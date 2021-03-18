@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="TeamD_Code/src/main/java"/>
+	<classpathentry kind="src" path="TeamD_Code/src/test/java"/>
+	<classpathentry kind="lib" path="TeamD_Code/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
