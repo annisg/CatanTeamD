@@ -26,9 +26,9 @@ jobs:
         chmod +x gradlew
     - name: Build with Gradle
       run: |
-        cd S2E_Code 
+        cd TeamD_Code 
         ./gradlew build
     - name: Test with gradle
       run: |
-        cd S2E_Code 
+        cd TeamD_Code 
         ./gradlew test
