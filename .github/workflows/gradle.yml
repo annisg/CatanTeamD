@@ -22,7 +22,7 @@ jobs:
         java-version: 1.8
     - name: Grant execute permission for gradlew
       run: |
-        cd S2E_Code
+        cd TeamD_Code
         chmod +x gradlew
     - name: Build with Gradle
       run: |
