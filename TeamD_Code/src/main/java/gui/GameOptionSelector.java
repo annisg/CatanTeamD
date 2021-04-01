@@ -31,13 +31,22 @@ public class GameOptionSelector {
                 selectedState = GameStartState.ADVANCED;
             }
         });
+        JRadioButton customMode = new JRadioButton(Messages.getString("GameOptionSelector.8"));
+        customMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedState = GameStartState.CUSTOM;
+            }
+        });
         difficultySelector.add(beginnerMode);
         difficultySelector.add(advancedMode);
+        difficultySelector.add(customMode);
 
         JPanel difficultyPanel = new JPanel();
         difficultyPanel.add(new JLabel(Messages.getString("GameOptionSelector.3")));
         difficultyPanel.add(beginnerMode);
         difficultyPanel.add(advancedMode);
+        difficultyPanel.add(customMode);
 
         ButtonGroup numPlayersSelector = new ButtonGroup();
         JRadioButton threePlayers = new JRadioButton(Messages.getString("GameOptionSelector.4"));
