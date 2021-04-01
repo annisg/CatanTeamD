@@ -176,19 +176,29 @@ public class HexMap {
     }
 
     List<Integer> getShuffledResourceNumbers(Random random) {
-        Integer[] resourceTokens = new Integer[] { 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12 };
-        List<Integer> resourceNumbers = Arrays.asList(resourceTokens);
+        List<Integer> resourceNumbers = getStandardResourceNumbers();
         Collections.shuffle(resourceNumbers, random);
         return resourceNumbers;
     }
 
+    private List<Integer> getStandardResourceNumbers() {
+        Integer[] resourceTokens = new Integer[] { 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12 };
+        List<Integer> resourceNumbers = Arrays.asList(resourceTokens);
+        return resourceNumbers;
+    }
+
     List<Resource> getShuffledResources(Random random) {
+        List<Resource> resources = getStandardResources();
+        Collections.shuffle(resources, random);
+        return resources;
+    }
+
+    private List<Resource> getStandardResources() {
         Resource[] resourceArray = new Resource[] { Resource.DESERT, Resource.BRICK, Resource.BRICK, Resource.BRICK,
                 Resource.ORE, Resource.ORE, Resource.ORE, Resource.LUMBER, Resource.LUMBER, Resource.LUMBER,
                 Resource.LUMBER, Resource.WOOL, Resource.WOOL, Resource.WOOL, Resource.WOOL, Resource.GRAIN,
                 Resource.GRAIN, Resource.GRAIN, Resource.GRAIN };
         List<Resource> resources = Arrays.asList(resourceArray);
-        Collections.shuffle(resources, random);
         return resources;
     }
 
