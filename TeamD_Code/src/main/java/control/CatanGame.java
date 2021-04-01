@@ -76,7 +76,6 @@ public class CatanGame {
     public void makeBoard(GameStartState state, int numPlayers) {
         this.turnTracker.setupPlayers(numPlayers);
         this.playerPlacer.refreshPlayerNumber();
-        buildModelFrame();
         if(state == ADVANCED) {
             model.setUpAdvancedMap();
             advancedInitialPlacement();
@@ -84,6 +83,7 @@ public class CatanGame {
             model.setUpBeginnerMap(numPlayers);
             this.turnTracker.setupBeginnerResourcesAndPieces();
         }
+        buildModelFrame();
     }
 
     public void advancedInitialPlacement() {
