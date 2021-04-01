@@ -161,6 +161,11 @@ public class HexMap {
         List<Resource> resources = getShuffledResources(random);
         List<Integer> resourceNumberTokens = getShuffledResourceNumbers(random);
 
+        setUpCustomMap(resources, resourceNumberTokens);
+    }
+    
+    public void setUpCustomMap(List<Resource> resources, List<Integer> resourceNumberTokens) {
+
         ArrayList<Hex> hexOrder = new ArrayList<Hex>();
         int addedDesert = 0;
         for (int i = 0; i < resources.size(); i++) {
