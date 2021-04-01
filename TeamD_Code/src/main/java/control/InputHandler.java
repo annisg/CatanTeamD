@@ -43,17 +43,13 @@ public class InputHandler {
         this.hasNotRolled = true;
         this.propertyBuilder = new BuildingHandler(game, builder, this);
 
-        possibleDevCardNames = new String[] { this.catanGame.getMessages().getString(Messages.getString("InputHandler.0")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.1")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.2")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.3")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.4")) }; //$NON-NLS-1$
-        
-        possibleResourceNames = new String[] { this.catanGame.getMessages().getString(Messages.getString("InputHandler.6")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.7")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.8")), //$NON-NLS-1$
-                this.catanGame.getMessages().getString(Messages.getString("InputHandler.9")), //$NON-NLS-1$
-                };
+        possibleDevCardNames = new String[] { this.catanGame.getMessages().getString("InputHandler.4"),
+                this.catanGame.getMessages().getString("InputHandler.3"),
+                this.catanGame.getMessages().getString("InputHandler.2"),
+                this.catanGame.getMessages().getString("InputHandler.1"),
+                this.catanGame.getMessages().getString("InputHandler.0") };
+        //TODO: extract strings
+        possibleResourceNames = new String[] { "Brick", "Grain", "Lumber", "Ore", "Wool"};
         optionalIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, true, this);
         optionalEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, true, this);
         mandatoryIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, false,
@@ -69,7 +65,7 @@ public class InputHandler {
     }
 
     public void placeInitialSettlement() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.10")), //$NON-NLS-1$
+        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.5"),
                 placeInitialSettlement);
     }
 
@@ -82,7 +78,7 @@ public class InputHandler {
     };
 
     public void placeInitialSettlementRound2() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.11")), //$NON-NLS-1$
+        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.6"),
                 placeInitialSettlementRound2);
     }
 
@@ -96,7 +92,7 @@ public class InputHandler {
 
     public void placeSettlement() {
         if (this.propertyBuilder.canPlaceSettlement(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.12")), //$NON-NLS-1$
+            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.7"),
                     this.placeSettlement);
         }
     }
@@ -111,7 +107,7 @@ public class InputHandler {
 
     public void placeCity() {
         if (this.propertyBuilder.canPlaceCity(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.13")), //$NON-NLS-1$
+            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.8"),
                     this.placeCity);
         }
     }
@@ -125,7 +121,7 @@ public class InputHandler {
     };
 
     public void placeInitialRoad() {
-        mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.14")), //$NON-NLS-1$
+        mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.9"),
                 placeInitialRoad);
     }
 
@@ -139,7 +135,7 @@ public class InputHandler {
 
     public void placeRoad() {
         if (this.propertyBuilder.canPlaceRoad(this.hasNotRolled)) {
-            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.15")), //$NON-NLS-1$
+            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
                     this.placeRoad);
         }
     }
@@ -157,7 +153,7 @@ public class InputHandler {
     }
 
     public void useDevCard() {
-        devCardSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.16")), useSelectedDevCard); //$NON-NLS-1$
+        devCardSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.11"), useSelectedDevCard);
     }
 
     public Function<Object, Void> useSelectedDevCard = new Function<Object, Void>() {
@@ -170,23 +166,23 @@ public class InputHandler {
 
     void canUseDevCard(Class devCardSelected) {
         if (this.hasNotRolled) {
-            displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.17"))); //$NON-NLS-1$
+            displayMessage(this.catanGame.getMessages().getString("InputHandler.12"));
             return;
         }
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         Player currentPlayer = playerTracker.getCurrentPlayer();
         DevelopmentCard cardToUse = currentPlayer.findDevelopmentCard(devCardSelected);
         if (cardToUse instanceof KnightCard) {
-            hexSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.18")), //$NON-NLS-1$
+            hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.13"),
                     this.performRobberTurn);
             cardToUse.use(currentPlayer);
         }
         if (cardToUse instanceof VictoryPointCard) {
-            displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.19"))); //$NON-NLS-1$
+            displayMessage(this.catanGame.getMessages().getString("InputHandler.14"));
         }
         if (cardToUse instanceof YearOfPlentyCard) {
         	for(int i = 0; i < 2; i++) {
-        		resourceSelector.selectAndApply(Messages.getString("InputHandler.20"), addResource); //$NON-NLS-1$
+        		resourceSelector.selectAndApply("Select a resource", addResource);
         	}
         	cardToUse.use(currentPlayer);
         }
@@ -204,16 +200,16 @@ public class InputHandler {
         try {
             int diceRoll = this.rollDice();
             if (this.isRobberTurn(diceRoll)) {
-                this.displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.21"))); //$NON-NLS-1$
-                hexSelector.selectAndApply(this.catanGame.getMessages().getString(Messages.getString("InputHandler.22")), //$NON-NLS-1$
+                this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
+                hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.16"),
                         this.performRobberTurn);
             } else {
                 this.displayMessage(
-                        MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.23")), diceRoll)); //$NON-NLS-1$
+                        MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.17"), diceRoll));
                 this.produceResources(diceRoll);
             }
         } catch (IllegalStateException resourceException) {
-            this.displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.24"))); //$NON-NLS-1$
+            this.displayMessage(this.catanGame.getMessages().getString("InputHandler.18"));
         }
     }
 
@@ -261,7 +257,7 @@ public class InputHandler {
 
     public void endTurn() {
         if (this.hasNotRolled) {
-            displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.25"))); //$NON-NLS-1$
+            displayMessage(this.catanGame.getMessages().getString("InputHandler.19"));
             return;
         }
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
@@ -271,7 +267,7 @@ public class InputHandler {
         boolean hasWon = pointCalculator.isWinning(currentPlayer);
         if (hasWon) {
             int score = pointCalculator.calculateForPlayer(currentPlayer);
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.26")), score)); //$NON-NLS-1$
+            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.20"), score));
         } else {
             this.hasNotRolled = true;
             playerTracker.passTurn();
@@ -287,26 +283,26 @@ public class InputHandler {
 
     public void handleException(Exception e, int row, int col) {
         if (e instanceof InvalidHexPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.27")), row, col)); //$NON-NLS-1$
+            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.21"), row, col));
 
         } else if (e instanceof IllegalRobberMoveException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.28")), row, col)); //$NON-NLS-1$
+            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.22"), row, col));
 
         } else if (e instanceof InvalidEdgePositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.29")), row, col)); //$NON-NLS-1$
+            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.23"), row, col));
 
         } else if (e instanceof InvalidIntersectionPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.30")), row, col)); //$NON-NLS-1$
+            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.24"), row, col));
 
         } else if (e instanceof PlaceBuildingException) {
             displayMessage(e.getMessage());
 
         } else if (e instanceof ItemNotFoundException) {
-            displayMessage(this.catanGame.getMessages().getString(Messages.getString("InputHandler.31"))); //$NON-NLS-1$
+            displayMessage(this.catanGame.getMessages().getString("InputHandler.25"));
 
         } else {
             displayMessage(
-                    MessageFormat.format(this.catanGame.getMessages().getString(Messages.getString("InputHandler.32")), e.getMessage())); //$NON-NLS-1$
+                    MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
         }
     }
 }
