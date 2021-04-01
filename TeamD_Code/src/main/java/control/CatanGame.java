@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import static control.GameStartState.ADVANCED;
+
 public class CatanGame {
 
     GameBoard gui;
@@ -72,28 +74,15 @@ public class CatanGame {
     }
 
     public void makeBoard(GameStartState state, int numPlayers) {
-        if (numPlayers < 3 || numPlayers > 4) {
-            options.getOptionsFromUser(this);
+        this.turnTracker.setupPlayers(numPlayers);
+        this.playerPlacer.refreshPlayerNumber();
+        buildModelFrame();
+        if(state == ADVANCED) {
+            model.setUpAdvancedMap();
+            advancedInitialPlacement();
         } else {
-
-            this.turnTracker.setupPlayers(numPlayers);
-
-            switch (state) {
-            case ADVANCED:
-                model.setUpAdvancedMap();
-                break;
-            case BEGINNER:
-            default:
-                model.setUpBeginnerMap(numPlayers);
-                this.turnTracker.setupBeginnerResourcesAndPieces();
-                break;
-            }
-
-            this.playerPlacer.refreshPlayerNumber();
-            buildModelFrame();
-            if (state == GameStartState.ADVANCED) {
-                advancedInitialPlacement();
-            }
+            model.setUpBeginnerMap(numPlayers);
+            this.turnTracker.setupBeginnerResourcesAndPieces();
         }
     }
 
