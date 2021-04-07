@@ -1,6 +1,7 @@
 package control;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 
@@ -178,6 +179,10 @@ public class InputHandler {
     public void tryToRollDice() {
         try {
             int diceRoll = this.rollDice();
+            //adding the seven feature
+            if(diceRoll==7){
+                discardCardsForEveryPlayer();
+            }
             if (this.isRobberTurn(diceRoll)) {
                 this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
                 hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.16"),
@@ -192,7 +197,14 @@ public class InputHandler {
         }
     }
 
-
+    public void discardCardsForEveryPlayer(){
+        List<Player> people = catanGame.turnTracker.getPlayers();
+        for(Player p : people){
+            if(p.getResourceHandSize()>7){
+                p.discardHalfResourceHand();
+            }
+        }
+    }
 
     public int rollDice() {
         if (this.hasNotRolled) {
