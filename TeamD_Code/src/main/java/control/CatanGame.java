@@ -93,9 +93,12 @@ public class CatanGame {
             }
 
             this.playerPlacer.refreshPlayerNumber();
-            buildModelFrame();
-            if (state != GameStartState.BEGINNER) {
-                advancedInitialPlacement();
+            
+            if (state != GameStartState.CUSTOM) {
+                buildModelFrame();
+                if (state != GameStartState.BEGINNER) {
+                    advancedInitialPlacement();
+                }
             }
         }
     }
