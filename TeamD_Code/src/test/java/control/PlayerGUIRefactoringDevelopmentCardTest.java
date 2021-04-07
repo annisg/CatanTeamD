@@ -23,7 +23,7 @@ public class PlayerGUIRefactoringDevelopmentCardTest {
         Player currentPlayer = new Player(PlayerColor.WHITE);
         TurnTracker threePlayers = EasyMock.strictMock(TurnTracker.class);
         PlayerGUI correctGUI = EasyMock.partialMockBuilder(PlayerGUI.class).withConstructor(Color.WHITE,
-                new HashMap<Resource, Integer>(), new HashMap<DevelopmentCard, Integer>(), 0, 0, messages).mock();
+                new HashMap<Resource, Integer>(), new HashMap<DevelopmentCard, Integer>(), 0, 0, null).mock();
 
         EasyMock.expect(threePlayers.getNumPlayers()).andReturn(3);
         EasyMock.expect(threePlayers.getCurrentPlayer()).andReturn(currentPlayer);
@@ -41,4 +41,20 @@ public class PlayerGUIRefactoringDevelopmentCardTest {
         EasyMock.verify(threePlayers, correctGUI);
     }
 
+    @Test
+    public void testCalculateExactCards(){
+        Player currentPlayer = new Player(PlayerColor.WHITE);
+        HashMap<DevelopmentCard, Integer> numOfEachCard = new HashMap<DevelopmentCard, Integer>();
+
+        numOfEachCard.add(new KnightCard(null, null), 1);
+        numOfEachCard.add(new VictoryPointCard(null), 1);
+        numOfEachCard.add(new MonopolyCard(null), 4);
+        numOfEachCard.add(new YearOfPlentyCard(null), 8);
+        numOfEachCard.add(new RoadBuildingCard(null), 10);
+
+        PlayerGUI playerGUI = new PlayerGUI(Color.WHITE, null, numOfEachCard, 0, 0, null);
+        int numberOfMonopoly = playerGUI.getAmountOfSpecificCard(new MonopolyCard(null));
+        assertEquals(4, numberOfMonopoly);
+
+    }
 }

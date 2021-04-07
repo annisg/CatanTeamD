@@ -127,6 +127,9 @@ public class PlayerGUI extends Drawable {
         g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
     }
 
+    public int getAmountOfSpecificCard(DevelopmentCard card){
+        return numOfEachDevelopmentCard.get(card);
+    }
     private String getAbbrForDevelopmentCard(DevelopmentCard developmentCard) {
         DevelopmentCard card = developmentCard;
 

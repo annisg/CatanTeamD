@@ -33,6 +33,8 @@ public class Player {
         return color;
     }
 
+
+
     public int getResourceCount(Resource resource) {
 
         if (resource.equals(Resource.DESERT)) {
