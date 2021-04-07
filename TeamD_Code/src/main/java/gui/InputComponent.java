@@ -2,12 +2,13 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
 
 import control.*;
+import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
@@ -94,6 +95,10 @@ public class InputComponent extends JPanel {
 
     public void selectInitialSettlementPlacementRound2() {
         handler.placeInitialSettlementRound2();
+    }
+
+    public void selectCustomHexPlacement(List<Resource> resources, List<Integer> availableNumbers) {
+        handler.selectCustomHexPlacement(resources, availableNumbers);
     }
 
 }

@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.List;
 
 public class CatanGame {
 
@@ -83,15 +84,17 @@ public class CatanGame {
                 model.setUpAdvancedMap();
                 break;
             case BEGINNER:
-            default:
                 model.setUpBeginnerMap(numPlayers);
                 this.turnTracker.setupBeginnerResourcesAndPieces();
                 break;
+            case CUSTOM:
+            default:
+                customHexPlacement(model.getHexMap());
             }
 
             this.playerPlacer.refreshPlayerNumber();
             buildModelFrame();
-            if (state == GameStartState.ADVANCED) {
+            if (state != GameStartState.BEGINNER) {
                 advancedInitialPlacement();
             }
         }
@@ -116,6 +119,12 @@ public class CatanGame {
     public void advancedInitialPlacementRoundTwoOneTurn() {
         input.selectInitialSettlementPlacementRound2();
         input.selectInitialRoadPlacement();
+    }
+    
+    private void customHexPlacement(HexMap hexMap) {
+        List<Resource> remainingResources = hexMap.getStandardResources();
+        List<Integer> remainingNumbers = hexMap.getStandardResourceNumbers();
+        input.selectCustomHexPlacement(remainingResources, remainingNumbers);
     }
 
     public void buildModelFrame() {
