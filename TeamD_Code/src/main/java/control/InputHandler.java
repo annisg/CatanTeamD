@@ -157,24 +157,8 @@ public class InputHandler {
         hexPlacementNumbers = availableNumbers;
         
         if(availableResources.size() != 0) {
-            String[] resourceStrings = new String[availableResources.size()];
-            Object[] resourceObjs = new Object[availableResources.size()];
-            
-            String[] numberStrings = new String[availableNumbers.size()];
-            Object[] numberObjs = new Object[availableNumbers.size()];
-            
-            for(int i = 0; i < availableResources.size(); i++) {
-                resourceStrings[i] = availableResources.get(i).name();
-                resourceObjs[i] = availableResources.get(i);
-            }
-            
-            for(int i = 0; i < availableNumbers.size(); i++) {
-                numberStrings[i] = availableNumbers.get(i).toString();
-                numberObjs[i] = availableNumbers.get(i);
-            }
-            
-            resourceSelector = new Select1Frame(resourceStrings, resourceObjs, false, this);
-            resourceNumberSelector = new Select1Frame(numberStrings, numberObjs, false, this);
+            resourceSelector = buildResourceSelector(availableResources);
+            resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
             resourceSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.27"),
                     this.selectResource);
         } else {
@@ -182,6 +166,30 @@ public class InputHandler {
             this.catanGame.buildModelFrame();
             this.catanGame.advancedInitialPlacement();
         }
+    }
+
+    Select1Frame buildResourceNumberSelector(List<Integer> availableNumbers) {
+        String[] numberStrings = new String[availableNumbers.size()];
+        Object[] numberObjs = new Object[availableNumbers.size()];
+        
+        for(int i = 0; i < availableNumbers.size(); i++) {
+            numberStrings[i] = availableNumbers.get(i).toString();
+            numberObjs[i] = availableNumbers.get(i);
+        }
+        
+        return new Select1Frame(numberStrings, numberObjs, false, this);
+    }
+
+    Select1Frame buildResourceSelector(List<Resource> availableResources) {
+        String[] resourceStrings = new String[availableResources.size()];
+        Object[] resourceObjs = new Object[availableResources.size()];
+        
+        for(int i = 0; i < availableResources.size(); i++) {
+            resourceStrings[i] = availableResources.get(i).name();
+            resourceObjs[i] = availableResources.get(i);
+        }
+        
+        return new Select1Frame(resourceStrings, resourceObjs, false, this);
     }
     
     public Function<Object, Void> selectResource = new Function<Object, Void>() {
