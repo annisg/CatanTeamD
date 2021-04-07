@@ -89,7 +89,7 @@ public class CatanGame {
                 break;
             case CUSTOM:
             default:
-                customHexPlacement(model.getHexMap());
+                customHexPlacement(model);
             }
 
             this.playerPlacer.refreshPlayerNumber();
@@ -124,9 +124,9 @@ public class CatanGame {
         input.selectInitialRoadPlacement();
     }
     
-    private void customHexPlacement(HexMap hexMap) {
-        List<Resource> remainingResources = hexMap.getStandardResources();
-        List<Integer> remainingNumbers = hexMap.getStandardResourceNumbers();
+    private void customHexPlacement(GameMap model) {
+        List<Resource> remainingResources = model.getHexMap().getStandardResources();
+        List<Integer> remainingNumbers = model.getHexMap().getStandardResourceNumbers();
         input.selectCustomHexPlacement(remainingResources, remainingNumbers);
     }
 
