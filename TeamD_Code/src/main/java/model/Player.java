@@ -11,6 +11,7 @@ public class Player {
     private List<DevelopmentCard> developmentCards;
     private int settlementCount, cityCount, roadCount, knightCount;;
 
+
     public Player(PlayerColor color) {
 
         this.color = color;
@@ -33,8 +34,14 @@ public class Player {
         return color;
     }
 
+    public void discardCards(){
 
+    }
 
+    //adding the behavior to discard cards
+    public  Map<Resource, Integer> getResourceCards(){
+        return resources;
+    }
     public int getResourceCount(Resource resource) {
 
         if (resource.equals(Resource.DESERT)) {
