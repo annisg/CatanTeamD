@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import static control.GameStartState.ADVANCED;
 
 public class CatanGame {
-
     GameBoard gui;
     InputComponent input;
     GameMap model;
@@ -78,12 +77,18 @@ public class CatanGame {
         this.playerPlacer.refreshPlayerNumber();
         if(state == ADVANCED) {
             model.setUpAdvancedMap();
-            advancedInitialPlacement();
         } else {
             model.setUpBeginnerMap(numPlayers);
-            this.turnTracker.setupBeginnerResourcesAndPieces();
         }
         buildModelFrame();
+    }
+
+    public void initialPlacement(GameStartState state) {
+        if(state == ADVANCED) {
+            advancedInitialPlacement();
+        } else {
+            this.turnTracker.setupBeginnerResourcesAndPieces();
+        }
     }
 
     public void advancedInitialPlacement() {

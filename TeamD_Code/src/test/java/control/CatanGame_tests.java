@@ -114,6 +114,7 @@ public class CatanGame_tests {
         }
         replayAll();
         testCatan.makeBoard(testState, testNumPlayers);
+        testCatan.initialPlacement(testState);
         verifyAll();
     }
 
