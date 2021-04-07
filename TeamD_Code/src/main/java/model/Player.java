@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import exception.*;
@@ -44,6 +45,21 @@ public class Player {
         return resources;
     }
 
+    public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
+        if(amount>resources.get(resource)){
+            throw new TooFewItemsException();
+        }
+        ArrayList<Resource> stuff = new ArrayList<Resource>();
+        for(int i= 0; i<amount; i++){
+            stuff.add(resource);
+        }
+        resources.put(resource, resources.get(resource)-amount);
+        return stuff;
+    }
+
+    public void receiveResourceForTrading(ArrayList<Resource> stuff){
+        resources.put(stuff.get(0), stuff.size() + resources.get(stuff.get(0)));
+    }
     public void addResourec(Resource r, int amt){
         resources.put(r, amt);
     }
