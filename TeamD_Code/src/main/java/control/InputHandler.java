@@ -20,8 +20,8 @@ public class InputHandler {
     private final Integer[] possibleHexCols = { 1, 2, 3, 4, 5 };
     private final Object[] possibleDevCards = { KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
             VictoryPointCard.class, RoadBuildingCard.class };
-    private final Object[] possibleResources = { Resource.BRICK, Resource.GRAIN, Resource.LUMBER, 
-    		Resource.ORE, Resource.WOOL};
+    private final Object[] possibleResources = { Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
+            Resource.WOOL };
     private String[] possibleDevCardNames;
     private String[] possibleResourceNames;
     Select2Frame optionalIntersectionSelector;
@@ -48,8 +48,8 @@ public class InputHandler {
                 this.catanGame.getMessages().getString("InputHandler.2"),
                 this.catanGame.getMessages().getString("InputHandler.1"),
                 this.catanGame.getMessages().getString("InputHandler.0") };
-        //TODO: extract strings
-        possibleResourceNames = new String[] { "Brick", "Grain", "Lumber", "Ore", "Wool"};
+        // TODO: extract strings
+        possibleResourceNames = new String[] { "Brick", "Grain", "Lumber", "Ore", "Wool" };
         optionalIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, true, this);
         optionalEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, true, this);
         mandatoryIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, false,
@@ -181,17 +181,17 @@ public class InputHandler {
             displayMessage(this.catanGame.getMessages().getString("InputHandler.14"));
         }
         if (cardToUse instanceof YearOfPlentyCard) {
-        	for(int i = 0; i < 2; i++) {
-        		resourceSelector.selectAndApply("Select a resource", addResource);
-        	}
-        	cardToUse.use(currentPlayer);
+            for (int i = 0; i < 2; i++) {
+                resourceSelector.selectAndApply("Select a resource", addResource);
+            }
+            cardToUse.use(currentPlayer);
         }
     }
-    
+
     public Function<Object, Void> addResource = new Function<Object, Void>() {
         @Override
         public Void apply(Object selected) {
-            addResourceFromYOPCard((Resource)selected);
+            addResourceFromYOPCard((Resource) selected);
             return null;
         }
     };
@@ -246,13 +246,13 @@ public class InputHandler {
         this.catanGame.getGameMap().moveRobberToPosition(row, col);
         this.catanGame.drawScreen();
     }
-    
+
     void addResourceFromYOPCard(Resource resource) {
-    	TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-    	Player currentPlayer = playerTracker.getCurrentPlayer();
-    	
-    	currentPlayer.giveResource(resource, 1);
-    	this.catanGame.drawPlayers();
+        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
+        Player currentPlayer = playerTracker.getCurrentPlayer();
+
+        currentPlayer.giveResource(resource, 1);
+        this.catanGame.drawPlayers();
     }
 
     public void endTurn() {
