@@ -192,6 +192,8 @@ public class InputHandler {
         }
     }
 
+
+
     public int rollDice() {
         if (this.hasNotRolled) {
             this.hasNotRolled = false;
