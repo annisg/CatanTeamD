@@ -3,14 +3,15 @@ package model;
 import java.util.*;
 
 import exception.*;
+import gui.RemoveCardsGUI;
 
 public class Player {
 
     private PlayerColor color;
     private Map<Resource, Integer> resources;
     private List<DevelopmentCard> developmentCards;
-    private int settlementCount, cityCount, roadCount, knightCount;;
-
+    private int settlementCount, cityCount, roadCount, knightCount;
+    private RemoveCardsGUI removeCardsGUI;
 
     public Player(PlayerColor color) {
 
@@ -34,22 +35,66 @@ public class Player {
         return color;
     }
 
-    public void discardCards(){
-
+    public void discardResourceCard(Resource resource){
+        resources.put(resource, resources.get(resource)-1);
     }
 
     //adding the behavior to discard cards
     public  Map<Resource, Integer> getResourceCards(){
         return resources;
     }
-    public int getResourceCount(Resource resource) {
 
-        if (resource.equals(Resource.DESERT)) {
+    public void addResourec(Resource r, int amt){
+        resources.put(r, amt);
+    }
+
+    public int getResourceCountString(String name) {
+
+        Resource r = getResourceByName(name);
+        if (r.equals(Resource.DESERT)) {
             throw new IllegalArgumentException();
         }
 
-        return resources.get(resource);
+
+        return resources.get(r);
     }
+
+    public void discardHalfResourceHand(){
+        removeCardsGUI = new RemoveCardsGUI(this);
+
+    }
+    public int getResourceCount(Resource r) {
+
+       // Resource r = getResourceByName(name);
+        if (r.equals(Resource.DESERT)) {
+            throw new IllegalArgumentException();
+        }
+
+
+        return resources.get(r);
+    }
+    public Resource getResourceByName(String name){
+        if(name.equals("GRAIN")){
+            return Resource.GRAIN;
+        }
+        else if(name.equals("BRICK")){
+            return Resource.BRICK;
+        }
+        else if(name.equals("ORE")){
+            return Resource.ORE;
+        }
+        else if(name.equals("LUMBER")){
+            return Resource.LUMBER;
+        }
+        else if(name.equals("WOOL")){
+            return Resource.WOOL;
+        }
+        else{
+            return Resource.DESERT;
+        }
+    }
+
+    //GRAIN, BRICK, ORE, LUMBER, WOOL, DESERT
 
     public int getResourceHandSize() {
         int sum = 0;

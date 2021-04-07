@@ -88,6 +88,9 @@ public class TurnTracker {
         return players.get(currentPlayerIndex);
     }
 
+    public List<Player> getPlayers(){
+        return this.players;
+    }
     public void passTurn() {
 
         currentPlayerIndex++;

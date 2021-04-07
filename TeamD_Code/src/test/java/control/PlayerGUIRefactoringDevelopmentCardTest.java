@@ -46,11 +46,11 @@ public class PlayerGUIRefactoringDevelopmentCardTest {
         Player currentPlayer = new Player(PlayerColor.WHITE);
         HashMap<DevelopmentCard, Integer> numOfEachCard = new HashMap<DevelopmentCard, Integer>();
 
-        numOfEachCard.add(new KnightCard(null, null), 1);
-        numOfEachCard.add(new VictoryPointCard(null), 1);
-        numOfEachCard.add(new MonopolyCard(null), 4);
-        numOfEachCard.add(new YearOfPlentyCard(null), 8);
-        numOfEachCard.add(new RoadBuildingCard(null), 10);
+        numOfEachCard.put(new KnightCard(null, null), 1);
+        numOfEachCard.put(new VictoryPointCard(null), 1);
+        numOfEachCard.put(new MonopolyCard(null), 4);
+        numOfEachCard.put(new YearOfPlentyCard(null), 8);
+        numOfEachCard.put(new RoadBuildingCard(null), 10);
 
         PlayerGUI playerGUI = new PlayerGUI(Color.WHITE, null, numOfEachCard, 0, 0, null);
         int numberOfMonopoly = playerGUI.getAmountOfSpecificCard(new MonopolyCard(null));
