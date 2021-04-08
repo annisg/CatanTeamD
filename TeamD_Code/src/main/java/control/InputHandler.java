@@ -208,6 +208,7 @@ public class InputHandler {
     }
 
     public void tradeWithPlayer(){
+        System.out.println("i am in trade with player");
         Player p = this.catanGame.getPlayerTracker().getCurrentPlayer();
         TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(p);
 

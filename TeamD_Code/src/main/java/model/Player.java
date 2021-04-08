@@ -69,7 +69,7 @@ public class Player {
         return stuff;
     }
 
-    public void receiveResourceForTrading(ArrayList<Resource> stuff){
+    public void receiveResourceForTrading (ArrayList<Resource> stuff){
         resources.put(stuff.get(0), stuff.size() + resources.get(stuff.get(0)));
     }
     public void addResourec(Resource r, int amt){

@@ -76,7 +76,7 @@ public class InputComponent extends JPanel {
         tradeWithPlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                handler.tradeWithPlayer();
             }
         });
 

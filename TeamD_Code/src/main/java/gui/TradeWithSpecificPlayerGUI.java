@@ -34,6 +34,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         frame.setSize(450, 300);
         frame.setLayout(new FlowLayout());
         JButton tradeButton = new JButton("Trade");
+        tradeButton.addActionListener(this);
         playerToTradeInstruction = new JLabel("choose the player you want to trade with according to his id");
         String[] array = {"LUMBER", "BRICK", "ORE", "GRAIN", "WOOL", "DESERT"};
         typeOfCardToTrade = new JComboBox(array);
@@ -55,10 +56,11 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         //pick the player number
         //read the number in the text
         Resource source = currentPlayer.getResourceByName((String) typeOfCardToTrade.getSelectedItem());
-        playerToTrade = currentPlayer.getTracker().getPlayer((int) playerMenu.getSelectedItem());
+        playerToTrade = currentPlayer.getTracker().getPlayer((Integer.parseInt((String) playerMenu.getSelectedItem())));
         int numToTrade = Integer.parseInt(numberOfCardsToTrade.getText());
         ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
         playerToTrade.receiveResourceForTrading(stuff);
+        System.out.println("I am in dispose!");
         frame.dispose();
         //need to do stuff the other way around
        // currentPlayer = playerToTrade;
