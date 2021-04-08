@@ -36,7 +36,7 @@ public class InputHandler {
     Select1Frame resourceSelector;
 
     private ResourceProducer resourceProducer;
-    private CatanGame catanGame;
+     CatanGame catanGame;
     BuildingHandler propertyBuilder;
 
     boolean hasNotRolled;
@@ -480,28 +480,8 @@ public class InputHandler {
     }
 
     public void handleException(Exception e, int row, int col) {
-        if (e instanceof InvalidHexPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.21"), row, col));
-
-        } else if (e instanceof IllegalRobberMoveException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.22"), row, col));
-
-        } else if (e instanceof InvalidEdgePositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.23"), row, col));
-
-        } else if (e instanceof InvalidIntersectionPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.24"), row, col));
-
-        } else if (e instanceof PlaceBuildingException) {
-            displayMessage(e.getMessage());
-
-        } else if (e instanceof ItemNotFoundException) {
-            displayMessage(this.catanGame.getMessages().getString("InputHandler.25"));
-
-        } else {
-            displayMessage(
-                    MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
-        }
+        ExceptionHandler exceptionHandler = new ExceptionHandler(this);
+        exceptionHandler.handleException(e, row, col);
     }
 
 }
