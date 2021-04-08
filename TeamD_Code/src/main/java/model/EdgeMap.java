@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 
 import exception.*;
+import gui.EdgeDirection;
+import gui.EdgeGUI;
 
 public class EdgeMap {
     private Edge[][] edges;
@@ -114,6 +116,62 @@ public class EdgeMap {
             throw new InvalidEdgePositionException();
         }
         return this.edges[position.getRow()][position.getColumn()];
+    }
+
+    public Edge getClosestEdge(int x, int y) {
+        Edge closestEdge = edges[3][3];
+        for(int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < edges.length; j++) {
+                if(!isNotValidPosition(new MapPosition(i, j))) {
+                    if(closestEdge == null) {
+                        closestEdge = edges[i][j];
+                    }
+                    if (getRowColumnDistanceFromPoint(i, j, x, y) < getRowColumnDistanceFromPoint(findEdgePosition(closestEdge).getRow(), findEdgePosition(closestEdge).getColumn(), x, y)) {
+                        closestEdge = edges[i][j];
+                    }
+                }
+            }
+        }
+        return closestEdge;
+    }
+
+    private double getRowColumnDistanceFromPoint(int row, int column, int pointX, int pointY) {
+        int edgeX = 0;
+        int edgeY = 0;
+        EdgeDirection direction;
+
+        if (row % 2 != 0) {
+            direction = EdgeDirection.UP;
+        } else {
+            if ((column % 2 == 0 && row < 5) || (column % 2 != 0 && row > 5)) {
+                direction = EdgeDirection.LEFT;
+            } else {
+                direction = EdgeDirection.RIGHT;
+            }
+        }
+
+        edgeX = column * 75;
+        if (direction == EdgeDirection.UP) {
+            edgeX *= 2;
+        }
+
+        if (row == 0 || row == 10) {
+            edgeX += 565;
+        } else if (row == 1 || row == 9) {
+            edgeX += 525;
+        } else if (row == 2 || row == 8) {
+            edgeX += 485;
+        } else if (row == 3 || row == 7) {
+            edgeX += 450;
+        } else if (row == 4 || row == 6) {
+            edgeX += 410;
+        } else if (row == 5) {
+            edgeX += 375;
+        }
+
+        edgeY = -row * 65 + 865;
+
+        return Math.sqrt((edgeX - pointX) * (edgeX - pointX) + (edgeY - pointY) * (edgeY - pointY));
     }
 
     public MapPosition findEdgePosition(Edge givenEdge) {

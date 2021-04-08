@@ -67,9 +67,9 @@ public class GameOptionSelector {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
+                startFrame.dispose();
                 catanController.makeBoard(selectedState, numPlayers);
                 catanController.initialPlacement(selectedState);
-                startFrame.dispose();
             }
         });
 

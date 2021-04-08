@@ -5,6 +5,8 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -121,6 +123,7 @@ public class CatanGame {
 
         gameFrame.add(this.gui, BorderLayout.CENTER);
         gameFrame.add(this.input, BorderLayout.SOUTH);
+        input.addMouseListenerToParent();
         drawScreen();
     }
 

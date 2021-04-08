@@ -26,8 +26,8 @@ public class BuildingHandler {
         this.catanGame.drawPlayers();
     }
 
-    void placeInitialRoad(int row, int col) {
-        Edge desiredEdge = this.catanGame.getGameMap().getEdge(row, col);
+    void placeInitialRoad(int x, int y) {
+        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildInitialRoad(playerTracker.getCurrentPlayer(), desiredEdge);

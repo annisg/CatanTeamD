@@ -2,14 +2,19 @@ package gui;
 
 import java.awt.event.*;
 
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Function;
 
 import javax.swing.*;
 
 import control.*;
 
+import static java.lang.Thread.sleep;
+
 public class InputComponent extends JPanel {
     private InputHandler handler;
+
+    private Queue<Function<Integer[], Void>> clickFunctionQueue = new LinkedList<>();
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
         this.handler = handler;
@@ -83,16 +88,30 @@ public class InputComponent extends JPanel {
         this.add(endTurn);
     }
 
+    public void addMouseListenerToParent() {
+        this.getParent().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+
+                Function<Integer[], Void> function = clickFunctionQueue.poll();
+                if(function != null) {
+                    function.apply(new Integer[] {x, y});
+                }
+            }
+        });
+    }
+
     public void selectInitialRoadPlacement() {
-        handler.placeInitialRoad();
+        clickFunctionQueue.add(handler.placeInitialRoad);
     }
 
     public void selectInitialPlaceSettlement() {
-        handler.placeInitialSettlement();
+        clickFunctionQueue.add(handler.placeInitialSettlement);
     }
 
     public void selectInitialSettlementPlacementRound2() {
-        handler.placeInitialSettlementRound2();
+        clickFunctionQueue.add(handler.placeInitialSettlementRound2);
     }
-
 }

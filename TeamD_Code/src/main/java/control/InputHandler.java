@@ -65,7 +65,8 @@ public class InputHandler {
     public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
         @Override
         public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+//            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+            propertyBuilder.placeInitialSettlement(5, 5);
             return null;
         }
     };
@@ -113,15 +114,10 @@ public class InputHandler {
         }
     };
 
-    public void placeInitialRoad() {
-        mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.9"),
-                placeInitialRoad);
-    }
-
     public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeInitialRoad(edgeCoordinates[0], edgeCoordinates[1]);
+        public Void apply(Integer[] mouseCoordinates) {
+            propertyBuilder.placeInitialRoad(mouseCoordinates[0], mouseCoordinates[1]);
             return null;
         }
     };
