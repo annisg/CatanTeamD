@@ -82,7 +82,7 @@ public class BuildingHandler_Build_Property_Tests {
         EasyMock.replay(mockedCG, mockedPB, mockedGM);
 
         try {
-            testBH.placeRoad(0, 4);
+            testBH.placeRoad(0, 4, true);
             fail();
         } catch (InvalidEdgePositionException e) {
         }
@@ -108,7 +108,7 @@ public class BuildingHandler_Build_Property_Tests {
         EasyMock.replay(mockedCG, mockedPB, mockedGM);
 
         try {
-            testBH.placeRoad(0, 0);
+            testBH.placeRoad(0, 0, true);
             fail();
         } catch (PlaceBuildingException e) {
         }
@@ -135,7 +135,7 @@ public class BuildingHandler_Build_Property_Tests {
         mockedCG.drawSpecialCards();
         EasyMock.replay(mockedCG, mockedPB, mockedGM);
 
-        testBH.placeRoad(0, 0);
+        testBH.placeRoad(0, 0, true);
         EasyMock.verify(mockedCG, mockedPB, mockedGM);
     }
 

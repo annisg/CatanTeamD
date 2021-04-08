@@ -7,10 +7,11 @@ import java.util.function.Function;
 
 import javax.swing.*;
 
-import control.*;
 import exception.PlaceBuildingException;
-
 import static java.lang.Thread.sleep;
+
+import control.*;
+import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
@@ -76,6 +77,15 @@ public class InputComponent extends JPanel {
             }
         });
 
+        JButton tradeWithPlayer = new JButton("Trade");
+        tradeWithPlayer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.tradeWithPlayer();
+            }
+        });
+
+        this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
         this.add(new JLabel(messages.getString("InputComponent.8")));

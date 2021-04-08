@@ -19,17 +19,15 @@ public class RoadBuildingCard_Tests {
     }
     
     @Test
-    public void testUseRoadBuildingCard() {
+    public void testUseRoadBuildingRemovesCard() {
         Player player = EasyMock.mock(Player.class);
+        DevelopmentCard testCard = new RoadBuildingCard(messages);
+        
+        player.removeDevelopmentCard(testCard);
         EasyMock.replay(player);
         
-        try {
-            DevelopmentCard testCard = new RoadBuildingCard(messages);
-            testCard.use(player);
-            fail("Expected RuntimeException");
-        } catch (RuntimeException e) {
-            assertEquals("Road Building Cards are unimplemented.", e.getMessage());
-        }
+        testCard.use(player);
+       
         EasyMock.verify(player);
     }
     

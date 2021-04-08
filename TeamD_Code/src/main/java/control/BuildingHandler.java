@@ -98,7 +98,24 @@ public class BuildingHandler {
         Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
     
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        this.itemBuilder.buildRoad(playerTracker.getCurrentPlayer(), desiredEdge);
+        
+        if(chargeResources) {
+            this.itemBuilder.buildRoad(playerTracker.getCurrentPlayer(), desiredEdge);
+        }
+        else {
+            this.itemBuilder.buildRoadWithCard(playerTracker.getCurrentPlayer(), desiredEdge);
+        }
+
+        this.catanGame.justDrawProperty();
+        this.catanGame.drawPlayers();
+        this.catanGame.drawSpecialCards();
+    }
+    
+    public void placeRoadWithCard(int row, int col) {
+        Edge desiredEdge = this.catanGame.getGameMap().getEdge(row, col);
+
+        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
+        this.itemBuilder.buildRoadWithCard(playerTracker.getCurrentPlayer(), desiredEdge);
 
         this.catanGame.justDrawProperty();
         this.catanGame.drawPlayers();

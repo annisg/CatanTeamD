@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.List;
 
 import static control.GameStartState.ADVANCED;
 
@@ -75,21 +76,33 @@ public class CatanGame {
     }
 
     public void makeBoard(GameStartState state, int numPlayers) {
-        this.turnTracker.setupPlayers(numPlayers);
-        this.playerPlacer.refreshPlayerNumber();
-        if(state == ADVANCED) {
-            model.setUpAdvancedMap();
+        if (numPlayers < 3 || numPlayers > 4) {
+            options.getOptionsFromUser(this);
         } else {
-            model.setUpBeginnerMap(numPlayers);
-        }
-        buildModelFrame();
-    }
 
-    public void initialPlacement(GameStartState state) {
-        if(state == ADVANCED) {
-            advancedInitialPlacement();
-        } else {
-            this.turnTracker.setupBeginnerResourcesAndPieces();
+            this.turnTracker.setupPlayers(numPlayers);
+
+            switch (state) {
+            case ADVANCED:
+                model.setUpAdvancedMap();
+                break;
+            case BEGINNER:
+                model.setUpBeginnerMap(numPlayers);
+                this.turnTracker.setupBeginnerResourcesAndPieces();
+                break;
+            case CUSTOM:
+            default:
+                customHexPlacement();
+            }
+
+            this.playerPlacer.refreshPlayerNumber();
+            
+            if (state != GameStartState.CUSTOM) {
+                buildModelFrame();
+                if (state != GameStartState.BEGINNER) {
+                    advancedInitialPlacement();
+                }
+            }
         }
     }
 
@@ -105,13 +118,19 @@ public class CatanGame {
     }
 
     public void advancedInitialPlacementOneTurn() {
-        input.selectInitialPlaceSettlement();
-        input.selectInitialRoadPlacement();
+        inputHandler.placeInitialSettlement();
+        inputHandler.placeInitialRoad();
     }
 
     public void advancedInitialPlacementRoundTwoOneTurn() {
-        input.selectInitialSettlementPlacementRound2();
-        input.selectInitialRoadPlacement();
+        inputHandler.placeInitialSettlementRound2();
+        inputHandler.placeInitialRoad();
+    }
+    
+    private void customHexPlacement() {
+        List<Resource> remainingResources = model.getHexMap().getStandardResources();
+        List<Integer> remainingNumbers = model.getHexMap().getStandardResourceNumbers();
+        inputHandler.selectCustomHexPlacement(remainingResources, remainingNumbers);
     }
 
     public void buildModelFrame() {
