@@ -16,8 +16,8 @@ public class BuildingHandler {
         this.handler = handler;
     }
 
-    void placeInitialSettlement(int row, int col) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getIntersection(row, col);
+    void placeInitialSettlement(int x, int y) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildInitialSettlement(playerTracker.getCurrentPlayer(), desiredIntersection);

@@ -91,13 +91,17 @@ public class InputComponent extends JPanel {
     public void addMouseListenerToParent() {
         this.getParent().addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int x = mouseEvent.getX();
+                int y = mouseEvent.getY();
 
-                Function<Integer[], Void> function = clickFunctionQueue.poll();
+                Function<Integer[], Void> function = clickFunctionQueue.peek();
                 if(function != null) {
-                    function.apply(new Integer[] {x, y});
+                    try {
+                        function.apply(new Integer[]{x, y});
+                        clickFunctionQueue.poll();
+                    } catch (Exception exception) {
+                    }
                 }
             }
         });
