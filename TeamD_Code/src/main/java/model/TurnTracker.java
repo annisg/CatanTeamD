@@ -6,7 +6,7 @@ public class TurnTracker {
 
     PlayerColor[] colors = { PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED };
 
-    List<Player> players;
+    static List<Player> players;
     Random random;
 
     int currentPlayerIndex;
@@ -43,6 +43,9 @@ public class TurnTracker {
             players.add(makePlayer(colors[i]));
         }
 
+        for(int i =0; i<numPlayers; i++){
+            players.get(i).addTracker(this);
+        }
         Collections.shuffle(players, random);
 
     }
