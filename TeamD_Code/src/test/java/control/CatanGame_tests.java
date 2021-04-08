@@ -23,6 +23,7 @@ public class CatanGame_tests {
     private SpecialCardPlacer mockedCardPlacer = null;
     private Random rand = null;
     private InputComponent component = null;
+    private InputHandler handler = null;
     private ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));
 
     private void setupGame() {
@@ -36,6 +37,7 @@ public class CatanGame_tests {
         this.mockedCardPlacer = EasyMock.strictMock(SpecialCardPlacer.class);
         this.rand = new Random(0);
         this.component = EasyMock.strictMock(InputComponent.class);
+        this.handler = EasyMock.strictMock(InputHandler.class);
 
         this.testCatan.messages = messages;
         this.testCatan.turnTracker = this.mockedTurnTracker;
@@ -47,17 +49,18 @@ public class CatanGame_tests {
         this.testCatan.specialCardPlacer = this.mockedCardPlacer;
         this.testCatan.random = this.rand;
         this.testCatan.input = this.component;
+        this.testCatan.inputHandler = this.handler;
         EasyMock.expect(this.mockedGameMap.getHexMap()).andStubReturn(mockedHexMap);
     }
 
     private void replayAll() {
         EasyMock.replay(testCatan, mockedTurnTracker, mockedGameMap, mockedHexMap, mockedOptions, mockedGUI, mockedHexPlacer,
-                mockedPlayerPlacer, mockedCardPlacer, component);
+                mockedPlayerPlacer, mockedCardPlacer, component, handler);
     }
 
     private void verifyAll() {
         EasyMock.verify(testCatan, mockedTurnTracker, mockedGameMap, mockedHexMap, mockedOptions, mockedGUI, mockedHexPlacer,
-                mockedPlayerPlacer, mockedCardPlacer, component);
+                mockedPlayerPlacer, mockedCardPlacer, component, handler);
     }
 
     @Test
@@ -118,7 +121,7 @@ public class CatanGame_tests {
         
         mockedTurnTracker.setupPlayers(3);
         mockedPlayerPlacer.refreshPlayerNumber();
-        component.selectCustomHexPlacement(resources, availableNumbers);
+        handler.selectCustomHexPlacement(resources, availableNumbers);
         //No build model frame, covered in InputHandler
         runTestsMakeBoard(GameStartState.CUSTOM, 3);
     }
@@ -135,7 +138,7 @@ public class CatanGame_tests {
         
         mockedTurnTracker.setupPlayers(4);
         mockedPlayerPlacer.refreshPlayerNumber();
-        component.selectCustomHexPlacement(resources, availableNumbers);
+        handler.selectCustomHexPlacement(resources, availableNumbers);
         //No build model frame, covered in InputHandler
         runTestsMakeBoard(GameStartState.CUSTOM, 4);
     }
@@ -156,8 +159,8 @@ public class CatanGame_tests {
     private void runTestsMakeBoard(GameStartState testState, int testNumPlayers) {
         if (testState == GameStartState.ADVANCED && testNumPlayers >= 3 && testNumPlayers <= 4) {
             EasyMock.expect(mockedTurnTracker.getNumPlayers()).andStubReturn(testNumPlayers);
-            component.selectInitialPlaceSettlement();
-            component.selectInitialRoadPlacement();
+            this.handler.placeInitialSettlement();
+            this.handler.placeInitialRoad();
         }
         replayAll();
         testCatan.makeBoard(testState, testNumPlayers);
@@ -344,8 +347,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.component.selectInitialPlaceSettlement();
-        this.component.selectInitialRoadPlacement();
+        this.handler.placeInitialSettlement();
+        this.handler.placeInitialRoad();
 
         replayAll();
         this.testCatan.advancedInitialPlacementOneTurn();
@@ -356,8 +359,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementRoundTwoOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.component.selectInitialSettlementPlacementRound2();
-        this.component.selectInitialRoadPlacement();
+        this.handler.placeInitialSettlementRound2();
+        this.handler.placeInitialRoad();
 
         replayAll();
         this.testCatan.advancedInitialPlacementRoundTwoOneTurn();

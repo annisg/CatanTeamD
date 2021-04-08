@@ -85,20 +85,4 @@ public class InputComponent extends JPanel {
         this.add(endTurn);
     }
 
-    public void selectInitialRoadPlacement() {
-        handler.placeInitialRoad();
-    }
-
-    public void selectInitialPlaceSettlement() {
-        handler.placeInitialSettlement();
-    }
-
-    public void selectInitialSettlementPlacementRound2() {
-        handler.placeInitialSettlementRound2();
-    }
-
-    public void selectCustomHexPlacement(List<Resource> resources, List<Integer> availableNumbers) {
-        handler.selectCustomHexPlacement(resources, availableNumbers);
-    }
-
 }
