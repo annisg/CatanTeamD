@@ -1,6 +1,8 @@
 package control;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 
@@ -58,7 +60,7 @@ public class InputHandler {
         hexSelector = new Select2Frame(possibleHexRows, possibleHexCols, false, this);
         devCardSelector = new Select1Frame(possibleDevCardNames, possibleDevCards, true, this);
         resourceSelector = new Select1Frame(possibleResourceNames, possibleResources, false, this);
-    }
+        }
 
     public ResourceBundle getMessages() {
         return this.catanGame.getMessages();
@@ -174,7 +176,7 @@ public class InputHandler {
         DevelopmentCard cardToUse = currentPlayer.findDevelopmentCard(devCardSelected);
         if (cardToUse instanceof KnightCard) {
             hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.13"),
-                    this.performRobberTurn);
+                    this.playKnightCard);
             cardToUse.use(currentPlayer);
         }
         if (cardToUse instanceof VictoryPointCard) {
@@ -187,14 +189,6 @@ public class InputHandler {
             cardToUse.use(currentPlayer);
         }
     }
-
-    public Function<Object, Void> addResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object selected) {
-            addResourceFromYOPCard((Resource) selected);
-            return null;
-        }
-    };
 
     public void tryToRollDice() {
         try {
@@ -246,6 +240,83 @@ public class InputHandler {
         this.catanGame.getGameMap().moveRobberToPosition(row, col);
         this.catanGame.drawScreen();
     }
+    
+    public Function<Integer[], Void> playKnightCard = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] hexCoordinates) {
+            playKnightCard(hexCoordinates[0], hexCoordinates[1]);
+            return null;
+        }
+    };
+
+    void playKnightCard(int row, int col) {
+        performRobberTurn(row, col);
+        ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
+        
+        HashSet<PlayerColor> adjacentColors = new HashSet<>();
+        for(Intersection i: intersections) {
+            adjacentColors.add(i.getBuildingColor());
+        }
+        adjacentColors.remove(PlayerColor.NONE);
+        
+        ArrayList<String> adjacentColorNames = new ArrayList<String>();
+        for(PlayerColor p : adjacentColors){
+                adjacentColorNames.add(p.name());
+        }
+        
+        Select1Frame playerSelector = new Select1Frame(adjacentColorNames.toArray(new String[adjacentColorNames.size()]), 
+                adjacentColors.toArray(), false, this);
+        playerSelector.selectAndApply("Select a player to steal a resource from", stealFromPlayer);
+    }
+    
+    public Function<Object, Void> stealFromPlayer = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object selected) {
+            stealFromPlayer((PlayerColor) selected);
+            return null;
+        }       
+    };
+    
+    Player playerToStealFrom;
+    private void stealFromPlayer(PlayerColor selected) {
+        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
+        playerToStealFrom = playerTracker.getPlayer(selected);
+        
+        Resource[] availableResources = playerToStealFrom.getResourceTypes().toArray(new Resource[5]);
+        String[] availableResourceNames = new String[availableResources.length];
+        
+        for(int i = 0; i < availableResources.length; i++) {
+            availableResourceNames[i] = availableResources[i].name();
+        }
+        
+        Select1Frame resourceSelector = new Select1Frame(availableResourceNames, 
+                availableResources, false, this);
+        resourceSelector.selectAndApply("Select a resource to steal", stealOneResource);
+    }
+    
+    public Function<Object, Void> stealOneResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object selected) {
+            stealOneResource((Resource) selected);
+            return null;
+        }
+    };
+
+    void stealOneResource(Resource resource) {
+        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
+        
+        playerToStealFrom.removeResource(resource, 1);
+        playerTracker.getCurrentPlayer().giveResource(resource, 1);
+        this.catanGame.drawPlayers();
+    }
+        
+    public Function<Object, Void> addResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object selected) {
+            addResourceFromYOPCard((Resource) selected);
+            return null;
+        }
+    };
 
     void addResourceFromYOPCard(Resource resource) {
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
