@@ -110,26 +110,31 @@ public class PlayerPlacer {
         return resourceMap;
     }
 
-    public HashMap<String, Integer> getDevelopmentCardMap(Player player) {
+    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMap(Player player) {
         String[] abbreviations = {"K", "M", "R", "V", "Y"};
 
-        HashMap<String, Integer> cardMap = new HashMap<String, Integer>();
-        for (String abbreviation : abbreviations) {
+        DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
+                new VictoryPointCard(messages), new MonopolyCard(messages),
+                new RoadBuildingCard(messages), new YearOfPlentyCard(messages)};
+        HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
+        for (DevelopmentCard abbreviation : devCards) {
             cardMap.put(abbreviation, 0);
         }
 
+
+
         for (DevelopmentCard card : player.getDevelopmentCards()) {
-            String abbreviation;
+            DevelopmentCard abbreviation;
             if (card instanceof KnightCard) {
-                abbreviation = "K";
+                abbreviation = devCards[0];
             } else if (card instanceof MonopolyCard) {
-                abbreviation = "M";
+                abbreviation = devCards[2];
             } else if (card instanceof RoadBuildingCard) {
-                abbreviation = "R";
+                abbreviation = devCards[3];
             } else if (card instanceof VictoryPointCard) {
-                abbreviation = "V";
+                abbreviation = devCards[1];
             } else if (card instanceof YearOfPlentyCard) {
-                abbreviation = "Y";
+                abbreviation = devCards[4];
             } else {
                 throw new RuntimeException();
             }
