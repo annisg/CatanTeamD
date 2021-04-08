@@ -74,7 +74,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
     }
 
     static public String[] populateComboBox() {
-        String[] nums = new String[2];
+        String[] nums = new String[currentPlayer.getPlayersInGame()];
         for (int i = 0; i < nums.length; i++) {
             nums[i] = "" + (i);
         }
