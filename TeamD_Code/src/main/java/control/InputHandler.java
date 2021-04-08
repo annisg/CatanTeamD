@@ -188,6 +188,13 @@ public class InputHandler {
             }
             cardToUse.use(currentPlayer);
         }
+        if (cardToUse instanceof RoadBuildingCard) {
+            for (int i = 0; i < 2; i++) {
+                optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
+                        this.placeRoadWithCard);
+            }
+            cardToUse.use(currentPlayer);
+        }
     }
 
     public void tryToRollDice() {
@@ -325,6 +332,14 @@ public class InputHandler {
         currentPlayer.giveResource(resource, 1);
         this.catanGame.drawPlayers();
     }
+    
+    public Function<Integer[], Void> placeRoadWithCard = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] edgeCoordinates) {
+            propertyBuilder.placeRoadWithCard(edgeCoordinates[0], edgeCoordinates[1]);
+            return null;
+        }
+    };
 
     public void endTurn() {
         if (this.hasNotRolled) {

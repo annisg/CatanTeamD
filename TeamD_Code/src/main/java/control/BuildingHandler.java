@@ -105,6 +105,17 @@ public class BuildingHandler {
         this.catanGame.drawPlayers();
         this.catanGame.drawSpecialCards();
     }
+    
+    public void placeRoadWithCard(int row, int col) {
+        Edge desiredEdge = this.catanGame.getGameMap().getEdge(row, col);
+
+        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
+        this.itemBuilder.buildRoadWithCard(playerTracker.getCurrentPlayer(), desiredEdge);
+
+        this.catanGame.justDrawProperty();
+        this.catanGame.drawPlayers();
+        this.catanGame.drawSpecialCards();
+    }
 
     public boolean canPlaceRoad(boolean hasNotRolled) {
         if (hasNotRolled) {
