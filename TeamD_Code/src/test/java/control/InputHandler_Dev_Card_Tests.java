@@ -53,7 +53,7 @@ public class InputHandler_Dev_Card_Tests {
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
         EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedPlayer.findDevelopmentCard(KnightCard.class)).andReturn(mockedKC);
-        mockedSelector.selectAndApply("Select hex to place robber:", testIH.performRobberTurn);
+        mockedSelector.selectAndApply("Select hex to place robber:", testIH.playKnightCard);
         mockedKC.use(mockedPlayer);
         EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedKC);
 
