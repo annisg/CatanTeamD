@@ -259,18 +259,17 @@ public class InputHandler {
     void playKnightCard(int row, int col) {
         performRobberTurn(row, col);
         ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
-        
+
         HashSet<PlayerColor> adjacentColors = new HashSet<>();
+        HashSet<String> adjacentColorNames = new HashSet<String>();
         for(Intersection i: intersections) {
-            adjacentColors.add(i.getBuildingColor());
+            PlayerColor color = i.getBuildingColor();
+            adjacentColors.add(color);
+            adjacentColorNames.add(color.name());
         }
         adjacentColors.remove(PlayerColor.NONE);
-        
-        ArrayList<String> adjacentColorNames = new ArrayList<String>();
-        for(PlayerColor p : adjacentColors){
-                adjacentColorNames.add(p.name());
-        }
-        
+        adjacentColorNames.add(PlayerColor.NONE.name());
+
         Select1Frame playerSelector = new Select1Frame(adjacentColorNames.toArray(new String[adjacentColorNames.size()]), 
                 adjacentColors.toArray(), false, this);
         playerSelector.selectAndApply("Select a player to steal a resource from", stealFromPlayer);
