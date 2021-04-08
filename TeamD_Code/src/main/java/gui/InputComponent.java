@@ -2,12 +2,13 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
 
 import control.*;
+import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
@@ -82,18 +83,6 @@ public class InputComponent extends JPanel {
         this.add(useDevCard);
         this.add(new JLabel(messages.getString("InputComponent.10")));
         this.add(endTurn);
-    }
-
-    public void selectInitialRoadPlacement() {
-        handler.placeInitialRoad();
-    }
-
-    public void selectInitialPlaceSettlement() {
-        handler.placeInitialSettlement();
-    }
-
-    public void selectInitialSettlementPlacementRound2() {
-        handler.placeInitialSettlementRound2();
     }
 
 }

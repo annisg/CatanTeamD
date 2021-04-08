@@ -1,9 +1,8 @@
 package control;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import java.util.function.Function;
 
 import javax.swing.JOptionPane;
@@ -32,18 +31,27 @@ public class InputHandler {
     Select2Frame mandatoryEdgeSelector;
     Select2Frame hexSelector;
     Select1Frame devCardSelector;
+    Select1Frame resourceNumberSelector;
     Select1Frame resourceSelector;
 
     private ResourceProducer resourceProducer;
     private CatanGame catanGame;
-    boolean hasNotRolled;
     BuildingHandler propertyBuilder;
 
+    boolean hasNotRolled;
+    List<Integer> orderedResourceNumbers;
+    List<Resource> orderedResources;
+    private List<Resource> hexPlacementResources;
+    private List<Integer> hexPlacementNumbers;
+    
     public InputHandler(ResourceProducer resourceProducer, CatanGame game, PieceBuilder builder) {
         this.resourceProducer = resourceProducer;
         this.catanGame = game;
         this.hasNotRolled = true;
         this.propertyBuilder = new BuildingHandler(game, builder, this);
+        
+        orderedResourceNumbers = new ArrayList<Integer>();
+        orderedResources = new ArrayList<Resource>();
 
         possibleDevCardNames = new String[] { this.catanGame.getMessages().getString("InputHandler.4"),
                 this.catanGame.getMessages().getString("InputHandler.3"),
@@ -146,6 +154,85 @@ public class InputHandler {
         @Override
         public Void apply(Integer[] edgeCoordinates) {
             propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
+            return null;
+        }
+    };
+    
+    public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
+        
+        hexPlacementResources = availableResources;
+        hexPlacementNumbers = availableNumbers;
+        
+        if(availableResources.size() != 0) {
+            resourceSelector = buildResourceSelector(availableResources);
+            resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
+            resourceSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.27"),
+                    this.selectResource);
+        } else {
+            this.catanGame.getGameMap().getHexMap().setUpCustomMap(orderedResources, orderedResourceNumbers);
+            this.catanGame.buildModelFrame();
+            this.catanGame.advancedInitialPlacement();
+        }
+    }
+
+    Select1Frame buildResourceNumberSelector(List<Integer> availableNumbers) {
+        String[] numberStrings = new String[availableNumbers.size()];
+        Object[] numberObjs = new Object[availableNumbers.size()];
+        
+        for(int i = 0; i < availableNumbers.size(); i++) {
+            numberStrings[i] = availableNumbers.get(i).toString();
+            numberObjs[i] = availableNumbers.get(i);
+        }
+        
+        return new Select1Frame(numberStrings, numberObjs, false, this);
+    }
+
+    Select1Frame buildResourceSelector(List<Resource> availableResources) {
+        String[] resourceStrings = new String[availableResources.size()];
+        Object[] resourceObjs = new Object[availableResources.size()];
+        
+        for(int i = 0; i < availableResources.size(); i++) {
+            resourceStrings[i] = availableResources.get(i).name();
+            resourceObjs[i] = availableResources.get(i);
+        }
+        
+        return new Select1Frame(resourceStrings, resourceObjs, false, this);
+    }
+    
+    public Function<Object, Void> selectResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object resource) {
+            Resource currentResource = (Resource) resource;
+            orderedResources.add(currentResource);
+            for(int i = 0; i < hexPlacementResources.size(); i++) {
+                if(hexPlacementResources.get(i).equals(currentResource)) {
+                    hexPlacementResources.remove(i);
+                    break;
+                }
+            }
+            if(!resource.equals(Resource.DESERT)) {
+                resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"), selectResourceNumber);
+            }
+            else {
+                selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
+            }
+            return null;
+        }
+    };
+    
+    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object number) {
+            Integer currentResourceNumber = (Integer) number;
+            orderedResourceNumbers.add(currentResourceNumber);
+            for(int i = 0; i < hexPlacementNumbers.size(); i++) {
+                if(hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
+                    hexPlacementNumbers.remove(i);
+                    break;
+                }
+            }
+            
+            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
             return null;
         }
     };
@@ -390,4 +477,5 @@ public class InputHandler {
                     MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
         }
     }
+
 }
