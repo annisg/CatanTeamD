@@ -112,6 +112,16 @@ public class PlayerPlacer {
     }
 
     public HashMap<DevelopmentCard, Integer> getDevelopmentCardMap(Player player) {
+        return getDevMapHelper(player);
+    }
+
+    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMapAmount(Player player) {
+        //String[] abbreviations = { "K", "M", "R", "V", "Y" };
+        return getDevCardAmtHelper(player);
+
+    }
+
+    public HashMap<DevelopmentCard, Integer> getDevMapHelper(Player player){
         String[] abbreviations = {"K", "M", "R", "V", "Y"};
 
         DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
@@ -147,8 +157,7 @@ public class PlayerPlacer {
         return cardMap;
     }
 
-    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMapAmount(Player player) {
-        //String[] abbreviations = { "K", "M", "R", "V", "Y" };
+    private HashMap<DevelopmentCard, Integer> getDevCardAmtHelper(Player player){
         DevelopmentCard[] cards = {new KnightCard(null, null), new MonopolyCard(null), new RoadBuildingCard(null),
                 new VictoryPointCard(null), new YearOfPlentyCard(null)};
         HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
