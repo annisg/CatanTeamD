@@ -143,24 +143,11 @@ public class CatanGame_tests {
         runTestsMakeBoard(GameStartState.CUSTOM, 4);
     }
 
-    @Test
-    public void testMakeBoardBadNumPlayers() {
-        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("drawScreen").mock();
-        setupGame();
-        mockedOptions.getOptionsFromUser(testCatan);
-        runTestsMakeBoard(GameStartState.BEGINNER, 5);
-
-        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("drawScreen").mock();
-        setupGame();
-        mockedOptions.getOptionsFromUser(testCatan);
-        runTestsMakeBoard(GameStartState.ADVANCED, 2);
-    }
-
     private void runTestsMakeBoard(GameStartState testState, int testNumPlayers) {
         if (testState == GameStartState.ADVANCED && testNumPlayers >= 3 && testNumPlayers <= 4) {
             EasyMock.expect(mockedTurnTracker.getNumPlayers()).andStubReturn(testNumPlayers);
-            this.handler.placeInitialSettlement();
-            this.handler.placeInitialRoad();
+            this.component.selectInitialPlaceSettlement();
+            this.component.selectInitialRoadPlacement();
         }
         replayAll();
         testCatan.makeBoard(testState, testNumPlayers);
@@ -169,8 +156,8 @@ public class CatanGame_tests {
 
     @Test
     public void testDrawModelCallsEverything() {
-        ArrayList<Drawable> playerGUIs = new ArrayList<Drawable>();
-        ArrayList<Drawable> cardGUIs = new ArrayList<Drawable>();
+        ArrayList<Drawable> playerGUIs = new ArrayList<>();
+        ArrayList<Drawable> cardGUIs = new ArrayList<>();
 
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
@@ -197,7 +184,7 @@ public class CatanGame_tests {
         HexMap mockedHM = EasyMock.strictMock(HexMap.class);
         EdgeMap mockedEM = EasyMock.strictMock(EdgeMap.class);
         IntersectionMap mockedIM = EasyMock.strictMock(IntersectionMap.class);
-        ArrayList<Drawable> hexDrawables = new ArrayList<Drawable>();
+        ArrayList<Drawable> hexDrawables = new ArrayList<>();
 
         this.mockedGUI.fullResetMap();
         EasyMock.expect(this.mockedGameMap.getHexMap()).andReturn(mockedHM);
@@ -347,8 +334,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.handler.placeInitialSettlement();
-        this.handler.placeInitialRoad();
+        this.component.selectInitialPlaceSettlement();
+        this.component.selectInitialRoadPlacement();
 
         replayAll();
         this.testCatan.advancedInitialPlacementOneTurn();
@@ -359,8 +346,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementRoundTwoOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.handler.placeInitialSettlementRound2();
-        this.handler.placeInitialRoad();
+        this.component.selectInitialSettlementPlacementRound2();
+        this.component.selectInitialRoadPlacement();
 
         replayAll();
         this.testCatan.advancedInitialPlacementRoundTwoOneTurn();

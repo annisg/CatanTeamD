@@ -61,6 +61,14 @@ public class GameMap {
         return this.intersectionMap.getIntersection(new MapPosition(row, col));
     }
 
+    public Edge getClosestEdge(int x, int y) {
+        return this.edgeMap.getClosestEdge(x, y);
+    }
+    
+    public Intersection getClosestIntersection(int x, int y) {
+        return this.intersectionMap.getClosestIntersection(x, y);
+    }
+
     public Edge getEdge(int row, int col) {
         return this.edgeMap.getEdge(new MapPosition(row, col));
     }

@@ -1,18 +1,22 @@
 package gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Function;
 
 import javax.swing.*;
+
+import exception.PlaceBuildingException;
+import static java.lang.Thread.sleep;
 
 import control.*;
 import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
+
+    private Queue<Function<Integer[], Void>> clickFunctionQueue = new LinkedList<>();
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
         this.handler = handler;
@@ -29,7 +33,7 @@ public class InputComponent extends JPanel {
         buildRoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeRoad();
+                clickFunctionQueue.add(handler.placeRoad);
             }
         });
 
@@ -37,7 +41,7 @@ public class InputComponent extends JPanel {
         buildSettlement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeSettlement();
+                clickFunctionQueue.add(handler.placeSettlement);
             }
         });
 
@@ -45,7 +49,7 @@ public class InputComponent extends JPanel {
         buildCity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeCity();
+                clickFunctionQueue.add(handler.placeCity);
             }
         });
 
@@ -95,4 +99,37 @@ public class InputComponent extends JPanel {
         this.add(endTurn);
     }
 
+    public void addMouseListenerToParent() {
+        this.getParent().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int x = mouseEvent.getX();
+                int y = mouseEvent.getY();
+
+                Function<Integer[], Void> function = clickFunctionQueue.peek();
+                if(function != null) {
+                    try {
+                        function.apply(new Integer[]{x, y});
+                        clickFunctionQueue.poll();
+                    } catch (PlaceBuildingException exception) {
+                    
+                    } catch (Exception exception) {
+                        clickFunctionQueue.poll();
+                    }
+                }
+            }
+        });
+    }
+
+    public void selectInitialRoadPlacement() {
+        clickFunctionQueue.add(handler.placeInitialRoad);
+    }
+
+    public void selectInitialPlaceSettlement() {
+        clickFunctionQueue.add(handler.placeInitialSettlement);
+    }
+
+    public void selectInitialSettlementPlacementRound2() {
+        clickFunctionQueue.add(handler.placeInitialSettlementRound2);
+    }
 }

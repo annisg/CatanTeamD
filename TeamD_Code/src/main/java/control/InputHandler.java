@@ -75,86 +75,51 @@ public class InputHandler {
         return this.catanGame.getMessages();
     }
 
-    public void placeInitialSettlement() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.5"),
-                placeInitialSettlement);
-    }
 
     public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeInitialSettlement(mousePosition[0], mousePosition[1]);
             return null;
         }
     };
-
-    public void placeInitialSettlementRound2() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.6"),
-                placeInitialSettlementRound2);
-    }
 
     public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlementRound2(intersectionCoordinates[0], intersectionCoordinates[1]);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeInitialSettlementRound2(mousePosition[0], mousePosition[1]);
             return null;
         }
     };
-
-    public void placeSettlement() {
-        if (this.propertyBuilder.canPlaceSettlement(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.7"),
-                    this.placeSettlement);
-        }
-    }
 
     public Function<Integer[], Void> placeSettlement = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeSettlement(mousePosition[0], mousePosition[1]);
             return null;
         }
     };
-
-    public void placeCity() {
-        if (this.propertyBuilder.canPlaceCity(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.8"),
-                    this.placeCity);
-        }
-    }
 
     public Function<Integer[], Void> placeCity = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeCity(intersectionCoordinates[0], intersectionCoordinates[1]);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeCity(mousePosition[0], mousePosition[1]);
             return null;
         }
     };
-
-    public void placeInitialRoad() {
-        mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.9"),
-                placeInitialRoad);
-    }
 
     public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeInitialRoad(edgeCoordinates[0], edgeCoordinates[1]);
+        public Void apply(Integer[] mouseCoordinates) {
+            propertyBuilder.placeInitialRoad(mouseCoordinates[0], mouseCoordinates[1]);
             return null;
         }
     };
 
-    public void placeRoad() {
-        if (this.propertyBuilder.canPlaceRoad(this.hasNotRolled)) {
-            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
-                    this.placeRoad);
-        }
-    }
-
     public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeRoad(mousePosition[0], mousePosition[1], true);
             return null;
         }
     };

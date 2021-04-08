@@ -5,12 +5,15 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.List;
 
-public class CatanGame {
+import static control.GameStartState.ADVANCED;
 
+public class CatanGame {
     GameBoard gui;
     InputComponent input;
     GameMap model;
@@ -115,13 +118,13 @@ public class CatanGame {
     }
 
     public void advancedInitialPlacementOneTurn() {
-        inputHandler.placeInitialSettlement();
-        inputHandler.placeInitialRoad();
+        input.selectInitialPlaceSettlement();
+        input.selectInitialRoadPlacement();
     }
 
     public void advancedInitialPlacementRoundTwoOneTurn() {
-        inputHandler.placeInitialSettlementRound2();
-        inputHandler.placeInitialRoad();
+        input.selectInitialSettlementPlacementRound2();
+        input.selectInitialRoadPlacement();
     }
     
     private void customHexPlacement() {
@@ -139,6 +142,7 @@ public class CatanGame {
 
         gameFrame.add(this.gui, BorderLayout.CENTER);
         gameFrame.add(this.input, BorderLayout.SOUTH);
+        input.addMouseListenerToParent();
         drawScreen();
     }
 
