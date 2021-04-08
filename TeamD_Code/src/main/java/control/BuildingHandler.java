@@ -95,11 +95,17 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeRoad(int row, int col) {
+    public void placeRoad(int row, int col, boolean chargeResources) {
         Edge desiredEdge = this.catanGame.getGameMap().getEdge(row, col);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        this.itemBuilder.buildRoad(playerTracker.getCurrentPlayer(), desiredEdge);
+        
+        if(chargeResources) {
+            this.itemBuilder.buildRoad(playerTracker.getCurrentPlayer(), desiredEdge);
+        }
+        else {
+            this.itemBuilder.buildRoadWithCard(playerTracker.getCurrentPlayer(), desiredEdge);
+        }
 
         this.catanGame.justDrawProperty();
         this.catanGame.drawPlayers();

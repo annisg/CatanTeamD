@@ -145,7 +145,7 @@ public class InputHandler {
     public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
         @Override
         public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1]);
+            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
             return null;
         }
     };
@@ -336,7 +336,7 @@ public class InputHandler {
     public Function<Integer[], Void> placeRoadWithCard = new Function<Integer[], Void>() {
         @Override
         public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoadWithCard(edgeCoordinates[0], edgeCoordinates[1]);
+            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], false);
             return null;
         }
     };
