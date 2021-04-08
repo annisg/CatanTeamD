@@ -199,8 +199,11 @@ public class InputHandler {
     }
 
     public void discardCardsForEveryPlayer(){
+        if(catanGame==null || catanGame.turnTracker == null){
+            return;
+        }
         List<Player> people = catanGame.turnTracker.getPlayers();
-        if(people.size()==0 || people==null){
+        if(people.size()==0){
             return;
         }
         for(Player p : people){
