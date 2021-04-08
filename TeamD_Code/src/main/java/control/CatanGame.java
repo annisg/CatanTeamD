@@ -177,4 +177,8 @@ public class CatanGame {
     public void drawSpecialCards() {
         gui.addSpecialCards(this.specialCardPlacer.getSpecialCards());
     }
+
+    public Player getCurrentPlayer() {
+        return getPlayerTracker().getCurrentPlayer();
+    }
 }

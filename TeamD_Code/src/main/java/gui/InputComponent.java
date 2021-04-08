@@ -2,13 +2,11 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
 
 import control.*;
-import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
@@ -60,7 +58,7 @@ public class InputComponent extends JPanel {
         useDevCard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.useDevCard();
+                handler.selectAndUseDevCard();
             }
         });
 

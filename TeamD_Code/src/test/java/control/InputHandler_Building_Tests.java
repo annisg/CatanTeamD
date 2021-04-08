@@ -1,7 +1,5 @@
 package control;
 
-import static org.junit.Assert.*;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -263,7 +261,7 @@ public class InputHandler_Building_Tests {
         mockedDevCardSelector.selectAndApply("Select card type to play:", testIH.useSelectedDevCard);
         EasyMock.replay(mockedRP, mockedPB, mockedDevCardSelector);
 
-        testIH.useDevCard();
+        testIH.selectAndUseDevCard();
         EasyMock.verify(mockedRP, mockedCG, mockedPB, mockedDevCardSelector);
     }
 

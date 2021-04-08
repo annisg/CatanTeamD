@@ -13,18 +13,16 @@ import gui.Select2Frame;
 import model.*;
 
 public class InputHandler {
-    private final Integer[] possibleIntersectionRows = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-    private final Integer[] possibleIntersectionCols = { 1, 2, 3, 4, 5, 6 };
-    private final Integer[] possibleEdgeRows = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-    private final Integer[] possibleEdgeCols = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    private final Integer[] possibleHexRows = { 1, 2, 3, 4, 5 };
-    private final Integer[] possibleHexCols = { 1, 2, 3, 4, 5 };
-    private final Object[] possibleDevCards = { KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
-            VictoryPointCard.class, RoadBuildingCard.class };
-    private final Object[] possibleResources = { Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
-            Resource.WOOL };
-    private String[] possibleDevCardNames;
-    private String[] possibleResourceNames;
+    private final Integer[] possibleIntersectionRows = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    private final Integer[] possibleIntersectionCols = {1, 2, 3, 4, 5, 6};
+    private final Integer[] possibleEdgeRows = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    private final Integer[] possibleEdgeCols = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private final Integer[] possibleHexRows = {1, 2, 3, 4, 5};
+    private final Integer[] possibleHexCols = {1, 2, 3, 4, 5};
+    private final Object[] possibleDevCards = {KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
+            VictoryPointCard.class, RoadBuildingCard.class};
+    private final Object[] possibleResources = {Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
+            Resource.WOOL};
     Select2Frame optionalIntersectionSelector;
     Select2Frame optionalEdgeSelector;
     Select2Frame mandatoryIntersectionSelector;
@@ -33,33 +31,129 @@ public class InputHandler {
     Select1Frame devCardSelector;
     Select1Frame resourceNumberSelector;
     Select1Frame resourceSelector;
-
-    private ResourceProducer resourceProducer;
-    private CatanGame catanGame;
     BuildingHandler propertyBuilder;
-
+    public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] intersectionCoordinates) {
+            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+            return null;
+        }
+    };
+    public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] intersectionCoordinates) {
+            propertyBuilder.placeInitialSettlementRound2(intersectionCoordinates[0], intersectionCoordinates[1]);
+            return null;
+        }
+    };
+    public Function<Integer[], Void> placeSettlement = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] intersectionCoordinates) {
+            propertyBuilder.placeSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
+            return null;
+        }
+    };
+    public Function<Integer[], Void> placeCity = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] intersectionCoordinates) {
+            propertyBuilder.placeCity(intersectionCoordinates[0], intersectionCoordinates[1]);
+            return null;
+        }
+    };
+    public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] edgeCoordinates) {
+            propertyBuilder.placeInitialRoad(edgeCoordinates[0], edgeCoordinates[1]);
+            return null;
+        }
+    };
+    public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] edgeCoordinates) {
+            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
+            return null;
+        }
+    };
+    private final Function<Integer[], Void> placeFreeRoad = new Function<Integer[], Void>() {
+        @Override
+        public Void apply(Integer[] edgeCoordinates) {
+            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], false);
+            return null;
+        }
+    };
     boolean hasNotRolled;
     List<Integer> orderedResourceNumbers;
     List<Resource> orderedResources;
+    private String[] possibleDevCardNames;
+    private String[] possibleResourceNames;
+    private ResourceProducer resourceProducer;
+    private CatanGame catanGame;
+
+    public Function<Object, Void> useSelectedDevCard = selected -> {
+        playDevelopmentCard((Class) selected);
+        return null;
+    };
+    private final Function<Object, Void> addResource = selected -> {
+        giveResourceToCurrentPlayer((Resource) selected);
+        return null;
+    };
+
     private List<Resource> hexPlacementResources;
     private List<Integer> hexPlacementNumbers;
-    
+    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object number) {
+            Integer currentResourceNumber = (Integer) number;
+            orderedResourceNumbers.add(currentResourceNumber);
+            for (int i = 0; i < hexPlacementNumbers.size(); i++) {
+                if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
+                    hexPlacementNumbers.remove(i);
+                    break;
+                }
+            }
+
+            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
+            return null;
+        }
+    };
+    public Function<Object, Void> selectResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object resource) {
+            Resource currentResource = (Resource) resource;
+            orderedResources.add(currentResource);
+            for (int i = 0; i < hexPlacementResources.size(); i++) {
+                if (hexPlacementResources.get(i).equals(currentResource)) {
+                    hexPlacementResources.remove(i);
+                    break;
+                }
+            }
+            if (!resource.equals(Resource.DESERT)) {
+                resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"),
+                        selectResourceNumber);
+            } else {
+                selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
+            }
+            return null;
+        }
+    };
+
+
     public InputHandler(ResourceProducer resourceProducer, CatanGame game, PieceBuilder builder) {
         this.resourceProducer = resourceProducer;
         this.catanGame = game;
         this.hasNotRolled = true;
         this.propertyBuilder = new BuildingHandler(game, builder, this);
-        
+
         orderedResourceNumbers = new ArrayList<Integer>();
         orderedResources = new ArrayList<Resource>();
 
-        possibleDevCardNames = new String[] { this.catanGame.getMessages().getString("InputHandler.4"),
+        possibleDevCardNames = new String[]{this.catanGame.getMessages().getString("InputHandler.4"),
                 this.catanGame.getMessages().getString("InputHandler.3"),
                 this.catanGame.getMessages().getString("InputHandler.2"),
                 this.catanGame.getMessages().getString("InputHandler.1"),
-                this.catanGame.getMessages().getString("InputHandler.0") };
+                this.catanGame.getMessages().getString("InputHandler.0")};
         // TODO: extract strings
-        possibleResourceNames = new String[] { "Brick", "Grain", "Lumber", "Ore", "Wool" };
+        possibleResourceNames = new String[]{"Brick", "Grain", "Lumber", "Ore", "Wool"};
         optionalIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, true, this);
         optionalEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, true, this);
         mandatoryIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, false,
@@ -68,7 +162,7 @@ public class InputHandler {
         hexSelector = new Select2Frame(possibleHexRows, possibleHexCols, false, this);
         devCardSelector = new Select1Frame(possibleDevCardNames, possibleDevCards, true, this);
         resourceSelector = new Select1Frame(possibleResourceNames, possibleResources, false, this);
-        }
+    }
 
     public ResourceBundle getMessages() {
         return this.catanGame.getMessages();
@@ -79,26 +173,10 @@ public class InputHandler {
                 placeInitialSettlement);
     }
 
-    public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-
     public void placeInitialSettlementRound2() {
         mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.6"),
                 placeInitialSettlementRound2);
     }
-
-    public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlementRound2(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
 
     public void placeSettlement() {
         if (this.propertyBuilder.canPlaceSettlement(this.hasNotRolled)) {
@@ -107,14 +185,6 @@ public class InputHandler {
         }
     }
 
-    public Function<Integer[], Void> placeSettlement = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-
     public void placeCity() {
         if (this.propertyBuilder.canPlaceCity(this.hasNotRolled)) {
             optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.8"),
@@ -122,26 +192,10 @@ public class InputHandler {
         }
     }
 
-    public Function<Integer[], Void> placeCity = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeCity(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-
     public void placeInitialRoad() {
         mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.9"),
                 placeInitialRoad);
     }
-
-    public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeInitialRoad(edgeCoordinates[0], edgeCoordinates[1]);
-            return null;
-        }
-    };
 
     public void placeRoad() {
         if (this.propertyBuilder.canPlaceRoad(this.hasNotRolled)) {
@@ -150,20 +204,11 @@ public class InputHandler {
         }
     }
 
-    public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
-            return null;
-        }
-    };
-    
     public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
-        
         hexPlacementResources = availableResources;
         hexPlacementNumbers = availableNumbers;
-        
-        if(availableResources.size() != 0) {
+
+        if (availableResources.size() != 0) {
             resourceSelector = buildResourceSelector(availableResources);
             resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
             resourceSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.27"),
@@ -178,128 +223,127 @@ public class InputHandler {
     Select1Frame buildResourceNumberSelector(List<Integer> availableNumbers) {
         String[] numberStrings = new String[availableNumbers.size()];
         Object[] numberObjs = new Object[availableNumbers.size()];
-        
-        for(int i = 0; i < availableNumbers.size(); i++) {
+
+        for (int i = 0; i < availableNumbers.size(); i++) {
             numberStrings[i] = availableNumbers.get(i).toString();
             numberObjs[i] = availableNumbers.get(i);
         }
-        
+
         return new Select1Frame(numberStrings, numberObjs, false, this);
     }
 
     Select1Frame buildResourceSelector(List<Resource> availableResources) {
         String[] resourceStrings = new String[availableResources.size()];
         Object[] resourceObjs = new Object[availableResources.size()];
-        
-        for(int i = 0; i < availableResources.size(); i++) {
+
+        for (int i = 0; i < availableResources.size(); i++) {
             resourceStrings[i] = availableResources.get(i).name();
             resourceObjs[i] = availableResources.get(i);
         }
-        
+
         return new Select1Frame(resourceStrings, resourceObjs, false, this);
     }
-    
-    public Function<Object, Void> selectResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object resource) {
-            Resource currentResource = (Resource) resource;
-            orderedResources.add(currentResource);
-            for(int i = 0; i < hexPlacementResources.size(); i++) {
-                if(hexPlacementResources.get(i).equals(currentResource)) {
-                    hexPlacementResources.remove(i);
-                    break;
-                }
-            }
-            if(!resource.equals(Resource.DESERT)) {
-                resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"), selectResourceNumber);
-            }
-            else {
-                selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            }
-            return null;
-        }
-    };
-    
-    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object number) {
-            Integer currentResourceNumber = (Integer) number;
-            orderedResourceNumbers.add(currentResourceNumber);
-            for(int i = 0; i < hexPlacementNumbers.size(); i++) {
-                if(hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
-                    hexPlacementNumbers.remove(i);
-                    break;
-                }
-            }
-            
-            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            return null;
-        }
-    };
 
     public void buyDevelopmentCard() {
         this.propertyBuilder.buyDevelopmentCard(this.hasNotRolled);
     }
 
-    public void useDevCard() {
+    public void selectAndUseDevCard() {
         devCardSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.11"), useSelectedDevCard);
     }
 
-    public Function<Object, Void> useSelectedDevCard = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object selected) {
-            canUseDevCard((Class) selected);
-            return null;
-        }
-    };
-
-    void canUseDevCard(Class devCardSelected) {
+    void playDevelopmentCard(Class selected) {
         if (this.hasNotRolled) {
             displayMessage(this.catanGame.getMessages().getString("InputHandler.12"));
             return;
         }
-        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        Player currentPlayer = playerTracker.getCurrentPlayer();
-        DevelopmentCard cardToUse = currentPlayer.findDevelopmentCard(devCardSelected);
-        if (cardToUse instanceof KnightCard) {
-            hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.13"),
-                    this.playKnightCard);
-            cardToUse.use(currentPlayer);
+
+        Player player = getCurrentPlayer();
+        DevelopmentCard card = player.getDevelopmentCard(selected);
+
+        if (card instanceof KnightCard) {
+            promptToMoveRobber();
+        } else if (card instanceof YearOfPlentyCard) {
+            offerPlayerTwoFreeResources();
+        } else if (card instanceof RoadBuildingCard) {
+            offerPlayerTwoFreeRoads();
         }
-        if (cardToUse instanceof VictoryPointCard) {
+
+        try {
+            card.use(player);
+        } catch (VictoryPointPlayedException e) {
             displayMessage(this.catanGame.getMessages().getString("InputHandler.14"));
-        }
-        if (cardToUse instanceof YearOfPlentyCard) {
-            for (int i = 0; i < 2; i++) {
-                resourceSelector.selectAndApply("Select a resource", addResource);
-            }
-            cardToUse.use(currentPlayer);
-        }
-        if (cardToUse instanceof RoadBuildingCard) {
-            for (int i = 0; i < 2; i++) {
-                optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
-                        this.placeRoadWithCard);
-            }
-            cardToUse.use(currentPlayer);
         }
     }
 
     public void tryToRollDice() {
+        int numRolled;
+
         try {
-            int diceRoll = this.rollDice();
-            if (this.isRobberTurn(diceRoll)) {
-                this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
-                hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.16"),
-                        this.performRobberTurn);
-            } else {
-                this.displayMessage(
-                        MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.17"), diceRoll));
-                this.produceResources(diceRoll);
-            }
+            numRolled = this.rollDice();
         } catch (IllegalStateException resourceException) {
             this.displayMessage(this.catanGame.getMessages().getString("InputHandler.18"));
+            return;
+        }
+
+        if (this.isRobberTurn(numRolled)) {
+            this.rolledSeven();
+        } else {
+            this.produceResources(numRolled);
         }
     }
+
+    private void rolledSeven() {
+        this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
+
+        // TODO @Pavani: All Players w/ >7 Cards Discard Here.
+        promptToMoveRobber();
+    }
+
+    private void promptToMoveRobber() {
+        hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.13"),
+                this.moveRobberTo);
+    }
+
+    public Function<Integer[], Void> moveRobberTo = hexCoordinates -> {
+        moveRobberTo(hexCoordinates[0], hexCoordinates[1]);
+        return null;
+    };
+
+    void moveRobberTo(int row, int col) {
+        updateRobberPositionOnBoard(row, col);
+        selectPlayerToStealFrom(row, col);
+    }
+
+//    private Player playerToStealFrom;
+//    private final Function<Object, Void> stealOneResource = selected -> {
+//        stealOneResource((Resource) selected);
+//        return null;
+//    };
+
+    private void selectPlayerToStealFrom(int row, int col) {
+        ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
+
+        HashSet<PlayerColor> adjacentColors = new HashSet<>();
+        HashSet<String> adjacentColorNames = new HashSet<String>();
+        for (Intersection i : intersections) {
+            PlayerColor color = i.getBuildingColor();
+            adjacentColors.add(color);
+            adjacentColorNames.add(color.name());
+        }
+        adjacentColors.remove(PlayerColor.NONE);
+        adjacentColors.add(PlayerColor.NONE);
+        adjacentColorNames.add(PlayerColor.NONE.name());
+
+        Select1Frame playerSelector =
+                new Select1Frame(adjacentColorNames.toArray(new String[0]), adjacentColors.toArray(), false, this);
+        playerSelector.selectAndApply("Select a player to steal a resource from", stealFromPlayer);
+    }
+
+    private final Function<Object, Void> stealFromPlayer = selected -> {
+        stealFromPlayer((PlayerColor) selected);
+        return null;
+    };
 
     public int rollDice() {
         if (this.hasNotRolled) {
@@ -317,123 +361,58 @@ public class InputHandler {
     }
 
     public void produceResources(int numRolled) {
-        this.resourceProducer.produceResources(this.catanGame.getGameMap(), this.catanGame.getPlayerTracker(),
-                numRolled);
+        this.displayMessage(
+                MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.17"), numRolled));
+
+        this.resourceProducer.produceResources(this.catanGame.getGameMap(), getPlayerTracker(), numRolled);
         this.catanGame.drawPlayers();
     }
 
-    public Function<Integer[], Void> performRobberTurn = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] hexCoordinates) {
-            performRobberTurn(hexCoordinates[0], hexCoordinates[1]);
-            return null;
-        }
-    };
+    private void stealFromPlayer(PlayerColor selectedPlayerColor) {
+        if (selectedPlayerColor == PlayerColor.NONE) return;
 
-    void performRobberTurn(int row, int col) {
-        this.catanGame.getGameMap().moveRobberToPosition(row, col);
-        this.catanGame.drawScreen();
+        Player selectedPlayer = getPlayerTracker().getPlayer(selectedPlayerColor);
+
+        Player currentPlayer = getCurrentPlayer();
+
+        String stolenResource = currentPlayer.stealRandomResourceFrom(selectedPlayer).toString();
+        catanGame.drawScreen();
+
+        displayMessage(String.format("Stole %s from %s.", stolenResource, selectedPlayerColor.name().toLowerCase()));
     }
-    
-    public Function<Integer[], Void> playKnightCard = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] hexCoordinates) {
-            playKnightCard(hexCoordinates[0], hexCoordinates[1]);
-            return null;
+
+    private void offerPlayerTwoFreeRoads() {
+        for (int i = 0; i < 2; i++) {
+            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
+                    this.placeFreeRoad);
         }
-    };
-
-    void playKnightCard(int row, int col) {
-        performRobberTurn(row, col);
-        ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
-
-        HashSet<PlayerColor> adjacentColors = new HashSet<>();
-        HashSet<String> adjacentColorNames = new HashSet<String>();
-        for(Intersection i: intersections) {
-            PlayerColor color = i.getBuildingColor();
-            adjacentColors.add(color);
-            adjacentColorNames.add(color.name());
-        }
-        adjacentColors.remove(PlayerColor.NONE);
-        adjacentColorNames.add(PlayerColor.NONE.name());
-
-        Select1Frame playerSelector = new Select1Frame(adjacentColorNames.toArray(new String[adjacentColorNames.size()]), 
-                adjacentColors.toArray(), false, this);
-        playerSelector.selectAndApply("Select a player to steal a resource from", stealFromPlayer);
     }
-    
-    public Function<Object, Void> stealFromPlayer = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object selected) {
-            stealFromPlayer((PlayerColor) selected);
-            return null;
-        }       
-    };
-    
-    Player playerToStealFrom;
-    private void stealFromPlayer(PlayerColor selected) {
-        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        playerToStealFrom = playerTracker.getPlayer(selected);
-        
-        Resource[] availableResources = playerToStealFrom.getResourceTypes().toArray(new Resource[5]);
-        String[] availableResourceNames = new String[availableResources.length];
-        
-        for(int i = 0; i < availableResources.length; i++) {
-            availableResourceNames[i] = availableResources[i].name();
-        }
-        
-        Select1Frame resourceSelector = new Select1Frame(availableResourceNames, 
-                availableResources, false, this);
-        resourceSelector.selectAndApply("Select a resource to steal", stealOneResource);
-    }
-    
-    public Function<Object, Void> stealOneResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object selected) {
-            stealOneResource((Resource) selected);
-            return null;
-        }
-    };
 
-    void stealOneResource(Resource resource) {
-        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        
-        playerToStealFrom.removeResource(resource, 1);
-        playerTracker.getCurrentPlayer().giveResource(resource, 1);
-        this.catanGame.drawPlayers();
-    }
-        
-    public Function<Object, Void> addResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object selected) {
-            addResourceFromYOPCard((Resource) selected);
-            return null;
+    private void offerPlayerTwoFreeResources() {
+        for (int i = 0; i < 2; i++) {
+            resourceSelector.selectAndApply("Select a resource", addResource);
         }
-    };
+    }
 
-    void addResourceFromYOPCard(Resource resource) {
-        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        Player currentPlayer = playerTracker.getCurrentPlayer();
+    private void giveResourceToCurrentPlayer(Resource resource) {
+        Player currentPlayer = getCurrentPlayer();
 
         currentPlayer.giveResource(resource, 1);
         this.catanGame.drawPlayers();
     }
-    
-    public Function<Integer[], Void> placeRoadWithCard = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], false);
-            return null;
-        }
-    };
+
+    void updateRobberPositionOnBoard(int row, int col) {
+        this.catanGame.getGameMap().moveRobberToPosition(row, col);
+        this.catanGame.drawScreen();
+    }
 
     public void endTurn() {
         if (this.hasNotRolled) {
             displayMessage(this.catanGame.getMessages().getString("InputHandler.19"));
             return;
         }
-        TurnTracker playerTracker = this.catanGame.getPlayerTracker();
-        Player currentPlayer = playerTracker.getCurrentPlayer();
+        TurnTracker playerTracker = getPlayerTracker();
+        Player currentPlayer = getCurrentPlayer();
         currentPlayer.letAllDevelopmentCardsBePlayed();
         VictoryPointCalculator pointCalculator = this.catanGame.getPointCalculator();
         boolean hasWon = pointCalculator.isWinning(currentPlayer);
@@ -445,6 +424,14 @@ public class InputHandler {
             playerTracker.passTurn();
         }
         this.catanGame.drawPlayers();
+    }
+
+    private Player getCurrentPlayer() {
+        return catanGame.getCurrentPlayer();
+    }
+
+    private TurnTracker getPlayerTracker() {
+        return catanGame.getPlayerTracker();
     }
 
     public void displayMessage(String message) {

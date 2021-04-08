@@ -171,7 +171,7 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        testIH.performRobberTurn(1, 1);
+        testIH.moveRobberTo(1, 1);
         assertTrue(testGM.getHex(1, 1).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
 
@@ -193,7 +193,7 @@ public class InputHandler_Resource_Production_Tests {
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
         try {
-            testIH.performRobberTurn(2, 2);
+            testIH.moveRobberTo(2, 2);
             fail();
         } catch (IllegalRobberMoveException e) {
         }
@@ -216,13 +216,13 @@ public class InputHandler_Resource_Production_Tests {
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCM, mockedPB);
         try {
-            testIH.performRobberTurn(0, 3);
+            testIH.moveRobberTo(0, 3);
             fail();
         } catch (InvalidHexPositionException e) {
         }
 
         try {
-            testIH.performRobberTurn(3, 4);
+            testIH.moveRobberTo(3, 4);
             fail();
         } catch (InvalidHexPositionException e) {
         }
@@ -247,7 +247,7 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.expect(testIH.rollDice()).andReturn(7);
         EasyMock.expect(testIH.isRobberTurn(7)).andReturn(true);
         testIH.displayMessage(messages.getString("InputHandler.15"));
-        mockedHexSelector.selectAndApply(messages.getString("InputHandler.16"), testIH.performRobberTurn);
+        mockedHexSelector.selectAndApply(messages.getString("InputHandler.16"), testIH.moveRobberTo);
 
         EasyMock.replay(testIH, mockedHexSelector);
 

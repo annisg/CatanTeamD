@@ -9,7 +9,9 @@ public class Player {
     private PlayerColor color;
     private Map<Resource, Integer> resources;
     private List<DevelopmentCard> developmentCards;
-    private int settlementCount, cityCount, roadCount, knightCount;;
+    private int settlementCount, cityCount, roadCount, knightCount;
+
+    private Random random;
 
     public Player(PlayerColor color) {
 
@@ -27,12 +29,14 @@ public class Player {
         cityCount = 4;
         roadCount = 15;
         knightCount = 0;
+
+        random = new Random();
     }
 
     public PlayerColor getColor() {
         return color;
     }
-    
+
     public Set<Resource> getResourceTypes() {
         return resources.keySet();
     }
@@ -90,7 +94,7 @@ public class Player {
         developmentCards.add(card);
     }
 
-    public DevelopmentCard findDevelopmentCard(Class selectedDevelopmentCard) {
+    public DevelopmentCard getDevelopmentCard(Class selectedDevelopmentCard) {
         List<DevelopmentCard> cards = this.getDevelopmentCards();
         for (DevelopmentCard card : cards) {
             if (card.canBePlayed() && card.getClass() == selectedDevelopmentCard) {
@@ -112,12 +116,40 @@ public class Player {
 
         boolean didRemove = developmentCards.remove(card);
 
-        if (didRemove) {
-            return;
-        } else {
+        if (!didRemove) {
             throw new ItemNotFoundException("Attempted to remove a development card that was not in hand.");
         }
 
+    }
+
+    public Resource stealRandomResourceFrom(Player stolenFrom) {
+        int handSize = stolenFrom.getResourceHandSize();
+
+        List<Resource> availableResources = new ArrayList<>();
+
+        if (handSize == 0) {
+            return Resource.DESERT;
+        } else {
+            stolenFrom.resources.forEach((key, value) -> {
+                for (int i = 0; i < value; i++) {
+                    availableResources.add(key);
+                }
+            });
+
+            Resource stolenResource = availableResources.get(random.nextInt(handSize));
+
+            stolenFrom.removeResource(stolenResource, 1);
+            this.giveResource(stolenResource, 1);
+            return stolenResource;
+        }
+    }
+
+    public int stealAllOfResourceFrom(Player stolenFrom, Resource resource) {
+        int qtyStolen = stolenFrom.getResourceCount(resource);
+        stolenFrom.removeResource(resource, qtyStolen);
+        this.giveResource(resource, qtyStolen);
+
+        return qtyStolen;
     }
 
     public int getSettlementCount() {
@@ -162,5 +194,9 @@ public class Player {
 
     public void incrementKnightCount() {
         knightCount++;
+    }
+
+    void setRandom(Random random) {
+        this.random = random;
     }
 }

@@ -40,7 +40,7 @@ public class InputHandler_Custom_Board_Tests {
         
         EasyMock.expect(testIH.buildResourceSelector(availableResources)).andReturn(mockedRS);
         EasyMock.expect(testIH.buildResourceNumberSelector(availableNumbers)).andReturn(mockedRNS);
-        mockedRS.selectAndApply(messages.getString("InputHandler.27"), testIH.selectResource);
+        mockedRS.selectAndApply("Select a resource for the next hex:", testIH.selectResource);
         
         EasyMock.replay(mockedRP, mockedPB, testIH, mockedRS, mockedRNS);
 
