@@ -66,15 +66,10 @@ public class InputHandler {
         }
     };
 
-    public void placeInitialSettlementRound2() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.6"),
-                placeInitialSettlementRound2);
-    }
-
     public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
         @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlementRound2(intersectionCoordinates[0], intersectionCoordinates[1]);
+        public Void apply(Integer[] mousePosition) {
+            propertyBuilder.placeInitialSettlementRound2(mousePosition[0], mousePosition[1]);
             return null;
         }
     };
