@@ -1,58 +1,39 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.function.Function;
-
-import javax.swing.*;
-
 import control.InputHandler;
 
-public class Select2Frame {
-    private Integer[] rows, cols;
-    private InputHandler handler;
-    private boolean isOptional;
+import javax.swing.*;
+import java.awt.*;
+import java.util.function.Function;
+
+public class Select2Frame extends SelectFrame {
+    private final Integer[] rows;
+    private final Integer[] cols;
 
     public Select2Frame(Integer[] rowOptions, Integer[] colOptions, boolean isOptional, InputHandler handler) {
+        super(handler, isOptional);
         this.rows = rowOptions;
         this.cols = colOptions;
-        this.handler = handler;
-        this.isOptional = isOptional;
     }
 
     public void selectAndApply(String selectMessage, Function<Integer[], Void> inputHandlerFunc) {
-        JFrame selectionFrame = new JFrame();
-        JPanel selectionPanel = new JPanel();
-        JPanel endPanel = new JPanel();
-        JComboBox<Integer> rowSelector = new JComboBox<Integer>(rows);
-        rowSelector.setSelectedIndex(0);
-        JComboBox<Integer> colSelector = new JComboBox<Integer>(cols);
-        colSelector.setSelectedIndex(0);
-        JButton submitButton = new JButton(handler.getMessages().getString("Select2Frame.0"));
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Integer selectedRow = new Integer(rowSelector.getSelectedIndex());
-                Integer selectedCol = new Integer(colSelector.getSelectedIndex());
+        resetComponents();
 
-                try {
-                    inputHandlerFunc.apply(new Integer[] { selectedRow, selectedCol });
-                    selectionFrame.dispose();
-                } catch (Exception exception) {
-                    handler.handleException(exception, selectedRow + 1, selectedCol + 1);
-                }
-            }
-        });
-        JButton quitButton = new JButton(handler.getMessages().getString("Select2Frame.1"));
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isOptional) {
-                    selectionFrame.dispose();
-                } else {
-                    handler.displayMessage(handler.getMessages().getString("Select2Frame.2"));
-                }
+        JComboBox<Integer> rowSelector = new JComboBox<>(rows);
+        JComboBox<Integer> colSelector = new JComboBox<>(cols);
+        rowSelector.setSelectedIndex(0);
+        colSelector.setSelectedIndex(0);
+
+        JButton submitButton = new JButton(handler.getMessages().getString("Select2Frame.0"));
+        submitButton.addActionListener(e -> {
+            int selectedRow = rowSelector.getSelectedIndex();
+            int selectedCol = colSelector.getSelectedIndex();
+
+            try {
+                inputHandlerFunc.apply(new Integer[]{selectedRow, selectedCol});
+                selectionFrame.dispose();
+            } catch (Exception exception) {
+                handler.handleException(exception, selectedRow + 1, selectedCol + 1);
             }
         });
 
@@ -61,12 +42,7 @@ public class Select2Frame {
         selectionPanel.add(rowSelector);
         selectionPanel.add(new JLabel(handler.getMessages().getString("Select2Frame.4")));
         selectionPanel.add(colSelector);
-        selectionFrame.add(selectionPanel);
-        endPanel.add(quitButton);
-        endPanel.add(submitButton);
-        selectionFrame.add(endPanel, BorderLayout.SOUTH);
-        selectionFrame.pack();
-        selectionFrame.setVisible(true);
-        selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        formatDialogBox(submitButton);
     }
 }

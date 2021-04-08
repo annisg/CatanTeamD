@@ -191,7 +191,7 @@ public class PlayerPlacer_Tests {
         EasyMock.expect(player.getDevelopmentCards()).andReturn(cards);
         EasyMock.replay(player);
 
-        HashMap<String, Integer> cardMap = testPP.getDevelopmentCardMap(player);
+        HashMap<DevelopmentCard, Integer> cardMap = testPP.getDevelopmentCardMap(player);
         assertEquals(0, cardMap.get("K").intValue());
         assertEquals(0, cardMap.get("M").intValue());
         assertEquals(0, cardMap.get("R").intValue());
@@ -228,7 +228,7 @@ public class PlayerPlacer_Tests {
         EasyMock.replay(player);
         EasyMock.replay(cards.toArray());
 
-        HashMap<String, Integer> cardMap = testPP.getDevelopmentCardMap(player);
+        HashMap<DevelopmentCard, Integer> cardMap = testPP.getDevelopmentCardMap(player);
         assertEquals(2, cardMap.get("K").intValue());
         assertEquals(3, cardMap.get("M").intValue());
         assertEquals(4, cardMap.get("R").intValue());
@@ -251,7 +251,7 @@ public class PlayerPlacer_Tests {
         EasyMock.replay(cards.toArray());
 
         try {
-            HashMap<String, Integer> cardMap = testPP.getDevelopmentCardMap(player);
+            HashMap<DevelopmentCard, Integer> cardMap = testPP.getDevelopmentCardMap(player);
             fail("Expected RuntimeException");
         } catch (RuntimeException e) {
         }
