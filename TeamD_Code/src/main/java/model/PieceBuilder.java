@@ -77,6 +77,10 @@ public class PieceBuilder {
             throw new IllegalStateException();
         }
     }
+    
+    public void buildRoadWithCard(Player player, Edge edge) {
+        placer.placeRoadOnMap(player, board, edge);
+    }
 
     public boolean hasResourcesToBuildRoad(Player player) {
         return hasSufficientResources(player, roadCost);
