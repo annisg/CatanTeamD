@@ -22,17 +22,17 @@ public class DevelopmentDeck {
 
     private void populateDeck() {
 
-//        for (int i = 0; i < 14; i++) {
-//            deck.add(new KnightCard(largestArmy, messages));
-//        }
-//
-//        for (int i = 0; i < 5; i++) {
-//            deck.add(new VictoryPointCard(messages));
-//        }
+        for (int i = 0; i < 14; i++) {
+            deck.add(new KnightCard(largestArmy, messages));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            deck.add(new VictoryPointCard(messages));
+        }
 
         for (int i = 0; i < 2; i++) {
-            //deck.add(new MonopolyCard(messages));
-            //deck.add(new YearOfPlentyCard(messages));
+            deck.add(new MonopolyCard(messages));
+            deck.add(new YearOfPlentyCard(messages));
             deck.add(new RoadBuildingCard(messages));
         }
 
