@@ -146,12 +146,11 @@ public class CatanGame_tests {
     private void runTestsMakeBoard(GameStartState testState, int testNumPlayers) {
         if (testState == GameStartState.ADVANCED && testNumPlayers >= 3 && testNumPlayers <= 4) {
             EasyMock.expect(mockedTurnTracker.getNumPlayers()).andStubReturn(testNumPlayers);
-            this.handler.placeInitialSettlement();
-            this.handler.placeInitialRoad();
+            this.component.selectInitialPlaceSettlement();
+            this.component.selectInitialRoadPlacement();
         }
         replayAll();
         testCatan.makeBoard(testState, testNumPlayers);
-        testCatan.initialPlacement(testState);
         verifyAll();
     }
 
@@ -335,8 +334,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.handler.placeInitialSettlement();
-        this.handler.placeInitialRoad();
+        this.component.selectInitialPlaceSettlement();
+        this.component.selectInitialRoadPlacement();
 
         replayAll();
         this.testCatan.advancedInitialPlacementOneTurn();
@@ -347,8 +346,8 @@ public class CatanGame_tests {
     public void testAdvancedInitialPlacementRoundTwoOneTurn() {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
-        this.handler.placeInitialSettlementRound2();
-        this.handler.placeInitialRoad();
+        this.component.selectInitialSettlementPlacementRound2();
+        this.component.selectInitialRoadPlacement();
 
         replayAll();
         this.testCatan.advancedInitialPlacementRoundTwoOneTurn();

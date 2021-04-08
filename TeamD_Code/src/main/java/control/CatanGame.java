@@ -118,13 +118,13 @@ public class CatanGame {
     }
 
     public void advancedInitialPlacementOneTurn() {
-        inputHandler.placeInitialSettlement();
-        inputHandler.placeInitialRoad();
+        input.selectInitialPlaceSettlement();
+        input.selectInitialRoadPlacement();
     }
 
     public void advancedInitialPlacementRoundTwoOneTurn() {
-        inputHandler.placeInitialSettlementRound2();
-        inputHandler.placeInitialRoad();
+        input.selectInitialSettlementPlacementRound2();
+        input.selectInitialRoadPlacement();
     }
     
     private void customHexPlacement() {

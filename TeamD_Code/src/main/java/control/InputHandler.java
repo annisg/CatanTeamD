@@ -119,7 +119,8 @@ public class InputHandler {
     public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
         @Override
         public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeRoad(mousePosition[0], mousePosition[1]);
+            propertyBuilder.placeRoad(mousePosition[0], mousePosition[1], true);
+            return null;
         }
     };
     

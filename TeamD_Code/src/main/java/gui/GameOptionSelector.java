@@ -41,7 +41,6 @@ public class GameOptionSelector {
             public void actionPerformed(ActionEvent arg0) {
                 startFrame.dispose();
                 catanController.makeBoard(selectedState, numPlayers);
-                catanController.initialPlacement(selectedState);
             }
         });
 

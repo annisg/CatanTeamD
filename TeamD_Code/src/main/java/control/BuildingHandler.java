@@ -94,7 +94,7 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeRoad(int x, int y) {
+    public void placeRoad(int x, int y, boolean chargeResources) {
         Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
     
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
