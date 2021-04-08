@@ -36,6 +36,10 @@ public class Player {
     public PlayerColor getColor() {
         return color;
     }
+    
+    public Set<Resource> getResourceTypes() {
+        return resources.keySet();
+    }
 
     public void discardResourceCard(Resource resource){
         resources.put(resource, resources.get(resource)-1);

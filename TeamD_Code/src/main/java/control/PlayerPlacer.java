@@ -83,6 +83,7 @@ public class PlayerPlacer {
             Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
             HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
+
             allPlayerGUIs
                     .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages));
         }
@@ -139,7 +140,7 @@ public class PlayerPlacer {
                 throw new RuntimeException();
             }
 
-            int previousCount = cardMap.get(abbreviation);
+            int previousCount = cardMap.get(c);
             cardMap.put(abbreviation, previousCount + 1);
         }
 

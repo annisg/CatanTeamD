@@ -1,5 +1,5 @@
 package control;
 
 public enum GameStartState {
-    BEGINNER, ADVANCED
+    BEGINNER, ADVANCED, CUSTOM
 }

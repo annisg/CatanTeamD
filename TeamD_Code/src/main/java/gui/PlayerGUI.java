@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.text.MessageFormat;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -63,15 +64,32 @@ public class PlayerGUI extends Drawable {
     public void drawComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
+        super.drawComponent(g);
+        drawPlayerName(g2);
+        drawResourceCards(g2);
+        drawDevelopmentCards(g2);
+    }
+
+    private void drawPlayerName(Graphics2D g2) {
+        int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         g2.setColor(Color.black);
         g2.setFont(writingFont);
         g2.drawString(this.playerOrderDisplay, xPlayerPosition + borderWidth, boxYPos + borderWidth + fontSize);
+    }
 
+    private void drawDevelopmentCards(Graphics2D g2) {
         int listIndex = 0;
         // TODO: Fix Primitive Obsession for Dev. Card Type. Collapse for loop like below.
         for (DevelopmentCard developmentCard : numOfEachDevelopmentCard.keySet()) {
             drawDevelopmentCard(g2, developmentCard, listIndex);
             listIndex++;
+        }
+    }
+
+    private void drawResourceCards(Graphics2D g2) {
+        Resource[] resources = Resource.values();
+        for (int i = 0; i < resources.length; i++) {
+            drawResourceCard(g2, resources[i], i);
         }
     }
 
@@ -114,12 +132,12 @@ public class PlayerGUI extends Drawable {
     public int getAmountOfSpecificCard(DevelopmentCard card){
         return numOfEachDevelopmentCard.get(card);
     }
+   
     private String getAbbrForDevelopmentCard(DevelopmentCard developmentCard) {
-        DevelopmentCard card = developmentCard;
 
             if (developmentCard instanceof KnightCard)
                 return messages.getString("PlayerGUI.4");
-            else if (developmentCard instanceof VictoryPointCard)
+            else if(developmentCard instanceof VictoryPointCard)
                 return messages.getString("PlayerGUI.6");
             else if (developmentCard instanceof YearOfPlentyCard)
                 return messages.getString("PlayerGUI.8");
@@ -129,6 +147,22 @@ public class PlayerGUI extends Drawable {
                 return messages.getString("PlayerGUI.12");
             else
                 return messages.getString("PlayerGUI.13");
+        }
+
+    private String getAbbrForDevelopmentCard(String developmentCard) {
+        switch (developmentCard) {
+        case "K":
+            return messages.getString("PlayerGUI.4");
+        case "V":
+            return messages.getString("PlayerGUI.6");
+        case "Y":
+            return messages.getString("PlayerGUI.8");
+        case "R":
+            return messages.getString("PlayerGUI.10");
+        case "M":
+            return messages.getString("PlayerGUI.12");
+        default:
+            return messages.getString("PlayerGUI.13");
         }
 
     }

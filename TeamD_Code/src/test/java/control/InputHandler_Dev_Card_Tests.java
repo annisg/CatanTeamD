@@ -53,13 +53,67 @@ public class InputHandler_Dev_Card_Tests {
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
         EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedPlayer.findDevelopmentCard(KnightCard.class)).andReturn(mockedKC);
-        mockedSelector.selectAndApply("Select hex to place robber:", testIH.performRobberTurn);
+        mockedSelector.selectAndApply("Select hex to place robber:", testIH.playKnightCard);
         mockedKC.use(mockedPlayer);
         EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedKC);
 
         testIH.rollDice();
         testIH.canUseDevCard(KnightCard.class);
         EasyMock.verify(mockedRP, mockedCG, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedKC);
+    }
+
+    @Test
+    public void testCanUseRoadBuildingCard() {
+        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
+        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
+        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        TurnTracker mockedTT = EasyMock.strictMock(TurnTracker.class);
+        Player mockedPlayer = EasyMock.strictMock(Player.class);
+        RoadBuildingCard mockedRBC = EasyMock.partialMockBuilder(RoadBuildingCard.class).addMockedMethod("use").mock();
+        Select2Frame mockedSelector = EasyMock.niceMock(Select2Frame.class);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.replay(mockedCG);
+        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
+        testIH.optionalEdgeSelector = mockedSelector;
+
+        EasyMock.expect(mockedRP.rollDice()).andReturn(4);
+        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
+        EasyMock.expect(mockedPlayer.findDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedRBC);
+        //mockedSelector.selectAndApply("Select edge to place road:", testIH.placeRoadWithCard);
+        mockedRBC.use(mockedPlayer);
+        EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedRBC);
+
+        testIH.rollDice();
+        testIH.canUseDevCard(RoadBuildingCard.class);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedRBC);
+    }
+
+    @Test
+    public void testCanUseYOPCard() {
+        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
+        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
+        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        TurnTracker mockedTT = EasyMock.strictMock(TurnTracker.class);
+        Player mockedPlayer = EasyMock.strictMock(Player.class);
+        YearOfPlentyCard mockedYOPC = EasyMock.partialMockBuilder(YearOfPlentyCard.class).addMockedMethod("use").mock();
+        Select2Frame mockedSelector = EasyMock.niceMock(Select2Frame.class);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.replay(mockedCG);
+        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
+        testIH.optionalEdgeSelector = mockedSelector;
+
+        EasyMock.expect(mockedRP.rollDice()).andReturn(4);
+        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
+        EasyMock.expect(mockedPlayer.findDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedYOPC);
+        //mockedSelector.selectAndApply("Select edge to place road:", testIH.placeRoadWithCard);
+        mockedYOPC.use(mockedPlayer);
+        EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedYOPC);
+
+        testIH.rollDice();
+        testIH.canUseDevCard(RoadBuildingCard.class);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedYOPC);
     }
 
     @Test

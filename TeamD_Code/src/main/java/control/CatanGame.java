@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.List;
 
 public class CatanGame {
 
@@ -83,16 +84,21 @@ public class CatanGame {
                 model.setUpAdvancedMap();
                 break;
             case BEGINNER:
-            default:
                 model.setUpBeginnerMap(numPlayers);
                 this.turnTracker.setupBeginnerResourcesAndPieces();
                 break;
+            case CUSTOM:
+            default:
+                customHexPlacement();
             }
 
             this.playerPlacer.refreshPlayerNumber();
-            buildModelFrame();
-            if (state == GameStartState.ADVANCED) {
-                advancedInitialPlacement();
+            
+            if (state != GameStartState.CUSTOM) {
+                buildModelFrame();
+                if (state != GameStartState.BEGINNER) {
+                    advancedInitialPlacement();
+                }
             }
         }
     }
@@ -109,13 +115,19 @@ public class CatanGame {
     }
 
     public void advancedInitialPlacementOneTurn() {
-        input.selectInitialPlaceSettlement();
-        input.selectInitialRoadPlacement();
+        inputHandler.placeInitialSettlement();
+        inputHandler.placeInitialRoad();
     }
 
     public void advancedInitialPlacementRoundTwoOneTurn() {
-        input.selectInitialSettlementPlacementRound2();
-        input.selectInitialRoadPlacement();
+        inputHandler.placeInitialSettlementRound2();
+        inputHandler.placeInitialRoad();
+    }
+    
+    private void customHexPlacement() {
+        List<Resource> remainingResources = model.getHexMap().getStandardResources();
+        List<Integer> remainingNumbers = model.getHexMap().getStandardResourceNumbers();
+        inputHandler.selectCustomHexPlacement(remainingResources, remainingNumbers);
     }
 
     public void buildModelFrame() {
