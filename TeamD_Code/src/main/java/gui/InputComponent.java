@@ -8,6 +8,7 @@ import java.util.function.Function;
 import javax.swing.*;
 
 import control.*;
+import exception.PlaceBuildingException;
 
 import static java.lang.Thread.sleep;
 
@@ -31,7 +32,7 @@ public class InputComponent extends JPanel {
         buildRoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeRoad();
+                clickFunctionQueue.add(handler.placeRoad);
             }
         });
 
@@ -39,7 +40,7 @@ public class InputComponent extends JPanel {
         buildSettlement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeSettlement();
+                clickFunctionQueue.add(handler.placeSettlement);
             }
         });
 
@@ -47,7 +48,7 @@ public class InputComponent extends JPanel {
         buildCity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.placeCity();
+                clickFunctionQueue.add(handler.placeCity);
             }
         });
 
@@ -100,7 +101,10 @@ public class InputComponent extends JPanel {
                     try {
                         function.apply(new Integer[]{x, y});
                         clickFunctionQueue.poll();
+                    } catch (PlaceBuildingException exception) {
+                    
                     } catch (Exception exception) {
+                        clickFunctionQueue.poll();
                     }
                 }
             }

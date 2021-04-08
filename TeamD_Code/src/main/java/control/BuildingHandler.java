@@ -47,8 +47,8 @@ public class BuildingHandler {
         this.catanGame.drawPlayers();
     }
 
-    public void placeSettlement(int row, int col) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getIntersection(row, col);
+    public void placeSettlement(int x, int y) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildSettlement(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -71,8 +71,8 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeCity(int row, int col) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getIntersection(row, col);
+    public void placeCity(int x, int y) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildCity(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -94,9 +94,9 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeRoad(int row, int col) {
-        Edge desiredEdge = this.catanGame.getGameMap().getEdge(row, col);
-
+    public void placeRoad(int x, int y) {
+        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
+    
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildRoad(playerTracker.getCurrentPlayer(), desiredEdge);
 
