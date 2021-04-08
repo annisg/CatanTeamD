@@ -30,14 +30,14 @@ public class PlayerGUI extends Drawable {
 
     Color playerColor;
     private HashMap<Resource, Integer> numOfEachResource;
-    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;  //change to development card type
+    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;
     int playersPosition;
     private String playerOrderDisplay;
     private ObjectToColorConverter colorConverter;
     private ResourceBundle messages;
 
     public PlayerGUI(Color colorOfPlayer, HashMap<Resource, Integer> numPerResourceMap,
-                     HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
+            HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
         this.messages = messages;
         this.playerColor = colorOfPlayer;
         this.numOfEachResource = numPerResourceMap;
@@ -136,8 +136,10 @@ public class PlayerGUI extends Drawable {
 
             if (developmentCard instanceof KnightCard)
                 return messages.getString("PlayerGUI.4");
+
             else if (developmentCard instanceof VictoryPointCard)
                 return messages.getString("PlayerGUI.6");
+
             else if (developmentCard instanceof VictoryPointCard)
                 return messages.getString("PlayerGUI.8");
             else if (developmentCard instanceof RoadBuildingCard)
@@ -148,5 +150,21 @@ public class PlayerGUI extends Drawable {
                 return messages.getString("PlayerGUI.13");
         }
 
+    private String getAbbrForDevelopmentCardy(String developmentCard) {
+        switch (developmentCard) {
+            case "K":
+                return messages.getString("PlayerGUI.4");
+            case "V":
+                return messages.getString("PlayerGUI.6");
+            case "Y":
+                return messages.getString("PlayerGUI.8");
+            case "R":
+                return messages.getString("PlayerGUI.10");
+            case "M":
+                return messages.getString("PlayerGUI.12");
+            default:
+                return messages.getString("PlayerGUI.13");
+        }
+    }
 
 }
