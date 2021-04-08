@@ -7,11 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.text.MessageFormat;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import control.ObjectToColorConverter;
-import model.Resource;
+import model.*;
 
 public class PlayerGUI extends Drawable {
 
@@ -30,14 +31,14 @@ public class PlayerGUI extends Drawable {
 
     Color playerColor;
     private HashMap<Resource, Integer> numOfEachResource;
-    private HashMap<String, Integer> numOfEachDevelopmentCard;
+    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;
     int playersPosition;
     private String playerOrderDisplay;
     private ObjectToColorConverter colorConverter;
     private ResourceBundle messages;
 
     public PlayerGUI(Color colorOfPlayer, HashMap<Resource, Integer> numPerResourceMap,
-            HashMap<String, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
+            HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
         this.messages = messages;
         this.playerColor = colorOfPlayer;
         this.numOfEachResource = numPerResourceMap;
@@ -78,7 +79,7 @@ public class PlayerGUI extends Drawable {
     private void drawDevelopmentCards(Graphics2D g2) {
         int listIndex = 0;
         // TODO: Fix Primitive Obsession for Dev. Card Type. Collapse for loop like below.
-        for (String developmentCard : numOfEachDevelopmentCard.keySet()) {
+        for (DevelopmentCard developmentCard : numOfEachDevelopmentCard.keySet()) {
             drawDevelopmentCard(g2, developmentCard, listIndex);
             listIndex++;
         }
@@ -112,7 +113,7 @@ public class PlayerGUI extends Drawable {
         return this.colorConverter.resourceToColor(resource);
     }
 
-    private void drawDevelopmentCard(Graphics2D g2, String developmentCard, int listOrder) {
+    private void drawDevelopmentCard(Graphics2D g2, DevelopmentCard developmentCard, int listOrder) {
         int cardX = initalCardOffsetX + listOrder * (cardWidth + borderWidth);
         int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         int cardY = boxYPos + relativeDevelopmentCardOffsetY;
@@ -126,6 +127,22 @@ public class PlayerGUI extends Drawable {
                 numOfEachDevelopmentCard.get(developmentCard));
         g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
     }
+
+    private String getAbbrForDevelopmentCard(DevelopmentCard developmentCard) {
+
+            if (developmentCard instanceof KnightCard)
+                return messages.getString("PlayerGUI.4");
+            else if(developmentCard instanceof VictoryPointCard)
+                return messages.getString("PlayerGUI.6");
+            else if (developmentCard instanceof YearOfPlentyCard)
+                return messages.getString("PlayerGUI.8");
+            else if (developmentCard instanceof RoadBuildingCard)
+                return messages.getString("PlayerGUI.10");
+            else if (developmentCard instanceof MonopolyCard)
+                return messages.getString("PlayerGUI.12");
+            else
+                return messages.getString("PlayerGUI.13");
+        }
 
     private String getAbbrForDevelopmentCard(String developmentCard) {
         switch (developmentCard) {
