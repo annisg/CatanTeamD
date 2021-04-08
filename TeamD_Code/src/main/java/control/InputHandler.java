@@ -200,6 +200,9 @@ public class InputHandler {
 
     public void discardCardsForEveryPlayer(){
         List<Player> people = catanGame.turnTracker.getPlayers();
+        if(people.size()==0 || people==null){
+            return;
+        }
         for(Player p : people){
             if(p.getResourceHandSize()>7){
                 p.discardHalfResourceHand();
