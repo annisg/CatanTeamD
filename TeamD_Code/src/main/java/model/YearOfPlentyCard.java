@@ -17,6 +17,6 @@ public class YearOfPlentyCard extends DevelopmentCard {
 
     @Override
     public void use(Player owner) {
-        throw new RuntimeException(messages.getString("YearOfPlentyCard.1"));
+    	owner.removeDevelopmentCard(this);
     }
 }
