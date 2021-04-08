@@ -32,6 +32,10 @@ public class Player {
     public PlayerColor getColor() {
         return color;
     }
+    
+    public Set<Resource> getResourceTypes() {
+        return resources.keySet();
+    }
 
     public int getResourceCount(Resource resource) {
 
