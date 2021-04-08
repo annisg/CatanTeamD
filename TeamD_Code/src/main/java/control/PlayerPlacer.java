@@ -140,7 +140,7 @@ public class PlayerPlacer {
                 throw new RuntimeException();
             }
 
-            int previousCount = cardMap.get(c);
+            int previousCount = cardMap.get(abbreviation);
             cardMap.put(abbreviation, previousCount + 1);
         }
 
