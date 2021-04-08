@@ -48,6 +48,7 @@ public class PlayerGUI extends Drawable {
         this.colorConverter = new ObjectToColorConverter();
     }
 
+
     @Override
     public Color getColor() {
         return this.playerColor;
@@ -128,6 +129,10 @@ public class PlayerGUI extends Drawable {
         g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
     }
 
+    public int getAmountOfSpecificCard(DevelopmentCard card){
+        return numOfEachDevelopmentCard.get(card);
+    }
+   
     private String getAbbrForDevelopmentCard(DevelopmentCard developmentCard) {
 
             if (developmentCard instanceof KnightCard)
@@ -159,6 +164,7 @@ public class PlayerGUI extends Drawable {
         default:
             return messages.getString("PlayerGUI.13");
         }
+
     }
 
 }

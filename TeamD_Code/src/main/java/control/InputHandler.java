@@ -1,8 +1,8 @@
 package control;
 
 import java.text.MessageFormat;
-import java.util.*;
 
+import java.util.*;
 import java.util.function.Function;
 
 import javax.swing.JOptionPane;
@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import exception.*;
 import gui.Select1Frame;
 import gui.Select2Frame;
+import gui.TradeWithSpecificPlayerGUI;
 import model.*;
 
 public class InputHandler {
@@ -287,6 +288,10 @@ public class InputHandler {
     public void tryToRollDice() {
         try {
             int diceRoll = this.rollDice();
+            //adding the seven feature
+            if(diceRoll==7){
+                discardCardsForEveryPlayer();
+            }
             if (this.isRobberTurn(diceRoll)) {
                 this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
                 hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.16"),
@@ -301,6 +306,27 @@ public class InputHandler {
         }
     }
 
+    public void discardCardsForEveryPlayer(){
+        if(catanGame==null || catanGame.turnTracker == null){
+            return;
+        }
+        List<Player> people = catanGame.turnTracker.getPlayers();
+        if(people.size()==0){
+            return;
+        }
+        for(Player p : people){
+            if(p.getResourceHandSize()>7){
+                p.discardHalfResourceHand();
+            }
+        }
+    }
+
+    public void tradeWithPlayer(){
+        System.out.println("i am in trade with player");
+        Player p = this.catanGame.getPlayerTracker().getCurrentPlayer();
+        TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(p);
+
+    }
     public int rollDice() {
         if (this.hasNotRolled) {
             this.hasNotRolled = false;
