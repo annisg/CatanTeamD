@@ -21,11 +21,12 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
     static Player playerToTrade;
     static JLabel playerToTradeInstruction;
     static JComboBox playerMenu;
-
+    JFrame frame;
     public TradeWithSpecificPlayerGUI(Player player) {
         this.currentPlayer = player;
         startGUI();
     }
+
 
     public void startGUI() {
         JFrame frame = new JFrame("My First GUI");
@@ -58,6 +59,10 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         int numToTrade = Integer.parseInt(numberOfCardsToTrade.getText());
         ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
         playerToTrade.receiveResourceForTrading(stuff);
+        frame.dispose();
+        //need to do stuff the other way around
+       // currentPlayer = playerToTrade;
+        TradeWithSpecificPlayerGUI swap = new TradeWithSpecificPlayerGUI(playerToTrade);
 
     }
 
