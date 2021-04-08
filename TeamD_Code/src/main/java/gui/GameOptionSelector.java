@@ -74,7 +74,7 @@ public class GameOptionSelector {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedState = GameStartState.BEGINNER;
+                selectedState = state;
             }
         });
         
