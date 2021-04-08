@@ -363,7 +363,6 @@ public class InputHandler {
         } else {
             displayMessage(
                     MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
-            e.printStackTrace();
         }
     }
 
