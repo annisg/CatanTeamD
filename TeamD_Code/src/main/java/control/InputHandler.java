@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import exception.*;
 import gui.Select1Frame;
 import gui.Select2Frame;
+import gui.TradeWithSpecificPlayerGUI;
 import model.*;
 
 public class InputHandler {
@@ -206,6 +207,11 @@ public class InputHandler {
         }
     }
 
+    public void tradeWithPlayer(){
+        Player p = this.catanGame.getPlayerTracker().getCurrentPlayer();
+        TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(p);
+
+    }
     public int rollDice() {
         if (this.hasNotRolled) {
             this.hasNotRolled = false;

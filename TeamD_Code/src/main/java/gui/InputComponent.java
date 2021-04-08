@@ -3,6 +3,7 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.net.JarURLConnection;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -71,6 +72,15 @@ public class InputComponent extends JPanel {
             }
         });
 
+        JButton tradeWithPlayer = new JButton("Trade");
+        tradeWithPlayer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
         this.add(new JLabel(messages.getString("InputComponent.8")));

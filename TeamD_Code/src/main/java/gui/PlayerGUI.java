@@ -47,6 +47,7 @@ public class PlayerGUI extends Drawable {
         this.colorConverter = new ObjectToColorConverter();
     }
 
+
     @Override
     public Color getColor() {
         return this.playerColor;

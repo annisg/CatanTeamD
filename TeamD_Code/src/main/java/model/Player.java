@@ -13,7 +13,8 @@ public class Player {
     private List<DevelopmentCard> developmentCards;
     private int settlementCount, cityCount, roadCount, knightCount;
     private RemoveCardsGUI removeCardsGUI;
-
+    private TurnTracker turnTracker;
+    private int numOfPlayersInEntireGame=0;
     public Player(PlayerColor color) {
 
         this.color = color;
@@ -40,6 +41,17 @@ public class Player {
         resources.put(resource, resources.get(resource)-1);
     }
 
+    public void addTracker(TurnTracker track){
+        this.turnTracker = track;
+        this.numOfPlayersInEntireGame = this.turnTracker.getNumPlayers();
+    }
+
+    public TurnTracker getTracker(){
+        return this.turnTracker;
+    }
+    public int getPlayersInGame(){
+        return this.turnTracker.getNumPlayers();
+    }
     //adding the behavior to discard cards
     public  Map<Resource, Integer> getResourceCards(){
         return resources;
