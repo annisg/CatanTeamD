@@ -101,6 +101,10 @@ public class Player {
 
         return resources.get(r);
     }
+
+    public void giveCardsToPlayer(Player player){
+
+    }
     public Resource getResourceByName(String name){
         if(name.equals("GRAIN")){
             return Resource.GRAIN;
