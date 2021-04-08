@@ -32,15 +32,6 @@ public class TurnTracker {
     public Player getPlayer(int index) {
         return players.get(index);
     }
-    
-    public Player getPlayer(PlayerColor color) {
-        for(Player p: players) {
-            if(p.getColor() == color) {
-                return p;
-            }
-        }
-        return null;
-    }
 
     public void setupPlayers(int numPlayers) {
 
