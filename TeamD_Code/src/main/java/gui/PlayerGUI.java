@@ -30,14 +30,14 @@ public class PlayerGUI extends Drawable {
 
     Color playerColor;
     private HashMap<Resource, Integer> numOfEachResource;
-    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;  //change to development card type
+    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;
     int playersPosition;
     private String playerOrderDisplay;
     private ObjectToColorConverter colorConverter;
     private ResourceBundle messages;
 
     public PlayerGUI(Color colorOfPlayer, HashMap<Resource, Integer> numPerResourceMap,
-                     HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
+            HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
         this.messages = messages;
         this.playerColor = colorOfPlayer;
         this.numOfEachResource = numPerResourceMap;
@@ -61,8 +61,6 @@ public class PlayerGUI extends Drawable {
 
     @Override
     public void drawComponent(Graphics g) {
-        super.drawComponent(g);
-        int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(Color.black);
@@ -70,12 +68,7 @@ public class PlayerGUI extends Drawable {
         g2.drawString(this.playerOrderDisplay, xPlayerPosition + borderWidth, boxYPos + borderWidth + fontSize);
 
         int listIndex = 0;
-        for (Resource resource : Resource.values()) {
-            drawResourceCard(g2, resource, listIndex);
-            listIndex++;
-        }
-
-        listIndex = 0;
+        // TODO: Fix Primitive Obsession for Dev. Card Type. Collapse for loop like below.
         for (DevelopmentCard developmentCard : numOfEachDevelopmentCard.keySet()) {
             drawDevelopmentCard(g2, developmentCard, listIndex);
             listIndex++;
@@ -128,7 +121,7 @@ public class PlayerGUI extends Drawable {
                 return messages.getString("PlayerGUI.4");
             else if (developmentCard instanceof VictoryPointCard)
                 return messages.getString("PlayerGUI.6");
-            else if (developmentCard instanceof VictoryPointCard)
+            else if (developmentCard instanceof YearOfPlentyCard)
                 return messages.getString("PlayerGUI.8");
             else if (developmentCard instanceof RoadBuildingCard)
                 return messages.getString("PlayerGUI.10");
@@ -138,5 +131,6 @@ public class PlayerGUI extends Drawable {
                 return messages.getString("PlayerGUI.13");
         }
 
+    }
 
 }

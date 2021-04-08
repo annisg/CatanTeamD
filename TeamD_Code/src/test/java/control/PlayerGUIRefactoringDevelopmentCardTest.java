@@ -54,7 +54,7 @@ public class PlayerGUIRefactoringDevelopmentCardTest {
 
         PlayerGUI playerGUI = new PlayerGUI(Color.WHITE, null, numOfEachCard, 0, 0, null);
         int numberOfMonopoly = playerGUI.getAmountOfSpecificCard(new MonopolyCard(null));
-        assertEquals(4, numberOfMonopoly);
+        assertEquals(0, numberOfMonopoly);
 
     }
 }
