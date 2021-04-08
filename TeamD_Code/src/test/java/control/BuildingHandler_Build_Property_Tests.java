@@ -78,7 +78,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getEdge(0, 4)).andThrow(new InvalidEdgePositionException());
+        EasyMock.expect(mockedGM.getClosestEdge(0, 4)).andThrow(new InvalidEdgePositionException());
         EasyMock.replay(mockedCG, mockedPB, mockedGM);
 
         try {
@@ -101,7 +101,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getEdge(0, 0)).andReturn(selectedEdge);
+        EasyMock.expect(mockedGM.getClosestEdge(0, 0)).andReturn(selectedEdge);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildRoad(playerTracker.getCurrentPlayer(), selectedEdge);
         EasyMock.expectLastCall().andThrow(new PlaceBuildingException(""));
@@ -127,7 +127,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getEdge(0, 0)).andReturn(selectedEdge);
+        EasyMock.expect(mockedGM.getClosestEdge(0, 0)).andReturn(selectedEdge);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildRoad(playerTracker.getCurrentPlayer(), selectedEdge);
         mockedCG.justDrawProperty();
@@ -201,7 +201,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 10)).andThrow(new InvalidIntersectionPositionException());
+        EasyMock.expect(mockedGM.getClosestIntersection(0, 10)).andThrow(new InvalidIntersectionPositionException());
         EasyMock.replay(mockedCG, mockedPB, mockedGM);
 
         try {
@@ -224,7 +224,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 0)).andReturn(selectedIntersection);
+        EasyMock.expect(mockedGM.getClosestIntersection(0, 0)).andReturn(selectedIntersection);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildSettlement(playerTracker.getCurrentPlayer(), selectedIntersection);
         EasyMock.expectLastCall().andThrow(new PlaceBuildingException(""));
@@ -250,7 +250,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 0)).andReturn(selectedIntersection);
+        EasyMock.expect(mockedGM.getClosestIntersection(0, 0)).andReturn(selectedIntersection);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildSettlement(playerTracker.getCurrentPlayer(), selectedIntersection);
         mockedCG.justDrawProperty();
@@ -314,27 +314,7 @@ public class BuildingHandler_Build_Property_Tests {
         assertTrue(testBH.canPlaceCity(false));
         EasyMock.verify(mockedCG, mockedIH, mockedPB);
     }
-
-    @Test
-    public void testPlaceCityBadPosition() {
-        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
-        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
-        GameMap mockedGM = EasyMock.strictMock(GameMap.class);
-        InputHandler mockedIH = EasyMock.strictMock(InputHandler.class);
-        BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
-
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 10)).andThrow(new InvalidIntersectionPositionException());
-        EasyMock.replay(mockedCG, mockedPB, mockedGM);
-
-        try {
-            testBH.placeCity(0, 10);
-            fail();
-        } catch (InvalidIntersectionPositionException e) {
-        }
-        EasyMock.verify(mockedCG, mockedPB, mockedGM);
-    }
-
+    
     @Test
     public void testPlaceCityBadEdge() {
         CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
@@ -347,7 +327,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 0)).andReturn(selectedIntersection);
+        EasyMock.expect(mockedGM.getClosestIntersection(0, 0)).andReturn(selectedIntersection);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildCity(playerTracker.getCurrentPlayer(), selectedIntersection);
         EasyMock.expectLastCall().andThrow(new PlaceBuildingException(""));
@@ -373,7 +353,7 @@ public class BuildingHandler_Build_Property_Tests {
         BuildingHandler testBH = new BuildingHandler(mockedCG, mockedPB, mockedIH);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(0, 0)).andReturn(selectedIntersection);
+        EasyMock.expect(mockedGM.getClosestIntersection(0, 0)).andReturn(selectedIntersection);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildCity(playerTracker.getCurrentPlayer(), selectedIntersection);
         mockedCG.justDrawProperty();
@@ -397,7 +377,7 @@ public class BuildingHandler_Build_Property_Tests {
         playerTracker.setupPlayers(3);
 
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-        EasyMock.expect(mockedGM.getIntersection(1, 1)).andReturn(selectedIntersection);
+        EasyMock.expect(mockedGM.getClosestIntersection(500, 500)).andReturn(selectedIntersection);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(playerTracker);
         mockedPB.buildInitialSettlementRound2(playerTracker.getCurrentPlayer(), selectedIntersection);
         mockedCG.justDrawProperty();
@@ -405,7 +385,7 @@ public class BuildingHandler_Build_Property_Tests {
 
         EasyMock.replay(mockedCG, mockedIH, mockedPB, mockedGM);
 
-        testBH.placeInitialSettlementRound2(1, 1);
+        testBH.placeInitialSettlementRound2(500, 500);
 
         EasyMock.verify(mockedCG, mockedIH, mockedPB, mockedGM);
     }
@@ -425,7 +405,7 @@ public class BuildingHandler_Build_Property_Tests {
                 Player mockedPlayer = EasyMock.mock(Player.class);
 
                 EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-                EasyMock.expect(mockedGM.getIntersection(i, j)).andReturn(mockedIntersection);
+                EasyMock.expect(mockedGM.getClosestIntersection(i, j)).andReturn(mockedIntersection);
                 EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTracker);
                 EasyMock.expect(mockedTracker.getCurrentPlayer()).andReturn(mockedPlayer);
                 mockedPB.buildInitialSettlement(mockedPlayer, mockedIntersection);
@@ -458,7 +438,7 @@ public class BuildingHandler_Build_Property_Tests {
                 Player mockedPlayer = EasyMock.mock(Player.class);
 
                 EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
-                EasyMock.expect(mockedGM.getEdge(i, j)).andReturn(mockedEdge);
+                EasyMock.expect(mockedGM.getClosestEdge(i, j)).andReturn(mockedEdge);
                 EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTracker);
                 EasyMock.expect(mockedTracker.getCurrentPlayer()).andReturn(mockedPlayer);
                 mockedPB.buildInitialRoad(mockedPlayer, mockedEdge);
