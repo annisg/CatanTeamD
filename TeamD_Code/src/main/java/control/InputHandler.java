@@ -418,7 +418,7 @@ public class InputHandler {
         }
     }
 
-    private void offerPlayerTwoFreeResources() {
+    void offerPlayerTwoFreeResources() {
         resourceSelector.selectAndApply("Select a resource", addResource);
         resourceSelector2.selectAndApply("Select a resource", addResource);
     }
