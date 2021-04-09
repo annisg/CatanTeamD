@@ -24,3 +24,5 @@ hs_err_pid*
 /bin/
 !/TeamD_Code/gradle/wrapper/gradle-wrapper.jar
 /.gradle/
+checkstyle-idea.xml
+TeamD_Code_main.iml
