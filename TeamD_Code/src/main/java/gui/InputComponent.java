@@ -12,7 +12,6 @@ import exception.PlaceBuildingException;
 import static java.lang.Thread.sleep;
 
 import control.*;
-import model.Resource;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
@@ -66,7 +65,7 @@ public class InputComponent extends JPanel {
         useDevCard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.useDevCard();
+                handler.selectAndUseDevCard();
             }
         });
 

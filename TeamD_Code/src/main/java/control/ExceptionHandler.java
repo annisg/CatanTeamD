@@ -4,37 +4,40 @@ import exception.*;
 
 import javax.swing.*;
 import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 public class ExceptionHandler {
 
-    public InputHandler input;
-    public ExceptionHandler(InputHandler handler){
+    private InputHandler input;
+    private ResourceBundle messages;
+    public ExceptionHandler(InputHandler handler, ResourceBundle message) {
         this.input = handler;
+        this.messages = message;
     }
 
 
     public void handleException(Exception e, int row, int col) {
         if (e instanceof InvalidHexPositionException) {
-            input.displayMessage(MessageFormat.format(input.catanGame.getMessages().getString("InputHandler.21"), row, col));
+            input.displayMessage(MessageFormat.format(messages.getString("InputHandler.21"), row, col));
 
         } else if (e instanceof IllegalRobberMoveException) {
-            input.displayMessage(MessageFormat.format(input.catanGame.getMessages().getString("InputHandler.22"), row, col));
+            input.displayMessage(MessageFormat.format(messages.getString("InputHandler.22"), row, col));
 
         } else if (e instanceof InvalidEdgePositionException) {
-            input.displayMessage(MessageFormat.format(input.catanGame.getMessages().getString("InputHandler.23"), row, col));
+            input.displayMessage(MessageFormat.format(messages.getString("InputHandler.23"), row, col));
 
         } else if (e instanceof InvalidIntersectionPositionException) {
-            input.displayMessage(MessageFormat.format(input.catanGame.getMessages().getString("InputHandler.24"), row, col));
+            input.displayMessage(MessageFormat.format(messages.getString("InputHandler.24"), row, col));
 
         } else if (e instanceof PlaceBuildingException) {
             input.displayMessage(e.getMessage());
 
         } else if (e instanceof ItemNotFoundException) {
-            input.displayMessage(input.catanGame.getMessages().getString("InputHandler.25"));
+            input.displayMessage(messages.getString("InputHandler.25"));
 
         } else {
             input.displayMessage(
-                    MessageFormat.format(input.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
+                    MessageFormat.format(messages.getString("InputHandler.26"), e.getMessage()));
         }
     }
 }
