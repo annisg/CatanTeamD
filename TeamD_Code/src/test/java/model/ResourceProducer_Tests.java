@@ -87,7 +87,7 @@ public class ResourceProducer_Tests {
         EasyMock.replay(players.toArray());
         
         for(int i = 0; i < rolls.length; i++) {
-            producer.produceResources(map, tracker);
+            producer.produceResources(map, tracker, producer.rollDice());
         }
         
         EasyMock.verify(producer, map, tracker);
@@ -109,7 +109,7 @@ public class ResourceProducer_Tests {
         EasyMock.replay(producer, map, tracker);
         EasyMock.replay(players.toArray());
         
-        producer.produceResources(map, tracker);
+        producer.produceResources(map, tracker, producer.rollDice());
         
         EasyMock.verify(producer, map, tracker);
         EasyMock.verify(players.toArray());
