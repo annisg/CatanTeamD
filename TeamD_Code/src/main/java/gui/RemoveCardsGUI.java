@@ -74,12 +74,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create checkbox
         c1 = new JComboBox(entries);
-        // JComboBox c2 = new JComboBox(values);
-        // create textfield
-        //  tf = new JTextField(16);
 
-        // create add and remove buttons
-        //JButton b = new JButton("ADD");
         JButton b1 = new JButton("REMOVE");
 
         // add action listener
