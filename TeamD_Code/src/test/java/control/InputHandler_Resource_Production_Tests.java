@@ -173,13 +173,17 @@ public class InputHandler_Resource_Production_Tests {
         mockedCG.drawScreen();
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
+        // Above mocks test calls in constructor, hence the separate replay below
         InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
                 mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
+        testIH.selectPlayerToStealFrom(1,1);
+        EasyMock.replay(testIH);
+
         testIH.moveRobberTo(1, 1);
         assertTrue(testGM.getHex(1, 1).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
 
-        EasyMock.verify(mockedRP, mockedCG, mockedPB);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH);
     }
 
     @Test
