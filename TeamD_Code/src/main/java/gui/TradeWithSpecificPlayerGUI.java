@@ -61,7 +61,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         try {
             ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
             playerToTrade.receiveResourceForTrading(stuff);
-
+            frame.dispose();
         }
         catch(Exception e2){
             frame.dispose();
