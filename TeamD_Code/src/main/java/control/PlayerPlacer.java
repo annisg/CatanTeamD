@@ -113,7 +113,6 @@ public class PlayerPlacer {
 
     public HashMap<DevelopmentCard, Integer> getDevelopmentCardMap(Player player) {
         String[] abbreviations = {"K", "M", "R", "V", "Y"};
-
         DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
                 new VictoryPointCard(messages), new MonopolyCard(messages),
                 new RoadBuildingCard(messages), new YearOfPlentyCard(messages)};
@@ -148,7 +147,6 @@ public class PlayerPlacer {
     }
 
     public HashMap<DevelopmentCard, Integer> getDevelopmentCardMapAmount(Player player) {
-        //String[] abbreviations = { "K", "M", "R", "V", "Y" };
         DevelopmentCard[] cards = {new KnightCard(null, null), new MonopolyCard(null), new RoadBuildingCard(null),
                 new VictoryPointCard(null), new YearOfPlentyCard(null)};
         HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();

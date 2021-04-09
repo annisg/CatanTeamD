@@ -29,7 +29,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
 
 
     public void startGUI() {
-        JFrame frame = new JFrame("My First GUI");
+         frame = new JFrame("My First GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 300);
         frame.setLayout(new FlowLayout());
@@ -58,13 +58,19 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         Resource source = currentPlayer.getResourceByName((String) typeOfCardToTrade.getSelectedItem());
         playerToTrade = currentPlayer.getTracker().getPlayer((Integer.parseInt((String) playerMenu.getSelectedItem())));
         int numToTrade = Integer.parseInt(numberOfCardsToTrade.getText());
-        ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
-        playerToTrade.receiveResourceForTrading(stuff);
-        System.out.println("I am in dispose!");
-        frame.dispose();
+        try {
+            ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
+            playerToTrade.receiveResourceForTrading(stuff);
+
+        }
+        catch(Exception e2){
+            frame.dispose();
+            // currentPlayer = playerToTrade;
+           // TradeWithSpecificPlayerGUI swap = new TradeWithSpecificPlayerGUI(playerToTrade);
+            startGUI();
+        }
         //need to do stuff the other way around
-       // currentPlayer = playerToTrade;
-        TradeWithSpecificPlayerGUI swap = new TradeWithSpecificPlayerGUI(playerToTrade);
+
 
     }
 
