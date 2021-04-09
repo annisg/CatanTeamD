@@ -168,6 +168,8 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
             // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
         }
 
+
+        //change
     }
 
     public void itemStateChanged(ItemEvent e)
