@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import exception.*;
@@ -207,7 +208,7 @@ public class IntersectionMap {
         return this.intersectionMap[pos.getRow()][pos.getColumn()];
     }
     
-    public Intersection getClosestIntersection(int x, int y) {
+    public Intersection getClosestIntersectionToPoint(Point point) {
         Intersection closestIntersection = intersectionMap[3][3];
         for(int i = 0; i < intersectionMap.length; i++) {
             for (int j = 0; j < intersectionMap.length; j++) {
@@ -215,7 +216,8 @@ public class IntersectionMap {
                     if(closestIntersection == null) {
                         closestIntersection = intersectionMap[i][j];
                     }
-                    if (getIntersectionDistanceFromPoint(i, j, x, y) < getIntersectionDistanceFromPoint(findIntersectionPosition(closestIntersection).getRow(), findIntersectionPosition(closestIntersection).getColumn(), x, y)) {
+                    if (getIntersectionDistanceFromPoint(new MapPosition(i, j), point) <
+                            getIntersectionDistanceFromPoint(findIntersectionPosition(closestIntersection), point)) {
                         closestIntersection = intersectionMap[i][j];
                     }
                 }
@@ -224,12 +226,12 @@ public class IntersectionMap {
         return closestIntersection;
     }
     
-    public double getIntersectionDistanceFromPoint(int row, int column, int pointX, int pointY) {
-        int intersectionX = 0;
-        int intersectionY = 0;
+    public double getIntersectionDistanceFromPoint(MapPosition mapPosition, Point point) {
+        int row = mapPosition.getRow();
+        int column = mapPosition.getColumn();
     
-        intersectionX = column * 150;
-        intersectionY = -row * 64 + 890;
+        int intersectionX = column * 150;
+        int intersectionY = -row * 64 + 890;
         if ((row == 0 || row == 11) && column <= 2) {
             intersectionX += 600;
         } else if ((row == 1 || row == 2 || row == 9 || row == 10) && column <= 3) {
@@ -240,7 +242,7 @@ public class IntersectionMap {
             intersectionX += 375;
         }
     
-        return Math.sqrt((intersectionX - pointX) * (intersectionX - pointX) + (intersectionY - pointY) * (intersectionY - pointY));
+        return Math.sqrt((intersectionX - point.x) * (intersectionX - point.x) + (intersectionY - point.y) * (intersectionY - point.y));
     }
 
     public MapPosition findIntersectionPosition(Intersection knownIntersection) {

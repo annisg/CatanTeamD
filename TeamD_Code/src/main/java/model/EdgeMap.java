@@ -1,10 +1,10 @@
 package model;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import exception.*;
 import gui.EdgeDirection;
-import gui.EdgeGUI;
 
 public class EdgeMap {
     private Edge[][] edges;
@@ -118,7 +118,7 @@ public class EdgeMap {
         return this.edges[position.getRow()][position.getColumn()];
     }
 
-    public Edge getClosestEdge(int x, int y) {
+    public Edge getClosestEdgeToPoint(Point point) {
         Edge closestEdge = edges[3][3];
         for(int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges.length; j++) {
@@ -126,7 +126,7 @@ public class EdgeMap {
                     if(closestEdge == null) {
                         closestEdge = edges[i][j];
                     }
-                    if (getRowColumnDistanceFromPoint(i, j, x, y) < getRowColumnDistanceFromPoint(findEdgePosition(closestEdge).getRow(), findEdgePosition(closestEdge).getColumn(), x, y)) {
+                    if (getDistanceFromPoint(new MapPosition(i, j), point) < getDistanceFromPoint(findEdgePosition(closestEdge), point)) {
                         closestEdge = edges[i][j];
                     }
                 }
@@ -135,7 +135,9 @@ public class EdgeMap {
         return closestEdge;
     }
 
-    private double getRowColumnDistanceFromPoint(int row, int column, int pointX, int pointY) {
+    private double getDistanceFromPoint(MapPosition mapPosition, Point point) {
+        int row = mapPosition.getRow();
+        int column = mapPosition.getColumn();
         int edgeX = 0;
         int edgeY = 0;
         EdgeDirection direction;
@@ -171,7 +173,7 @@ public class EdgeMap {
 
         edgeY = -row * 65 + 865;
 
-        return Math.sqrt((edgeX - pointX) * (edgeX - pointX) + (edgeY - pointY) * (edgeY - pointY));
+        return Math.sqrt((edgeX - point.x) * (edgeX - point.x) + (edgeY - point.y) * (edgeY - point.y));
     }
 
     public MapPosition findEdgePosition(Edge givenEdge) {

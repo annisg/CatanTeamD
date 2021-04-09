@@ -1,6 +1,7 @@
 
 package model;
 
+import java.awt.*;
 import java.util.*;
 
 import exception.*;
@@ -61,12 +62,12 @@ public class GameMap {
         return this.intersectionMap.getIntersection(new MapPosition(row, col));
     }
 
-    public Edge getClosestEdge(int x, int y) {
-        return this.edgeMap.getClosestEdge(x, y);
+    public Edge getClosestEdgeToPoint(Point point) {
+        return this.edgeMap.getClosestEdgeToPoint(point);
     }
     
-    public Intersection getClosestIntersection(int x, int y) {
-        return this.intersectionMap.getClosestIntersection(x, y);
+    public Intersection getClosestIntersectionToPoint(Point point) {
+        return this.intersectionMap.getClosestIntersectionToPoint(point);
     }
 
     public Edge getEdge(int row, int col) {

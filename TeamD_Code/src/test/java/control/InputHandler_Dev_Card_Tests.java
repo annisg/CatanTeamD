@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import gui.InputComponent;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -72,6 +73,9 @@ public class InputHandler_Dev_Card_Tests {
         Player mockedPlayer = EasyMock.strictMock(Player.class);
         RoadBuildingCard mockedRBC = EasyMock.partialMockBuilder(RoadBuildingCard.class).addMockedMethod("use").mock();
         Select2Frame mockedSelector = EasyMock.niceMock(Select2Frame.class);
+        InputComponent mockedInputComponent = EasyMock.strictMock(InputComponent.class);
+        mockedCG.input = mockedInputComponent;
+        mockedInputComponent.placeRoadWithCard();
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
         EasyMock.replay(mockedCG);

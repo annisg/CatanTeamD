@@ -1,8 +1,10 @@
 package control;
 
+import java.awt.*;
 import java.text.MessageFormat;
 
 import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 
 import javax.swing.JOptionPane;
@@ -76,50 +78,50 @@ public class InputHandler {
     }
 
 
-    public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeInitialSettlement = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeInitialSettlement(mousePosition[0], mousePosition[1]);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeInitialSettlement(mousePosition);
             return null;
         }
     };
 
-    public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeInitialSettlementRound2 = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeInitialSettlementRound2(mousePosition[0], mousePosition[1]);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeInitialSettlementRound2(mousePosition);
             return null;
         }
     };
 
-    public Function<Integer[], Void> placeSettlement = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeSettlement = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeSettlement(mousePosition[0], mousePosition[1]);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeSettlement(mousePosition);
             return null;
         }
     };
 
-    public Function<Integer[], Void> placeCity = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeCity = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeCity(mousePosition[0], mousePosition[1]);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeCity(mousePosition);
             return null;
         }
     };
 
-    public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeInitialRoad = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mouseCoordinates) {
-            propertyBuilder.placeInitialRoad(mouseCoordinates[0], mouseCoordinates[1]);
+        public Void apply(Point mouseCoordinates) {
+            propertyBuilder.placeInitialRoadAtClosestEdge(mouseCoordinates);
             return null;
         }
     };
 
-    public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeRoad = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] mousePosition) {
-            propertyBuilder.placeRoad(mousePosition[0], mousePosition[1], true);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeRoad(mousePosition, true);
             return null;
         }
     };
@@ -243,8 +245,7 @@ public class InputHandler {
         }
         if (cardToUse instanceof RoadBuildingCard) {
             for (int i = 0; i < 2; i++) {
-                optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
-                        this.placeRoadWithCard);
+                catanGame.input.placeRoadWithCard();
             }
             cardToUse.use(currentPlayer);
         }
@@ -410,10 +411,10 @@ public class InputHandler {
         this.catanGame.drawPlayers();
     }
     
-    public Function<Integer[], Void> placeRoadWithCard = new Function<Integer[], Void>() {
+    public Function<Point, Void> placeRoadWithCard = new Function<Point, Void>() {
         @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], false);
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeRoad(mousePosition, false);
             return null;
         }
     };

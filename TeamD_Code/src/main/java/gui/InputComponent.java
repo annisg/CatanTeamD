@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.*;
 import java.awt.event.*;
 
 import java.util.*;
@@ -16,7 +17,7 @@ import model.Resource;
 public class InputComponent extends JPanel {
     private InputHandler handler;
 
-    private Queue<Function<Integer[], Void>> clickFunctionQueue = new LinkedList<>();
+    private Queue<Function<Point, Void>> clickFunctionQueue = new LinkedList<>();
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
         this.handler = handler;
@@ -103,13 +104,10 @@ public class InputComponent extends JPanel {
         this.getParent().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                int x = mouseEvent.getX();
-                int y = mouseEvent.getY();
-
-                Function<Integer[], Void> function = clickFunctionQueue.peek();
+                Function<Point, Void> function = clickFunctionQueue.peek();
                 if(function != null) {
                     try {
-                        function.apply(new Integer[]{x, y});
+                        function.apply(mouseEvent.getPoint());
                         clickFunctionQueue.poll();
                     } catch (PlaceBuildingException exception) {
                     
@@ -131,5 +129,9 @@ public class InputComponent extends JPanel {
 
     public void selectInitialSettlementPlacementRound2() {
         clickFunctionQueue.add(handler.placeInitialSettlementRound2);
+    }
+
+    public void placeRoadWithCard() {
+        clickFunctionQueue.add(handler.placeRoadWithCard);
     }
 }

@@ -1,5 +1,6 @@
 package control;
 
+import java.awt.*;
 import java.text.MessageFormat;
 
 import model.*;
@@ -16,8 +17,8 @@ public class BuildingHandler {
         this.handler = handler;
     }
 
-    void placeInitialSettlement(int x, int y) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
+    void placeInitialSettlement(Point point) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersectionToPoint(point);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildInitialSettlement(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -26,8 +27,8 @@ public class BuildingHandler {
         this.catanGame.drawPlayers();
     }
 
-    void placeInitialRoad(int x, int y) {
-        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
+    void placeInitialRoadAtClosestEdge(Point point) {
+        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdgeToPoint(point);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildInitialRoad(playerTracker.getCurrentPlayer(), desiredEdge);
@@ -37,8 +38,8 @@ public class BuildingHandler {
         this.catanGame.advancedInitialPlacement();
     }
 
-    void placeInitialSettlementRound2(int x, int y) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
+    void placeInitialSettlementRound2(Point point) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersectionToPoint(point);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildInitialSettlementRound2(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -47,8 +48,8 @@ public class BuildingHandler {
         this.catanGame.drawPlayers();
     }
 
-    public void placeSettlement(int x, int y) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
+    public void placeSettlement(Point point) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersectionToPoint(point);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildSettlement(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -71,8 +72,8 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeCity(int x, int y) {
-        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersection(x, y);
+    public void placeCity(Point point) {
+        Intersection desiredIntersection = this.catanGame.getGameMap().getClosestIntersectionToPoint(point);
 
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         this.itemBuilder.buildCity(playerTracker.getCurrentPlayer(), desiredIntersection);
@@ -94,8 +95,8 @@ public class BuildingHandler {
         return false;
     }
 
-    public void placeRoad(int x, int y, boolean chargeResources) {
-        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdge(x, y);
+    public void placeRoad(Point point, boolean chargeResources) {
+        Edge desiredEdge = this.catanGame.getGameMap().getClosestEdgeToPoint(point);
     
         TurnTracker playerTracker = this.catanGame.getPlayerTracker();
         
