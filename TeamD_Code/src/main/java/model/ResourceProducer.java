@@ -10,12 +10,12 @@ public class ResourceProducer {
         this.random = random;
     }
 
-    public void produceResources(GameMap map, TurnTracker players) {
-
-        int roll = rollDice();
-
-        produceResources(map, players, roll);
-    }
+//    public void produceResources(GameMap map, TurnTracker players) {
+//
+//        int roll = rollDice();
+//
+//        produceResources(map, players, roll);
+//    }
 
     public void produceResources(GameMap map, TurnTracker players, int roll) {
         if (roll != 7) {

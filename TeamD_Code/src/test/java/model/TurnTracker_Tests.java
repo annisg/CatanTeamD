@@ -202,17 +202,18 @@ public class TurnTracker_Tests {
         TurnTracker tracker = EasyMock.partialMockBuilder(TurnTracker.class).addMockedMethod("makePlayer").withConstructor(random).createMock();
                 
         for(PlayerColor color : colors) {
-            EasyMock.expect(tracker.makePlayer(color)).andStubReturn(mockedPlayer(color));
+            EasyMock.expect(tracker.makePlayer(color)).andStubReturn(mockedPlayer(color, tracker));
         }
         
         return tracker;
     }
     
-    private Player mockedPlayer(PlayerColor color) {
+    private Player mockedPlayer(PlayerColor color, TurnTracker tracker) {
         
         Player player = EasyMock.mock(Player.class);
         
         EasyMock.expect(player.getColor()).andStubReturn(color);
+        player.addTracker(tracker);
         EasyMock.replay(player);
         
         return player;

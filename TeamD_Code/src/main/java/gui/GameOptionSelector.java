@@ -39,8 +39,8 @@ public class GameOptionSelector {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                catanController.makeBoard(selectedState, numPlayers);
                 startFrame.dispose();
+                catanController.makeBoard(selectedState, numPlayers);
             }
         });
 
@@ -74,7 +74,7 @@ public class GameOptionSelector {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedState = GameStartState.BEGINNER;
+                selectedState = state;
             }
         });
         

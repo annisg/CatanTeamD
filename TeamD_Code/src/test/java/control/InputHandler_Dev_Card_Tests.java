@@ -5,10 +5,12 @@ import static org.junit.Assert.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import gui.InputComponent;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
 import exception.ItemNotFoundException;
+import gui.Select1Frame;
 import gui.Select2Frame;
 import model.*;
 
@@ -68,6 +70,9 @@ public class InputHandler_Dev_Card_Tests {
         Player mockedPlayer = EasyMock.strictMock(Player.class);
         RoadBuildingCard mockedRBC = EasyMock.partialMockBuilder(RoadBuildingCard.class).addMockedMethod("use").mock();
         Select2Frame mockedSelector = EasyMock.niceMock(Select2Frame.class);
+        InputComponent mockedInputComponent = EasyMock.strictMock(InputComponent.class);
+        mockedCG.input = mockedInputComponent;
+        mockedInputComponent.placeRoadWithCard();
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
         EasyMock.replay(mockedCG);
@@ -94,17 +99,19 @@ public class InputHandler_Dev_Card_Tests {
         TurnTracker mockedTT = EasyMock.strictMock(TurnTracker.class);
         Player mockedPlayer = EasyMock.strictMock(Player.class);
         YearOfPlentyCard mockedYOPC = EasyMock.partialMockBuilder(YearOfPlentyCard.class).addMockedMethod("use").mock();
-        Select2Frame mockedSelector = EasyMock.niceMock(Select2Frame.class);
+        Select1Frame mockedSelector = EasyMock.niceMock(Select1Frame.class);
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
         EasyMock.replay(mockedCG);
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        testIH.optionalEdgeSelector = mockedSelector;
+        testIH.resourceSelector = mockedSelector;
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
         EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
-        EasyMock.expect(mockedPlayer.getDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedYOPC);
-        //mockedSelector.selectAndApply("Select edge to place road:", testIH.placeRoadWithCard);
+
+        EasyMock.expect(mockedPlayer.findDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedYOPC);
+        mockedSelector.selectAndApply("Select a resource", testIH.addResource);
+
         mockedYOPC.use(mockedPlayer);
         EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedSelector, mockedPlayer, mockedYOPC);
 

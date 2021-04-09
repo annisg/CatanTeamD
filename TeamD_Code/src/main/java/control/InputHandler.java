@@ -1,8 +1,10 @@
 package control;
 
+import java.awt.*;
 import java.text.MessageFormat;
-import java.util.*;
 
+import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 
 import javax.swing.JOptionPane;
@@ -10,6 +12,7 @@ import javax.swing.JOptionPane;
 import exception.*;
 import gui.Select1Frame;
 import gui.Select2Frame;
+import gui.TradeWithSpecificPlayerGUI;
 import model.*;
 
 public class InputHandler {
@@ -31,6 +34,7 @@ public class InputHandler {
     Select1Frame devCardSelector;
     Select1Frame resourceNumberSelector;
     Select1Frame resourceSelector;
+
     BuildingHandler propertyBuilder;
     public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
         @Override
@@ -168,42 +172,55 @@ public class InputHandler {
         return this.catanGame.getMessages();
     }
 
-    public void placeInitialSettlement() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.5"),
-                placeInitialSettlement);
-    }
 
-    public void placeInitialSettlementRound2() {
-        mandatoryIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.6"),
-                placeInitialSettlementRound2);
-    }
-
-    public void placeSettlement() {
-        if (this.propertyBuilder.canPlaceSettlement(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.7"),
-                    this.placeSettlement);
+    public Function<Point, Void> placeInitialSettlement = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeInitialSettlement(mousePosition);
+            return null;
         }
-    }
+    };
 
-    public void placeCity() {
-        if (this.propertyBuilder.canPlaceCity(this.hasNotRolled)) {
-            optionalIntersectionSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.8"),
-                    this.placeCity);
+    public Function<Point, Void> placeInitialSettlementRound2 = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeInitialSettlementRound2(mousePosition);
+            return null;
         }
-    }
+    };
 
-    public void placeInitialRoad() {
-        mandatoryEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.9"),
-                placeInitialRoad);
-    }
-
-    public void placeRoad() {
-        if (this.propertyBuilder.canPlaceRoad(this.hasNotRolled)) {
-            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
-                    this.placeRoad);
+    public Function<Point, Void> placeSettlement = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeSettlement(mousePosition);
+            return null;
         }
-    }
+    };
 
+    public Function<Point, Void> placeCity = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeCity(mousePosition);
+            return null;
+        }
+    };
+
+    public Function<Point, Void> placeInitialRoad = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mouseCoordinates) {
+            propertyBuilder.placeInitialRoadAtClosestEdge(mouseCoordinates);
+            return null;
+        }
+    };
+
+    public Function<Point, Void> placeRoad = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeRoad(mousePosition, true);
+            return null;
+        }
+    };
+    
     public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
         hexPlacementResources = availableResources;
         hexPlacementNumbers = availableNumbers;
@@ -310,22 +327,54 @@ public class InputHandler {
 
         try {
             numRolled = this.rollDice();
+
+            if (this.isRobberTurn(numRolled)) {
+              this.rolledSeven();
+            }
+            else {
+                this.produceResources(numRolled);
+            }
         } catch (IllegalStateException resourceException) {
             this.displayMessage(this.catanGame.getMessages().getString("InputHandler.18"));
             return;
         }
+    }
 
-        if (this.isRobberTurn(numRolled)) {
-            this.rolledSeven();
-        } else {
-            this.produceResources(numRolled);
+        
+          
+          
+    public void discardCardsForEveryPlayer(){
+        if(catanGame==null || catanGame.turnTracker == null){
+            return;
+        }
+        List<Player> people = catanGame.turnTracker.getPlayers();
+        if(people.size()==0){
+            return;
+        }
+        for(Player p : people){
+            if(p.getResourceHandSize()>7){
+                p.discardHalfResourceHand();
+            }
+        }
+    }
+
+    public void tradeWithPlayer(){
+        Player p = this.catanGame.getPlayerTracker().getCurrentPlayer();
+        TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(p);
+
+    }
+    public int rollDice() {
+        if (this.hasNotRolled) {
+            this.hasNotRolled = false;
+            return this.resourceProducer.rollDice();
         }
     }
 
     private void rolledSeven() {
         this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
 
-        // TODO @Pavani: All Players w/ >7 Cards Discard Here.
+        discardCardsForEveryPlayer();
+        this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
         promptToMoveRobber();
     }
 
@@ -428,6 +477,14 @@ public class InputHandler {
         this.catanGame.getGameMap().moveRobberToPosition(row, col);
         this.catanGame.drawScreen();
     }
+    
+    public Function<Point, Void> placeRoadWithCard = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            propertyBuilder.placeRoad(mousePosition, false);
+            return null;
+        }
+    };
 
     public void endTurn() {
         if (this.hasNotRolled) {
@@ -464,28 +521,8 @@ public class InputHandler {
     }
 
     public void handleException(Exception e, int row, int col) {
-        if (e instanceof InvalidHexPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.21"), row, col));
-
-        } else if (e instanceof IllegalRobberMoveException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.22"), row, col));
-
-        } else if (e instanceof InvalidEdgePositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.23"), row, col));
-
-        } else if (e instanceof InvalidIntersectionPositionException) {
-            displayMessage(MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.24"), row, col));
-
-        } else if (e instanceof PlaceBuildingException) {
-            displayMessage(e.getMessage());
-
-        } else if (e instanceof ItemNotFoundException) {
-            displayMessage(this.catanGame.getMessages().getString("InputHandler.25"));
-
-        } else {
-            displayMessage(
-                    MessageFormat.format(this.catanGame.getMessages().getString("InputHandler.26"), e.getMessage()));
-        }
+        ExceptionHandler exceptionHandler = new ExceptionHandler(this);
+        exceptionHandler.handleException(e, row, col);
     }
 
 }

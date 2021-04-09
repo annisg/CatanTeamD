@@ -1,7 +1,13 @@
 package model;
 
 import java.util.ResourceBundle;
+/*
+each opponent must give you 2 cards of that type (brick, grain, ore, lumber, or wool)
+ */
 
+/*
+junk change
+ */
 public class MonopolyCard extends DevelopmentCard {
 
     private ResourceBundle messages;
