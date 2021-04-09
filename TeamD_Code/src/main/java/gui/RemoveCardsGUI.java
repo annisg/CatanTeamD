@@ -26,9 +26,9 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
     // combobox
     static JComboBox c1;
     int numberTimeDiscard = 0;
-
+    JLabel totalCards;
     // textfield to add and delete items
-
+    ArrayList<JLabel> labelsOfStuff = new ArrayList<JLabel>();
     // main class
 
     public RemoveCardsGUI(Player p){
@@ -151,6 +151,16 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
     }
 
+    public void updateJLabels(){
+        HashMap<Resource, Integer> resourceMap = (HashMap<Resource, Integer>) player.getResourceCards();
+        int index = 0;
+        for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
+            labelsOfStuff.get(index).setText(entry.getKey().name() + " with " + "" + entry.getValue() + " remaining");
+           // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
+        }
+
+    }
+    
     public void itemStateChanged(ItemEvent e)
     {
         // if the state combobox is changed
