@@ -47,6 +47,9 @@ public class Player {
     }
 
     public void discardResourceCard(Resource resource){
+        if(resources.get(resource)<=0){
+            throw new TooFewItemsException();
+        }
         resources.put(resource, resources.get(resource)-1);
     }
 
@@ -82,7 +85,7 @@ public class Player {
         resources.put(stuff.get(0), stuff.size() + resources.get(stuff.get(0)));
     }
     public void addResourec(Resource r, int amt){
-        resources.put(r, amt);
+        resources.put(r, resources.get(r) + amt);
     }
 
     public int getResourceCountString(String name) {

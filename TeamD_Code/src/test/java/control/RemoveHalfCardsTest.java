@@ -1,5 +1,6 @@
 package control;
 
+import exception.TooFewItemsException;
 import gui.PlayerGUI;
 import model.*;
 import org.easymock.EasyMock;
@@ -11,6 +12,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 
 public class RemoveHalfCardsTest {
@@ -58,6 +60,16 @@ public class RemoveHalfCardsTest {
             assertEquals(7, size);
         }
     }
+    public void removeTooManyCardsTest(){
+        Player p1 = new Player((PlayerColor.WHITE) );
+        Player p2 = new Player((PlayerColor.RED));
+        p1.addResourec(Resource.LUMBER, 4);
+        p2.addResourec(Resource.GRAIN, 4);
+        Exception exception = assertThrows(TooFewItemsException.class, () -> {
+            p1.removeResource(Resource.LUMBER, 8);
+        });
+    }
+
 
     private ArrayList<Player> realPlayer(int num){
         ArrayList<Player> list = new ArrayList<Player>();

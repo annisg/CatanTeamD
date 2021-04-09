@@ -29,7 +29,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
 
 
     public void startGUI() {
-         frame = new JFrame("My First GUI");
+         frame = new JFrame("My Trading GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 300);
         frame.setLayout(new FlowLayout());
@@ -67,7 +67,12 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
             frame.dispose();
             // currentPlayer = playerToTrade;
            // TradeWithSpecificPlayerGUI swap = new TradeWithSpecificPlayerGUI(playerToTrade);
-            startGUI();
+           // startGUI();
+
+            JOptionPane.showMessageDialog(null, "You don't have enough resources to traide");
+
+
+
         }
         //need to do stuff the other way around
 

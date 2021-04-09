@@ -26,9 +26,9 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
     // combobox
     static JComboBox c1;
     int numberTimeDiscard = 0;
-
+    JLabel totalCards;
     // textfield to add and delete items
-
+    ArrayList<JLabel> labelsOfStuff = new ArrayList<JLabel>();
     // main class
 
     public RemoveCardsGUI(Player p){
@@ -76,7 +76,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         c1 = new JComboBox(entries);
        // JComboBox c2 = new JComboBox(values);
         // create textfield
-        tf = new JTextField(16);
+      //  tf = new JTextField(16);
 
         // create add and remove buttons
        //JButton b = new JButton("ADD");
@@ -92,8 +92,15 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
 
         // create labels
+        totalCards = new JLabel("You have " + "" + player.getResourceHandSize() + " cards" );
         l = new JLabel("Remove your card ");
-        l1 = new JLabel("Jalpaiguri selected");
+        l1 = new JLabel("Blank selected");
+
+        //institate and show what stuff are there:
+        HashMap<Resource, Integer> resourceMap = (HashMap<Resource, Integer>) player.getResourceCards();
+        for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
+            labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
+        }
 
         // set color of text
         l.setForeground(Color.red);
@@ -101,14 +108,17 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create a new panel
         JPanel p = new JPanel();
-        c2 = new JComboBox();
+       // c2 = new JComboBox();
+        for(JLabel l: labelsOfStuff){
+            p.add(l);
+        }
         p.add(l);
-
+        p.add(totalCards);
         // add combobox to panel
         p.add(c1);
-        p.add(c2);
+       // p.add(c2);
         p.add(l1);
-        p.add(tf);
+       // p.add(tf);
         //p.add(b);
         p.add(b1);
 
@@ -130,11 +140,23 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
             Resource r = player.getResourceByName((String) c1.getSelectedItem());
             player.discardResourceCard(r);
             numberTimeDiscard++;
+            totalCards.setText("you have this many cards " + "" + player.getResourceHandSize() );
+            updateJLabels();
         }
         else{
             this.dispose();
         }
         tf.setText("" + numberTimeDiscard);
+
+    }
+
+    public void updateJLabels(){
+        HashMap<Resource, Integer> resourceMap = (HashMap<Resource, Integer>) player.getResourceCards();
+        int index = 0;
+        for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
+            labelsOfStuff.get(index).setText(entry.getKey().name() + " with " + "" + entry.getValue() + " remaining");
+           // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
+        }
 
     }
 
