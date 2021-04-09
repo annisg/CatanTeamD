@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Year;
 import java.util.ResourceBundle;
 
 public class YearOfPlentyCard extends DevelopmentCard {
@@ -19,4 +20,6 @@ public class YearOfPlentyCard extends DevelopmentCard {
     public void use(Player owner) {
     	owner.removeDevelopmentCard(this);
     }
+
+
 }

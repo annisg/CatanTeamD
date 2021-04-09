@@ -26,4 +26,5 @@ public class VictoryPointCard extends DevelopmentCard {
     public boolean canBePlayed() {
         return true;
     }
+
 }

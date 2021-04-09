@@ -19,6 +19,8 @@ public class KnightCard extends DevelopmentCard {
         largestArmy.updateLargestArmy();
     }
 
+
+
     @Override
     public String getName() {
         return messages.getString("KnightCard.0");
