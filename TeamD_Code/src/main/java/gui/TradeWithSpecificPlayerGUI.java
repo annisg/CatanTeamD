@@ -89,6 +89,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         playerToTrade = currentPlayer.getTracker().getPlayer((Integer.parseInt((String) playerMenu.getSelectedItem())));
         int numToTrade = parseInteger();
 
+        //huge try catch just to take care of exceptions
         try {
             ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
             String message = "You have traded " + ("" + numToTrade) + " of "  + source.toString();
