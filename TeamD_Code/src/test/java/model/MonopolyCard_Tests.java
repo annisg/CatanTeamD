@@ -20,13 +20,15 @@ public class MonopolyCard_Tests {
     
     @Test
     public void testUseMonopolyCard() {
+        DevelopmentCard testCard = new MonopolyCard(messages);
         Player player = EasyMock.mock(Player.class);
+        player.removeDevelopmentCard(testCard);
         EasyMock.replay(player);
         
         try {
-            DevelopmentCard testCard = new MonopolyCard(messages);
             testCard.use(player);
-            fail("Expected RuntimeException");
+            //TODO: Likely Dialog Box, tests
+            //fail("Expected RuntimeException");
         } catch (RuntimeException e) {
             assertEquals("Monopoly Cards are unimplemented.", e.getMessage());
         }

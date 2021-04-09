@@ -10,6 +10,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import exception.ItemNotFoundException;
+import exception.VictoryPointPlayedException;
 import gui.Select1Frame;
 import gui.Select2Frame;
 import model.*;
@@ -74,13 +75,12 @@ public class InputHandler_Dev_Card_Tests {
         mockedCG.input = mockedInputComponent;
         mockedInputComponent.placeRoadWithCard();
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
-        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.replay(mockedCG);
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
         testIH.optionalEdgeSelector = mockedSelector;
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
-        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedPlayer.getDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedRBC);
         //mockedSelector.selectAndApply("Select edge to place road:", testIH.placeRoadWithCard);
         mockedRBC.use(mockedPlayer);
@@ -101,15 +101,14 @@ public class InputHandler_Dev_Card_Tests {
         YearOfPlentyCard mockedYOPC = EasyMock.partialMockBuilder(YearOfPlentyCard.class).addMockedMethod("use").mock();
         Select1Frame mockedSelector = EasyMock.niceMock(Select1Frame.class);
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
-        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.replay(mockedCG);
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
         testIH.resourceSelector = mockedSelector;
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
-        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
 
-        EasyMock.expect(mockedPlayer.findDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedYOPC);
+        EasyMock.expect(mockedPlayer.getDevelopmentCard(RoadBuildingCard.class)).andReturn(mockedYOPC);
         mockedSelector.selectAndApply("Select a resource", testIH.addResource);
 
         mockedYOPC.use(mockedPlayer);
@@ -130,16 +129,17 @@ public class InputHandler_Dev_Card_Tests {
         VictoryPointCard mockedVPC = EasyMock.strictMock(VictoryPointCard.class);
         EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
         EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
         EasyMock.replay(mockedCG);
         InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class)
                 .withConstructor(mockedRP, mockedCG, mockedPB).addMockedMethod("displayMessage").mock();
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
-        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedPlayer.getDevelopmentCard(KnightCard.class)).andReturn(mockedVPC);
         testIH.displayMessage("You do not need to play Victory Point Cards, they are always counted.");
+        mockedVPC.use(mockedPlayer);
+        EasyMock.expectLastCall().andThrow(new VictoryPointPlayedException("unlike every other easter egg, this one is funny"));
         EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedPlayer, mockedVPC, testIH);
 
         testIH.rollDice();
@@ -156,12 +156,11 @@ public class InputHandler_Dev_Card_Tests {
         Player mockedPlayer = EasyMock.strictMock(Player.class);
         EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
         EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
+        EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.replay(mockedCG);
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
-        EasyMock.expect(mockedTT.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.expect(mockedPlayer.getDevelopmentCard(KnightCard.class)).andThrow(new ItemNotFoundException(""));
         EasyMock.replay(mockedRP, mockedPB, mockedTT, mockedPlayer);
 

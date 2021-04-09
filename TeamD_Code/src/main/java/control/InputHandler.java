@@ -36,52 +36,11 @@ public class InputHandler {
     Select1Frame resourceSelector;
 
     BuildingHandler propertyBuilder;
-    public Function<Integer[], Void> placeInitialSettlement = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-    public Function<Integer[], Void> placeInitialSettlementRound2 = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeInitialSettlementRound2(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-    public Function<Integer[], Void> placeSettlement = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeSettlement(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-    public Function<Integer[], Void> placeCity = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] intersectionCoordinates) {
-            propertyBuilder.placeCity(intersectionCoordinates[0], intersectionCoordinates[1]);
-            return null;
-        }
-    };
-    public Function<Integer[], Void> placeInitialRoad = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeInitialRoad(edgeCoordinates[0], edgeCoordinates[1]);
-            return null;
-        }
-    };
-    public Function<Integer[], Void> placeRoad = new Function<Integer[], Void>() {
-        @Override
-        public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], true);
-            return null;
-        }
-    };
+    
     private final Function<Integer[], Void> placeFreeRoad = new Function<Integer[], Void>() {
         @Override
         public Void apply(Integer[] edgeCoordinates) {
-            propertyBuilder.placeRoad(edgeCoordinates[0], edgeCoordinates[1], false);
+            propertyBuilder.placeRoad(new Point(edgeCoordinates[0], edgeCoordinates[1]), false);
             return null;
         }
     };
@@ -97,7 +56,7 @@ public class InputHandler {
         playDevelopmentCard((Class) selected);
         return null;
     };
-    private final Function<Object, Void> addResource = selected -> {
+    final Function<Object, Void> addResource = selected -> {
         giveResourceToCurrentPlayer((Resource) selected);
         return null;
     };
@@ -368,11 +327,10 @@ public class InputHandler {
             this.hasNotRolled = false;
             return this.resourceProducer.rollDice();
         }
+        throw new IllegalStateException();
     }
 
     private void rolledSeven() {
-        this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
-
         discardCardsForEveryPlayer();
         this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
         promptToMoveRobber();
@@ -416,14 +374,6 @@ public class InputHandler {
         stealFromPlayer((PlayerColor) selected);
         return null;
     };
-
-    public int rollDice() {
-        if (this.hasNotRolled) {
-            this.hasNotRolled = false;
-            return this.resourceProducer.rollDice();
-        }
-        throw new IllegalStateException();
-    }
 
     public boolean isRobberTurn(int numRolled) {
         if (numRolled < 2 || numRolled > 12) {
@@ -492,7 +442,7 @@ public class InputHandler {
             return;
         }
         TurnTracker playerTracker = getPlayerTracker();
-        Player currentPlayer = getCurrentPlayer();
+        Player currentPlayer = playerTracker.getCurrentPlayer();
         currentPlayer.letAllDevelopmentCardsBePlayed();
         VictoryPointCalculator pointCalculator = this.catanGame.getPointCalculator();
         boolean hasWon = pointCalculator.isWinning(currentPlayer);
@@ -521,7 +471,7 @@ public class InputHandler {
     }
 
     public void handleException(Exception e, int row, int col) {
-        ExceptionHandler exceptionHandler = new ExceptionHandler(this);
+        ExceptionHandler exceptionHandler = new ExceptionHandler(this, catanGame.getMessages());
         exceptionHandler.handleException(e, row, col);
     }
 
