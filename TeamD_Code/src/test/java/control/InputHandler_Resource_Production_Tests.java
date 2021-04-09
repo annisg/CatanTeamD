@@ -167,14 +167,16 @@ public class InputHandler_Resource_Production_Tests {
         CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
         ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
         PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
+                mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
 
+        testIH.selectPlayerToStealFrom(1,1);
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getGameMap()).andStubReturn(testGM);
         mockedCG.drawScreen();
+
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
-        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
-                mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
         testIH.moveRobberTo(1, 1);
         assertTrue(testGM.getHex(1, 1).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
