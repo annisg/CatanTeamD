@@ -109,6 +109,9 @@ public class Player {
         if (r.equals(Resource.DESERT)) {
             throw new IllegalArgumentException();
         }
+        if(resources.get(r)==null){
+            return 0;
+        }
 
 
         return resources.get(r);
