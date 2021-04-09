@@ -139,7 +139,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         if(numberTimeDiscard <sizeOfDeck/2) {
             Resource r = player.getResourceByName((String) c1.getSelectedItem());
             //make sure you do the check here for discard card of it doesn't exist
-            if(player.getResourceCount(r)<=0){
+            if(player.getResourceCount(r)<0){
                 JOptionPane.showMessageDialog(null, "You do not have enough of that resource!");
                 return;
             }

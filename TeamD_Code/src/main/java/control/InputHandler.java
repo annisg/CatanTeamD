@@ -336,7 +336,7 @@ public class InputHandler {
     private void rolledSeven() {
         this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
         promptToMoveRobber();
-//        discardCardsForEveryPlayer();
+        discardCardsForEveryPlayer();
     }
 
     private void promptToMoveRobber() {
