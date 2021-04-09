@@ -275,10 +275,13 @@ public class InputHandler {
         }
         inactivePlayers.remove(currentPlayer);
 
+        int countStolen = 0;
         for (Player player : inactivePlayers) {
-            currentPlayer.stealAllOfResourceFrom(player, resource);
+            countStolen += currentPlayer.stealAllOfResourceFrom(player, resource);
         }
         catanGame.drawPlayers();
+
+        displayMessage(String.format("Stole %d %s in total.", countStolen, resource.toString()));
     }
 
     public void tryToRollDice() {
@@ -331,9 +334,9 @@ public class InputHandler {
     }
 
     private void rolledSeven() {
-        discardCardsForEveryPlayer();
         this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
         promptToMoveRobber();
+//        discardCardsForEveryPlayer();
     }
 
     private void promptToMoveRobber() {
@@ -354,19 +357,23 @@ public class InputHandler {
     private void selectPlayerToStealFrom(int row, int col) {
         ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
 
-        HashSet<PlayerColor> adjacentColors = new HashSet<>();
-        HashSet<String> adjacentColorNames = new HashSet<String>();
+        LinkedHashSet<PlayerColor> adjacentColorsSet = new LinkedHashSet<>();
         for (Intersection i : intersections) {
             PlayerColor color = i.getBuildingColor();
-            adjacentColors.add(color);
-            adjacentColorNames.add(color.name());
+            adjacentColorsSet.add(color);
         }
-        adjacentColors.remove(PlayerColor.NONE);
-        adjacentColors.add(PlayerColor.NONE);
-        adjacentColorNames.add(PlayerColor.NONE.name());
+        adjacentColorsSet.remove(PlayerColor.NONE);
+        adjacentColorsSet.add(PlayerColor.NONE);
+
+        PlayerColor[] colors = adjacentColorsSet.toArray(new PlayerColor[0]);
+        String[] colorNames = new String[colors.length];
+
+        for (int i = 0; i < colors.length; i++) {
+            colorNames[i] = colors[i].name();
+        }
 
         Select1Frame playerSelector =
-                new Select1Frame(adjacentColorNames.toArray(new String[0]), adjacentColors.toArray(), false, this);
+                new Select1Frame(colorNames, colors, false, this);
         playerSelector.selectAndApply("Select a player to steal a resource from", stealFromPlayer);
     }
 
