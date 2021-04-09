@@ -267,6 +267,8 @@ public class InputHandler {
             offerPlayerTwoFreeResources();
         } else if (card instanceof RoadBuildingCard) {
             offerPlayerTwoFreeRoads();
+        } else if (card instanceof MonopolyCard) {
+            promptForStealingAllOfResource();
         }
 
         try {
@@ -274,6 +276,33 @@ public class InputHandler {
         } catch (VictoryPointPlayedException e) {
             displayMessage(this.catanGame.getMessages().getString("InputHandler.14"));
         }
+    }
+
+    private void promptForStealingAllOfResource() {
+        resourceSelector.selectAndApply("Select which resource to steal from all other players", stealAllOfResource);
+    }
+
+    private final Function<Object, Void> stealAllOfResource = selected -> {
+        stealAllOfResource((Resource) selected);
+        return null;
+    };
+
+    private void stealAllOfResource(Resource resource) {
+        Player currentPlayer = getCurrentPlayer();
+        TurnTracker turnTracker = catanGame.getPlayerTracker();
+
+        int numPlayers = turnTracker.getNumPlayers();
+        List<Player> inactivePlayers = new ArrayList<>();
+
+        for (int i = 0; i < numPlayers; i++) {
+            inactivePlayers.add(turnTracker.getPlayer(i));
+        }
+        inactivePlayers.remove(currentPlayer);
+
+        for (Player player : inactivePlayers) {
+            currentPlayer.stealAllOfResourceFrom(player, resource);
+        }
+        catanGame.drawPlayers();
     }
 
     public void tryToRollDice() {
@@ -314,12 +343,6 @@ public class InputHandler {
         updateRobberPositionOnBoard(row, col);
         selectPlayerToStealFrom(row, col);
     }
-
-//    private Player playerToStealFrom;
-//    private final Function<Object, Void> stealOneResource = selected -> {
-//        stealOneResource((Resource) selected);
-//        return null;
-//    };
 
     private void selectPlayerToStealFrom(int row, int col) {
         ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
