@@ -64,7 +64,6 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
 
         }
         catch(Exception e2){
-            System.out.println("I am in dispose!");
             frame.dispose();
             // currentPlayer = playerToTrade;
            // TradeWithSpecificPlayerGUI swap = new TradeWithSpecificPlayerGUI(playerToTrade);
