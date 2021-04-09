@@ -25,4 +25,5 @@ public class MonopolyCard extends DevelopmentCard {
     public void use(Player owner) {
         owner.removeDevelopmentCard(this);
     }
+
 }

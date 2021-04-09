@@ -56,7 +56,7 @@ public class PlayerPlacer {
         int currentPlayerOrder = findPlayerIndex(currentPlayer);
         Color realColorOfPlayer = getColorFromPlayerColor(currentPlayer.getColor());
         HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(currentPlayer);
-        HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(currentPlayer);
+        HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(currentPlayer);
         playerGUI.add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, 0, currentPlayerOrder,
                 messages));
 
@@ -82,7 +82,7 @@ public class PlayerPlacer {
             Player ithPlayer = this.turnTracker.getPlayer(i);
             Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
-            HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
+            HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
 
             allPlayerGUIs
                     .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages));
@@ -111,30 +111,30 @@ public class PlayerPlacer {
         return resourceMap;
     }
 
-    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMap(Player player) {
+    public HashMap<String, Integer> getDevelopmentCardMap(Player player) {
         String[] abbreviations = {"K", "M", "R", "V", "Y"};
         DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
                 new VictoryPointCard(messages), new MonopolyCard(messages),
                 new RoadBuildingCard(messages), new YearOfPlentyCard(messages)};
-        HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
-        for (DevelopmentCard abbreviation : devCards) {
+        HashMap<String, Integer> cardMap = new HashMap<String, Integer>();
+        for (String abbreviation : abbreviations) {
             cardMap.put(abbreviation, 0);
         }
 
 
 
         for (DevelopmentCard card : player.getDevelopmentCards()) {
-            DevelopmentCard abbreviation;
+           String abbreviation;
             if (card instanceof KnightCard) {
-                abbreviation = devCards[0];
+                abbreviation = "K";
             } else if (card instanceof MonopolyCard) {
-                abbreviation = devCards[2];
+                abbreviation = "M";
             } else if (card instanceof RoadBuildingCard) {
-                abbreviation = devCards[3];
+                abbreviation = "R";
             } else if (card instanceof VictoryPointCard) {
-                abbreviation = devCards[1];
+                abbreviation = "V";
             } else if (card instanceof YearOfPlentyCard) {
-                abbreviation = devCards[4];
+                abbreviation ="Y";
             } else {
                 throw new RuntimeException();
             }
@@ -146,34 +146,43 @@ public class PlayerPlacer {
         return cardMap;
     }
 
-    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMapAmount(Player player) {
-        DevelopmentCard[] cards = {new KnightCard(null, null), new MonopolyCard(null), new RoadBuildingCard(null),
-                new VictoryPointCard(null), new YearOfPlentyCard(null)};
-        HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
-        for (DevelopmentCard card : cards) {
+    public HashMap<String, Integer> getDevelopmentCardMapAmount(Player player) {
+//        DevelopmentCard[] cards = {new KnightCard(new LargestArmy(player.getTracker()), messages), new MonopolyCard(messages), new RoadBuildingCard(messages),
+//                new VictoryPointCard(messages), new YearOfPlentyCard(messages)};
+        String [] abbreviations = {"K", "M", "R", "V", "Y"};
+        HashMap<String, Integer> cardMap = new HashMap<String, Integer>();
+        for (String card : abbreviations) {
             cardMap.put(card, 0);
         }
 
         for (DevelopmentCard card : player.getDevelopmentCards()) {
 
+            String s;
             if (card instanceof KnightCard) {
-                int previousCount = cardMap.get(card);
-                cardMap.put(card, previousCount + 1);
+
+                    s="K";
+
             } else if (card instanceof MonopolyCard) {
-                int previousCount = cardMap.get(card);
-                cardMap.put(card, previousCount + 1);
-            } else if (card instanceof RoadBuildingCard) {
-                int previousCount = cardMap.get(card);
-                cardMap.put(card, previousCount + 1);
+
+                    s="M";
+            } else if (card instanceof  RoadBuildingCard) {
+
+                   s="R";
+
             } else if (card instanceof VictoryPointCard) {
-                int previousCount = cardMap.get(card);
-                cardMap.put(card, previousCount + 1);
+
+                    s="V";
+
             } else if (card instanceof YearOfPlentyCard) {
-                int previousCount = cardMap.get(card);
-                cardMap.put(card, previousCount + 1);
+
+                    s = "Y";
+
             } else {
                 throw new RuntimeException();
             }
+
+            int previousCount = cardMap.get(s);
+            cardMap.put(s, previousCount + 1);
 
 
         }

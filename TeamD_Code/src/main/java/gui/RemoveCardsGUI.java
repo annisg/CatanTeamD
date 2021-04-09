@@ -50,7 +50,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         // set layout of frame
         f.setLayout(new FlowLayout());
 
-        Player player = new Player(PlayerColor.WHITE);
+        //Player player = new Player(PlayerColor.WHITE);
         Map<Resource, Integer> resources = player.getResourceCards();
         numberOfResourceCards= player.getResourceHandSize();
         // array of string contating cities
@@ -92,8 +92,15 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
 
         // create labels
+        totalCards = new JLabel("You have " + "" + player.getResourceHandSize() + " cards " );
         l = new JLabel("Remove your card ");
-        l1 = new JLabel("Jalpaiguri selected");
+        l1 = new JLabel("Blank selected");
+
+        //institate and show what stuff are there:
+        HashMap<Resource, Integer> resourceMap = (HashMap<Resource, Integer>) player.getResourceCards();
+        for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
+            labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining "));
+        }
 
         // set color of text
         l.setForeground(Color.red);
@@ -125,23 +132,29 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
     // if button is pressed
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("I am in resource");
+
         if(numberTimeDiscard <sizeOfDeck/2) {
             Resource r = player.getResourceByName((String) c1.getSelectedItem());
             player.discardResourceCard(r);
             numberTimeDiscard++;
+
+            totalCards.setText("you have this many cards " + "" + player.getResourceHandSize() );
+            System.out.println("I am in resource");
         }
         else{
-            this.dispose();
+            System.out.print("this is where you are over!");
+            f.dispose();
+            JOptionPane.showMessageDialog(null, "You lost half your cards! You cannot get rid of any more!");
         }
-        tf.setText("" + numberTimeDiscard);
+        updateJLabels();
+        //tf.setText("" + numberTimeDiscard);
 
     }
 
     public void itemStateChanged(ItemEvent e)
     {
         // if the state combobox is changed
-        System.out.println("I am in item state change");
+       // System.out.println("I am in item state change");
         if (e.getSource() == c1) {
 
             l1.setText(c1.getSelectedItem() + " selected");
