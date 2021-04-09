@@ -2,10 +2,7 @@ package control;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
@@ -18,6 +15,7 @@ public class CatanGame_tests {
     private CatanGame testCatan = null;
     private TurnTracker mockedTurnTracker = null;
     private GameMap mockedGameMap = null;
+    private HexMap mockedHexMap = null;
     private GameOptionSelector mockedOptions = null;
     private GameBoard mockedGUI = null;
     private HexPlacer mockedHexPlacer = null;
@@ -25,11 +23,13 @@ public class CatanGame_tests {
     private SpecialCardPlacer mockedCardPlacer = null;
     private Random rand = null;
     private InputComponent component = null;
+    private InputHandler handler = null;
     private ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));
 
     private void setupGame() {
         this.mockedTurnTracker = EasyMock.strictMock(TurnTracker.class);
         this.mockedGameMap = EasyMock.strictMock(GameMap.class);
+        this.mockedHexMap = EasyMock.strictMock(HexMap.class);
         this.mockedOptions = EasyMock.strictMock(GameOptionSelector.class);
         this.mockedGUI = EasyMock.strictMock(GameBoard.class);
         this.mockedHexPlacer = EasyMock.strictMock(HexPlacer.class);
@@ -37,6 +37,7 @@ public class CatanGame_tests {
         this.mockedCardPlacer = EasyMock.strictMock(SpecialCardPlacer.class);
         this.rand = new Random(0);
         this.component = EasyMock.strictMock(InputComponent.class);
+        this.handler = EasyMock.strictMock(InputHandler.class);
 
         this.testCatan.messages = messages;
         this.testCatan.turnTracker = this.mockedTurnTracker;
@@ -48,16 +49,18 @@ public class CatanGame_tests {
         this.testCatan.specialCardPlacer = this.mockedCardPlacer;
         this.testCatan.random = this.rand;
         this.testCatan.input = this.component;
+        this.testCatan.inputHandler = this.handler;
+        EasyMock.expect(this.mockedGameMap.getHexMap()).andStubReturn(mockedHexMap);
     }
 
     private void replayAll() {
-        EasyMock.replay(testCatan, mockedTurnTracker, mockedGameMap, mockedOptions, mockedGUI, mockedHexPlacer,
-                mockedPlayerPlacer, mockedCardPlacer, component);
+        EasyMock.replay(testCatan, mockedTurnTracker, mockedGameMap, mockedHexMap, mockedOptions, mockedGUI, mockedHexPlacer,
+                mockedPlayerPlacer, mockedCardPlacer, component, handler);
     }
 
     private void verifyAll() {
-        EasyMock.verify(testCatan, mockedTurnTracker, mockedGameMap, mockedOptions, mockedGUI, mockedHexPlacer,
-                mockedPlayerPlacer, mockedCardPlacer, component);
+        EasyMock.verify(testCatan, mockedTurnTracker, mockedGameMap, mockedHexMap, mockedOptions, mockedGUI, mockedHexPlacer,
+                mockedPlayerPlacer, mockedCardPlacer, component, handler);
     }
 
     @Test
@@ -105,25 +108,46 @@ public class CatanGame_tests {
         testCatan.buildModelFrame();
         runTestsMakeBoard(GameStartState.ADVANCED, 4);
     }
-
+    
     @Test
-    public void testMakeBoardBadNumPlayers() {
-        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("drawScreen").mock();
+    public void testMakeBoardCustom3() {
+        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
-        mockedOptions.getOptionsFromUser(testCatan);
-        runTestsMakeBoard(GameStartState.BEGINNER, 5);
-
-        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("drawScreen").mock();
+        
+        List<Resource> resources = Arrays.asList(Resource.WOOL);
+        List<Integer> availableNumbers = Arrays.asList(2);
+        EasyMock.expect(mockedHexMap.getStandardResources()).andReturn(resources);
+        EasyMock.expect(mockedHexMap.getStandardResourceNumbers()).andReturn(availableNumbers);
+        
+        mockedTurnTracker.setupPlayers(3);
+        mockedPlayerPlacer.refreshPlayerNumber();
+        handler.selectCustomHexPlacement(resources, availableNumbers);
+        //No build model frame, covered in InputHandler
+        runTestsMakeBoard(GameStartState.CUSTOM, 3);
+    }
+    
+    @Test
+    public void testMakeBoardCustom4() {
+        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
-        mockedOptions.getOptionsFromUser(testCatan);
-        runTestsMakeBoard(GameStartState.ADVANCED, 2);
+        
+        List<Resource> resources = Arrays.asList(Resource.WOOL);
+        List<Integer> availableNumbers = Arrays.asList(2);
+        EasyMock.expect(mockedHexMap.getStandardResources()).andReturn(resources);
+        EasyMock.expect(mockedHexMap.getStandardResourceNumbers()).andReturn(availableNumbers);
+        
+        mockedTurnTracker.setupPlayers(4);
+        mockedPlayerPlacer.refreshPlayerNumber();
+        handler.selectCustomHexPlacement(resources, availableNumbers);
+        //No build model frame, covered in InputHandler
+        runTestsMakeBoard(GameStartState.CUSTOM, 4);
     }
 
     private void runTestsMakeBoard(GameStartState testState, int testNumPlayers) {
         if (testState == GameStartState.ADVANCED && testNumPlayers >= 3 && testNumPlayers <= 4) {
             EasyMock.expect(mockedTurnTracker.getNumPlayers()).andStubReturn(testNumPlayers);
-            component.selectInitialPlaceSettlement();
-            component.selectInitialRoadPlacement();
+            this.component.selectInitialPlaceSettlement();
+            this.component.selectInitialRoadPlacement();
         }
         replayAll();
         testCatan.makeBoard(testState, testNumPlayers);
@@ -132,8 +156,8 @@ public class CatanGame_tests {
 
     @Test
     public void testDrawModelCallsEverything() {
-        ArrayList<Drawable> playerGUIs = new ArrayList<Drawable>();
-        ArrayList<Drawable> cardGUIs = new ArrayList<Drawable>();
+        ArrayList<Drawable> playerGUIs = new ArrayList<>();
+        ArrayList<Drawable> cardGUIs = new ArrayList<>();
 
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
@@ -160,7 +184,7 @@ public class CatanGame_tests {
         HexMap mockedHM = EasyMock.strictMock(HexMap.class);
         EdgeMap mockedEM = EasyMock.strictMock(EdgeMap.class);
         IntersectionMap mockedIM = EasyMock.strictMock(IntersectionMap.class);
-        ArrayList<Drawable> hexDrawables = new ArrayList<Drawable>();
+        ArrayList<Drawable> hexDrawables = new ArrayList<>();
 
         this.mockedGUI.fullResetMap();
         EasyMock.expect(this.mockedGameMap.getHexMap()).andReturn(mockedHM);

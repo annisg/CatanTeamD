@@ -1,5 +1,7 @@
 package model;
 
+import exception.VictoryPointPlayedException;
+
 import java.util.ResourceBundle;
 
 public class VictoryPointCard extends DevelopmentCard {
@@ -17,7 +19,7 @@ public class VictoryPointCard extends DevelopmentCard {
 
     @Override
     public void use(Player owner) {
-        throw new RuntimeException(messages.getString("VictoryPointCard.1"));
+        throw new VictoryPointPlayedException(messages.getString("VictoryPointCard.1"));
     }
 
     @Override

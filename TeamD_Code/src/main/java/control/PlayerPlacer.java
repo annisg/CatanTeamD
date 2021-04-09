@@ -1,6 +1,7 @@
 package control;
 
 import java.awt.Color;
+import java.time.Year;
 import java.util.*;
 
 import gui.*;
@@ -55,7 +56,7 @@ public class PlayerPlacer {
         int currentPlayerOrder = findPlayerIndex(currentPlayer);
         Color realColorOfPlayer = getColorFromPlayerColor(currentPlayer.getColor());
         HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(currentPlayer);
-        HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMap(currentPlayer);
+        HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(currentPlayer);
         playerGUI.add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, 0, currentPlayerOrder,
                 messages));
 
@@ -81,7 +82,8 @@ public class PlayerPlacer {
             Player ithPlayer = this.turnTracker.getPlayer(i);
             Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
-            HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMap(ithPlayer);
+            HashMap<DevelopmentCard, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
+
             allPlayerGUIs
                     .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages));
         }
@@ -110,34 +112,73 @@ public class PlayerPlacer {
     }
 
     public HashMap<DevelopmentCard, Integer> getDevelopmentCardMap(Player player) {
-        String[] abbreviations = { "K", "M", "R", "V", "Y" };
-        DevelopmentCard [] cards = {new MonopolyCard(messages), new YearOfPlentyCard(messages),
-                new RoadBuildingCard(messages), new VictoryPointCard(messages), new KnightCard(new LargestArmy(turnTracker), messages)};
+        String[] abbreviations = {"K", "M", "R", "V", "Y"};
+        DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
+                new VictoryPointCard(messages), new MonopolyCard(messages),
+                new RoadBuildingCard(messages), new YearOfPlentyCard(messages)};
         HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
-        for (DevelopmentCard d : cards) {
-            cardMap.put(d, 0);
+        for (DevelopmentCard abbreviation : devCards) {
+            cardMap.put(abbreviation, 0);
         }
 
+
+
         for (DevelopmentCard card : player.getDevelopmentCards()) {
-            DevelopmentCard c;
+            DevelopmentCard abbreviation;
             if (card instanceof KnightCard) {
-                c= cards[4];
+                abbreviation = devCards[0];
             } else if (card instanceof MonopolyCard) {
-                c= cards[0];
+                abbreviation = devCards[2];
             } else if (card instanceof RoadBuildingCard) {
-                c  = cards[2];
+                abbreviation = devCards[3];
             } else if (card instanceof VictoryPointCard) {
-                c = cards[3];
+                abbreviation = devCards[1];
             } else if (card instanceof YearOfPlentyCard) {
-                c= cards[1];
+                abbreviation = devCards[4];
             } else {
                 throw new RuntimeException();
             }
 
-            int previousCount = cardMap.get(c);
-            cardMap.put(c, previousCount + 1);
+            int previousCount = cardMap.get(abbreviation);
+            cardMap.put(abbreviation, previousCount + 1);
         }
 
         return cardMap;
     }
+
+    public HashMap<DevelopmentCard, Integer> getDevelopmentCardMapAmount(Player player) {
+        DevelopmentCard[] cards = {new KnightCard(null, null), new MonopolyCard(null), new RoadBuildingCard(null),
+                new VictoryPointCard(null), new YearOfPlentyCard(null)};
+        HashMap<DevelopmentCard, Integer> cardMap = new HashMap<DevelopmentCard, Integer>();
+        for (DevelopmentCard card : cards) {
+            cardMap.put(card, 0);
+        }
+
+        for (DevelopmentCard card : player.getDevelopmentCards()) {
+
+            if (card instanceof KnightCard) {
+                int previousCount = cardMap.get(card);
+                cardMap.put(card, previousCount + 1);
+            } else if (card instanceof MonopolyCard) {
+                int previousCount = cardMap.get(card);
+                cardMap.put(card, previousCount + 1);
+            } else if (card instanceof RoadBuildingCard) {
+                int previousCount = cardMap.get(card);
+                cardMap.put(card, previousCount + 1);
+            } else if (card instanceof VictoryPointCard) {
+                int previousCount = cardMap.get(card);
+                cardMap.put(card, previousCount + 1);
+            } else if (card instanceof YearOfPlentyCard) {
+                int previousCount = cardMap.get(card);
+                cardMap.put(card, previousCount + 1);
+            } else {
+                throw new RuntimeException();
+            }
+
+
+        }
+
+        return cardMap;
+    }
+
 }

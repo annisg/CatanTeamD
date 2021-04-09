@@ -1,8 +1,10 @@
 package model;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import exception.*;
+import gui.EdgeDirection;
 
 public class IntersectionMap {
 
@@ -204,6 +206,43 @@ public class IntersectionMap {
             throw new InvalidIntersectionPositionException();
         }
         return this.intersectionMap[pos.getRow()][pos.getColumn()];
+    }
+    
+    public Intersection getClosestIntersectionToPoint(Point point) {
+        Intersection closestIntersection = intersectionMap[3][3];
+        for(int i = 0; i < intersectionMap.length; i++) {
+            for (int j = 0; j < intersectionMap.length; j++) {
+                if(!isNotValidPosition(new MapPosition(i, j))) {
+                    if(closestIntersection == null) {
+                        closestIntersection = intersectionMap[i][j];
+                    }
+                    if (getIntersectionDistanceFromPoint(new MapPosition(i, j), point) <
+                            getIntersectionDistanceFromPoint(findIntersectionPosition(closestIntersection), point)) {
+                        closestIntersection = intersectionMap[i][j];
+                    }
+                }
+            }
+        }
+        return closestIntersection;
+    }
+    
+    public double getIntersectionDistanceFromPoint(MapPosition mapPosition, Point point) {
+        int row = mapPosition.getRow();
+        int column = mapPosition.getColumn();
+    
+        int intersectionX = column * 150;
+        int intersectionY = -row * 64 + 890;
+        if ((row == 0 || row == 11) && column <= 2) {
+            intersectionX += 600;
+        } else if ((row == 1 || row == 2 || row == 9 || row == 10) && column <= 3) {
+            intersectionX += 525;
+        } else if ((row == 3 || row == 4 || row == 7 || row == 8) && column <= 4) {
+            intersectionX += 450;
+        } else if ((row == 5 || row == 6) && column <= 5) {
+            intersectionX += 375;
+        }
+    
+        return Math.sqrt((intersectionX - point.x) * (intersectionX - point.x) + (intersectionY - point.y) * (intersectionY - point.y));
     }
 
     public MapPosition findIntersectionPosition(Intersection knownIntersection) {

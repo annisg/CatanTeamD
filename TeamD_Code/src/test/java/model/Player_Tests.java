@@ -11,10 +11,6 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import exception.*;
-import model.DevelopmentCard;
-import model.Player;
-import model.PlayerColor;
-import model.Resource;
 
 public class Player_Tests {
 
@@ -380,7 +376,7 @@ public class Player_Tests {
         EasyMock.replay(testPlayer);
         
         try {
-            testPlayer.findDevelopmentCard(KnightCard.class);
+            testPlayer.getDevelopmentCard(KnightCard.class);
             fail();
         }catch(ItemNotFoundException e) {};
         EasyMock.verify(testPlayer);
@@ -397,7 +393,7 @@ public class Player_Tests {
         EasyMock.replay(testPlayer);
         
         try {
-            testPlayer.findDevelopmentCard(MonopolyCard.class);
+            testPlayer.getDevelopmentCard(MonopolyCard.class);
             fail();
         }catch(ItemNotFoundException e) {};
         EasyMock.verify(testPlayer);
@@ -414,7 +410,7 @@ public class Player_Tests {
         EasyMock.expect(testPlayer.getDevelopmentCards()).andReturn(cards);
         EasyMock.replay(testPlayer);
         
-        assertEquals(correctCard, testPlayer.findDevelopmentCard(MonopolyCard.class));
+        assertEquals(correctCard, testPlayer.getDevelopmentCard(MonopolyCard.class));
         EasyMock.verify(testPlayer);
     }
     
@@ -429,7 +425,7 @@ public class Player_Tests {
         EasyMock.expect(testPlayer.getDevelopmentCards()).andReturn(cards);
         EasyMock.replay(testPlayer);
         
-        assertEquals(correctCard, testPlayer.findDevelopmentCard(MonopolyCard.class));
+        assertEquals(correctCard, testPlayer.getDevelopmentCard(MonopolyCard.class));
         EasyMock.verify(testPlayer);
     }
     
@@ -444,7 +440,7 @@ public class Player_Tests {
         EasyMock.expect(testPlayer.getDevelopmentCards()).andReturn(cards);
         EasyMock.replay(testPlayer);
         
-        assertEquals(correctCard, testPlayer.findDevelopmentCard(MonopolyCard.class));
+        assertEquals(correctCard, testPlayer.getDevelopmentCard(MonopolyCard.class));
         EasyMock.verify(testPlayer);
     }
     
