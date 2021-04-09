@@ -354,7 +354,7 @@ public class InputHandler {
         selectPlayerToStealFrom(row, col);
     }
 
-    private void selectPlayerToStealFrom(int row, int col) {
+    void selectPlayerToStealFrom(int row, int col) {
         ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
 
         LinkedHashSet<PlayerColor> adjacentColorsSet = new LinkedHashSet<>();

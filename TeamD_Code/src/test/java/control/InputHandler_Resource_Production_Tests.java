@@ -150,11 +150,12 @@ public class InputHandler_Resource_Production_Tests {
         mockedCG.drawPlayers();
 
         EasyMock.replay(mockedRP, mockedGM, mockedCG, mockedTT, mockedPB);
-        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG, mockedPB)
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
+                mockedPB)
                 .addMockedMethod("displayMessage").mock();
         testIH.displayMessage("Rolled a 4 for resource production.");
         EasyMock.replay(testIH);
-        
+
         testIH.produceResources(4);
         EasyMock.verify(mockedRP, mockedGM, mockedTT, mockedCG, mockedPB, testIH);
     }
@@ -172,7 +173,8 @@ public class InputHandler_Resource_Production_Tests {
         mockedCG.drawScreen();
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
+                mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
         testIH.moveRobberTo(1, 1);
         assertTrue(testGM.getHex(1, 1).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
