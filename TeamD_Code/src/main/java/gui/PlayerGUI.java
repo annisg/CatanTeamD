@@ -31,14 +31,14 @@ public class PlayerGUI extends Drawable {
 
     Color playerColor;
     private HashMap<Resource, Integer> numOfEachResource;
-    private HashMap<DevelopmentCard, Integer> numOfEachDevelopmentCard;
+    private HashMap<String, Integer> numOfEachDevelopmentCard;
     int playersPosition;
     private String playerOrderDisplay;
     private ObjectToColorConverter colorConverter;
     private ResourceBundle messages;
 
     public PlayerGUI(Color colorOfPlayer, HashMap<Resource, Integer> numPerResourceMap,
-            HashMap<DevelopmentCard, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
+            HashMap<String, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
         this.messages = messages;
         this.playerColor = colorOfPlayer;
         this.numOfEachResource = numPerResourceMap;
@@ -80,7 +80,7 @@ public class PlayerGUI extends Drawable {
     private void drawDevelopmentCards(Graphics2D g2) {
         int listIndex = 0;
         // TODO: Fix Primitive Obsession for Dev. Card Type. Collapse for loop like below.
-        for (DevelopmentCard developmentCard : numOfEachDevelopmentCard.keySet()) {
+        for (String developmentCard : numOfEachDevelopmentCard.keySet()) {
             drawDevelopmentCard(g2, developmentCard, listIndex);
             listIndex++;
         }
@@ -114,7 +114,7 @@ public class PlayerGUI extends Drawable {
         return this.colorConverter.resourceToColor(resource);
     }
 
-    private void drawDevelopmentCard(Graphics2D g2, DevelopmentCard developmentCard, int listOrder) {
+    private void drawDevelopmentCard(Graphics2D g2, String developmentCard, int listOrder) {
         int cardX = initalCardOffsetX + listOrder * (cardWidth + borderWidth);
         int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         int cardY = boxYPos + relativeDevelopmentCardOffsetY;
