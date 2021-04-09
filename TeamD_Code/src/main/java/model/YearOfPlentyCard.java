@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Year;
 import java.util.ResourceBundle;
 
 public class YearOfPlentyCard extends DevelopmentCard {
@@ -17,6 +18,8 @@ public class YearOfPlentyCard extends DevelopmentCard {
 
     @Override
     public void use(Player owner) {
-        throw new RuntimeException(messages.getString("YearOfPlentyCard.1"));
+    	owner.removeDevelopmentCard(this);
     }
+
+
 }

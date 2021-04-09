@@ -17,7 +17,9 @@ public class RoadBuildingCard extends DevelopmentCard {
 
     @Override
     public void use(Player owner) {
-        throw new RuntimeException(messages.getString("RoadBuildingCard.1"));
+        owner.removeDevelopmentCard(this);
     }
+
+
 
 }

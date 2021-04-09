@@ -1,6 +1,7 @@
 package control;
 
 import java.awt.Color;
+import java.time.Year;
 import java.util.*;
 
 import gui.*;
@@ -55,7 +56,7 @@ public class PlayerPlacer {
         int currentPlayerOrder = findPlayerIndex(currentPlayer);
         Color realColorOfPlayer = getColorFromPlayerColor(currentPlayer.getColor());
         HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(currentPlayer);
-        HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMap(currentPlayer);
+        HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(currentPlayer);
         playerGUI.add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, 0, currentPlayerOrder,
                 messages));
 
@@ -81,7 +82,8 @@ public class PlayerPlacer {
             Player ithPlayer = this.turnTracker.getPlayer(i);
             Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
-            HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMap(ithPlayer);
+            HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
+
             allPlayerGUIs
                     .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages));
         }
@@ -110,15 +112,19 @@ public class PlayerPlacer {
     }
 
     public HashMap<String, Integer> getDevelopmentCardMap(Player player) {
-        String[] abbreviations = { "K", "M", "R", "V", "Y" };
-
+        String[] abbreviations = {"K", "M", "R", "V", "Y"};
+        DevelopmentCard [] devCards = {new KnightCard(new LargestArmy(new TurnTracker(null)), messages),
+                new VictoryPointCard(messages), new MonopolyCard(messages),
+                new RoadBuildingCard(messages), new YearOfPlentyCard(messages)};
         HashMap<String, Integer> cardMap = new HashMap<String, Integer>();
         for (String abbreviation : abbreviations) {
             cardMap.put(abbreviation, 0);
         }
 
+
+
         for (DevelopmentCard card : player.getDevelopmentCards()) {
-            String abbreviation;
+           String abbreviation;
             if (card instanceof KnightCard) {
                 abbreviation = "K";
             } else if (card instanceof MonopolyCard) {
@@ -128,7 +134,7 @@ public class PlayerPlacer {
             } else if (card instanceof VictoryPointCard) {
                 abbreviation = "V";
             } else if (card instanceof YearOfPlentyCard) {
-                abbreviation = "Y";
+                abbreviation ="Y";
             } else {
                 throw new RuntimeException();
             }
@@ -139,4 +145,49 @@ public class PlayerPlacer {
 
         return cardMap;
     }
+
+    public HashMap<String, Integer> getDevelopmentCardMapAmount(Player player) {
+//        DevelopmentCard[] cards = {new KnightCard(new LargestArmy(player.getTracker()), messages), new MonopolyCard(messages), new RoadBuildingCard(messages),
+//                new VictoryPointCard(messages), new YearOfPlentyCard(messages)};
+        String [] abbreviations = {"K", "M", "R", "V", "Y"};
+        HashMap<String, Integer> cardMap = new HashMap<String, Integer>();
+        for (String card : abbreviations) {
+            cardMap.put(card, 0);
+        }
+
+        for (DevelopmentCard card : player.getDevelopmentCards()) {
+
+            String s;
+            if (card instanceof KnightCard) {
+
+                    s="K";
+
+            } else if (card instanceof MonopolyCard) {
+
+                    s="M";
+            } else if (card instanceof  RoadBuildingCard) {
+
+                   s="R";
+
+            } else if (card instanceof VictoryPointCard) {
+
+                    s="V";
+
+            } else if (card instanceof YearOfPlentyCard) {
+
+                    s = "Y";
+
+            } else {
+                throw new RuntimeException();
+            }
+
+            int previousCount = cardMap.get(s);
+            cardMap.put(s, previousCount + 1);
+
+
+        }
+
+        return cardMap;
+    }
+
 }

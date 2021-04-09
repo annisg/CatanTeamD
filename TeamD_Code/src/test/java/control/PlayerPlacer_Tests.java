@@ -191,12 +191,14 @@ public class PlayerPlacer_Tests {
         EasyMock.expect(player.getDevelopmentCards()).andReturn(cards);
         EasyMock.replay(player);
 
+        String[] devCards = {"K", "V", "M", "R", "Y"};
+
         HashMap<String, Integer> cardMap = testPP.getDevelopmentCardMap(player);
-        assertEquals(0, cardMap.get("K").intValue());
-        assertEquals(0, cardMap.get("M").intValue());
-        assertEquals(0, cardMap.get("R").intValue());
-        assertEquals(0, cardMap.get("V").intValue());
-        assertEquals(0, cardMap.get("Y").intValue());
+        assertEquals(0, cardMap.get(devCards[0]).intValue());
+        assertEquals(0, cardMap.get(devCards[2]).intValue());
+        assertEquals(0, cardMap.get(devCards[3]).intValue());
+        assertEquals(0, cardMap.get(devCards[1]).intValue());
+        assertEquals(0, cardMap.get(devCards[4]).intValue());
 
         EasyMock.verify(player);
     }
@@ -228,12 +230,14 @@ public class PlayerPlacer_Tests {
         EasyMock.replay(player);
         EasyMock.replay(cards.toArray());
 
+        String[] devCards = {"K", "V", "M", "R", "Y"};
+
         HashMap<String, Integer> cardMap = testPP.getDevelopmentCardMap(player);
-        assertEquals(2, cardMap.get("K").intValue());
-        assertEquals(3, cardMap.get("M").intValue());
-        assertEquals(4, cardMap.get("R").intValue());
-        assertEquals(5, cardMap.get("V").intValue());
-        assertEquals(6, cardMap.get("Y").intValue());
+        assertEquals(2, cardMap.get(devCards[0]).intValue());
+        assertEquals(3, cardMap.get(devCards[2]).intValue());
+        assertEquals(4, cardMap.get(devCards[3]).intValue());
+        assertEquals(5, cardMap.get(devCards[1]).intValue());
+        assertEquals(6, cardMap.get(devCards[4]).intValue());
 
         EasyMock.verify(player);
         EasyMock.verify(cards.toArray());

@@ -143,17 +143,21 @@ public class InputHandler_Resource_Production_Tests {
         CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
         PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
 
-        EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
         EasyMock.expect(mockedCG.getPlayerTracker()).andReturn(mockedTT);
         mockedRP.produceResources(mockedGM, mockedTT, 4);
         mockedCG.drawPlayers();
 
         EasyMock.replay(mockedRP, mockedGM, mockedCG, mockedTT, mockedPB);
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
+                mockedPB)
+                .addMockedMethod("displayMessage").mock();
+        testIH.displayMessage("Rolled a 4 for resource production.");
+        EasyMock.replay(testIH);
+
         testIH.produceResources(4);
-        EasyMock.verify(mockedRP, mockedGM, mockedTT, mockedCG, mockedPB);
+        EasyMock.verify(mockedRP, mockedGM, mockedTT, mockedCG, mockedPB, testIH);
     }
 
     @Test
@@ -164,18 +168,22 @@ public class InputHandler_Resource_Production_Tests {
         ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
         PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
 
-        EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        EasyMock.expect(mockedCG.getGameMap()).andStubReturn(testGM);
         mockedCG.drawScreen();
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        testIH.performRobberTurn(1, 1);
+        // Above mocks test calls in constructor, hence the separate replay below
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
+                mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
+        testIH.selectPlayerToStealFrom(1,1);
+        EasyMock.replay(testIH);
+
+        testIH.moveRobberTo(1, 1);
         assertTrue(testGM.getHex(1, 1).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
 
-        EasyMock.verify(mockedRP, mockedCG, mockedPB);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH);
     }
 
     @Test
@@ -193,7 +201,7 @@ public class InputHandler_Resource_Production_Tests {
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
         try {
-            testIH.performRobberTurn(2, 2);
+            testIH.moveRobberTo(2, 2);
             fail();
         } catch (IllegalRobberMoveException e) {
         }
@@ -216,13 +224,13 @@ public class InputHandler_Resource_Production_Tests {
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCM, mockedPB);
         try {
-            testIH.performRobberTurn(0, 3);
+            testIH.moveRobberTo(0, 3);
             fail();
         } catch (InvalidHexPositionException e) {
         }
 
         try {
-            testIH.performRobberTurn(3, 4);
+            testIH.moveRobberTo(3, 4);
             fail();
         } catch (InvalidHexPositionException e) {
         }
@@ -247,7 +255,7 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.expect(testIH.rollDice()).andReturn(7);
         EasyMock.expect(testIH.isRobberTurn(7)).andReturn(true);
         testIH.displayMessage(messages.getString("InputHandler.15"));
-        mockedHexSelector.selectAndApply(messages.getString("InputHandler.16"), testIH.performRobberTurn);
+        mockedHexSelector.selectAndApply(messages.getString("InputHandler.16"), testIH.moveRobberTo);
 
         EasyMock.replay(testIH, mockedHexSelector);
 
@@ -272,7 +280,6 @@ public class InputHandler_Resource_Production_Tests {
 
                 EasyMock.expect(testIH.rollDice()).andReturn(6);
                 EasyMock.expect(testIH.isRobberTurn(6)).andReturn(false);
-                testIH.displayMessage(MessageFormat.format(messages.getString("InputHandler.17"), 6));
                 testIH.produceResources(6);
 
                 EasyMock.replay(testIH);

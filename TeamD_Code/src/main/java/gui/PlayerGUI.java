@@ -7,11 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.text.MessageFormat;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import control.ObjectToColorConverter;
-import model.Resource;
+import model.*;
 
 public class PlayerGUI extends Drawable {
 
@@ -47,6 +48,7 @@ public class PlayerGUI extends Drawable {
         this.colorConverter = new ObjectToColorConverter();
     }
 
+
     @Override
     public Color getColor() {
         return this.playerColor;
@@ -60,24 +62,34 @@ public class PlayerGUI extends Drawable {
 
     @Override
     public void drawComponent(Graphics g) {
-        super.drawComponent(g);
-        int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         Graphics2D g2 = (Graphics2D) g;
 
+        super.drawComponent(g);
+        drawPlayerName(g2);
+        drawResourceCards(g2);
+        drawDevelopmentCards(g2);
+    }
+
+    private void drawPlayerName(Graphics2D g2) {
+        int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         g2.setColor(Color.black);
         g2.setFont(writingFont);
         g2.drawString(this.playerOrderDisplay, xPlayerPosition + borderWidth, boxYPos + borderWidth + fontSize);
+    }
 
+    private void drawDevelopmentCards(Graphics2D g2) {
         int listIndex = 0;
-        for (Resource resource : Resource.values()) {
-            drawResourceCard(g2, resource, listIndex);
-            listIndex++;
-        }
-
-        listIndex = 0;
+        // TODO: Fix Primitive Obsession for Dev. Card Type. Collapse for loop like below.
         for (String developmentCard : numOfEachDevelopmentCard.keySet()) {
             drawDevelopmentCard(g2, developmentCard, listIndex);
             listIndex++;
+        }
+    }
+
+    private void drawResourceCards(Graphics2D g2) {
+        Resource[] resources = Resource.values();
+        for (int i = 0; i < resources.length; i++) {
+            drawResourceCard(g2, resources[i], i);
         }
     }
 
@@ -117,6 +129,26 @@ public class PlayerGUI extends Drawable {
         g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
     }
 
+    public int getAmountOfSpecificCard(DevelopmentCard card){
+        return numOfEachDevelopmentCard.get(card);
+    }
+   
+    private String getAbbrForDevelopmentCard(DevelopmentCard developmentCard) {
+
+            if (developmentCard instanceof KnightCard)
+                return messages.getString("PlayerGUI.4");
+            else if(developmentCard instanceof VictoryPointCard)
+                return messages.getString("PlayerGUI.6");
+            else if (developmentCard instanceof YearOfPlentyCard)
+                return messages.getString("PlayerGUI.8");
+            else if (developmentCard instanceof RoadBuildingCard)
+                return messages.getString("PlayerGUI.10");
+            else if (developmentCard instanceof MonopolyCard)
+                return messages.getString("PlayerGUI.12");
+            else
+                return messages.getString("PlayerGUI.13");
+        }
+
     private String getAbbrForDevelopmentCard(String developmentCard) {
         switch (developmentCard) {
         case "K":
@@ -132,6 +164,7 @@ public class PlayerGUI extends Drawable {
         default:
             return messages.getString("PlayerGUI.13");
         }
+
     }
 
 }

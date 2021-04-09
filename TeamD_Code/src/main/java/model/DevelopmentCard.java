@@ -15,4 +15,5 @@ public abstract class DevelopmentCard {
     public void makePlayable() {
         this.canBePlayed = true;
     }
+
 }

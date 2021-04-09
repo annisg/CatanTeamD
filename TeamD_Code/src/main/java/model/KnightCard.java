@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 public class KnightCard extends DevelopmentCard {
 
     LargestArmy largestArmy;
-    private ResourceBundle messages;
+    private final ResourceBundle messages;
 
     public KnightCard(LargestArmy largestArmy, ResourceBundle messages) {
         this.largestArmy = largestArmy;
@@ -17,8 +17,9 @@ public class KnightCard extends DevelopmentCard {
         owner.removeDevelopmentCard(this);
         owner.incrementKnightCount();
         largestArmy.updateLargestArmy();
-
     }
+
+
 
     @Override
     public String getName() {

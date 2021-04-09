@@ -5,11 +5,15 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.List;
+
+import static control.GameStartState.ADVANCED;
 
 public class CatanGame {
-
     GameBoard gui;
     InputComponent input;
     GameMap model;
@@ -83,16 +87,21 @@ public class CatanGame {
                 model.setUpAdvancedMap();
                 break;
             case BEGINNER:
-            default:
                 model.setUpBeginnerMap(numPlayers);
                 this.turnTracker.setupBeginnerResourcesAndPieces();
                 break;
+            case CUSTOM:
+            default:
+                customHexPlacement();
             }
 
             this.playerPlacer.refreshPlayerNumber();
-            buildModelFrame();
-            if (state == GameStartState.ADVANCED) {
-                advancedInitialPlacement();
+            
+            if (state != GameStartState.CUSTOM) {
+                buildModelFrame();
+                if (state != GameStartState.BEGINNER) {
+                    advancedInitialPlacement();
+                }
             }
         }
     }
@@ -117,6 +126,12 @@ public class CatanGame {
         input.selectInitialSettlementPlacementRound2();
         input.selectInitialRoadPlacement();
     }
+    
+    private void customHexPlacement() {
+        List<Resource> remainingResources = model.getHexMap().getStandardResources();
+        List<Integer> remainingNumbers = model.getHexMap().getStandardResourceNumbers();
+        inputHandler.selectCustomHexPlacement(remainingResources, remainingNumbers);
+    }
 
     public void buildModelFrame() {
         JFrame gameFrame = new JFrame(Messages.getString("CatanGame.0"));
@@ -127,6 +142,7 @@ public class CatanGame {
 
         gameFrame.add(this.gui, BorderLayout.CENTER);
         gameFrame.add(this.input, BorderLayout.SOUTH);
+        input.addMouseListenerToParent();
         drawScreen();
     }
 
@@ -165,4 +181,9 @@ public class CatanGame {
     public void drawSpecialCards() {
         gui.addSpecialCards(this.specialCardPlacer.getSpecialCards());
     }
+
+    public Player getCurrentPlayer() {
+        return getPlayerTracker().getCurrentPlayer();
+    }
 }
+
