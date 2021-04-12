@@ -33,7 +33,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
     public RemoveCardsGUI(Player p){
         this.player = p;
-         this.sizeOfDeck = p.getResourceHandSize();
+        this.sizeOfDeck = p.getResourceHandSize();
         beginning();
     }
 
@@ -74,18 +74,13 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create checkbox
         c1 = new JComboBox(entries);
-       // JComboBox c2 = new JComboBox(values);
-        // create textfield
-        tf = new JTextField(16);
 
-        // create add and remove buttons
-       //JButton b = new JButton("ADD");
         JButton b1 = new JButton("REMOVE");
 
         // add action listener
-       // b.addActionListener(s);
-       //
-         b1.addActionListener(this);
+        // b.addActionListener(s);
+        //
+        b1.addActionListener(this);
 
         // add ItemListener
         c1.addItemListener(this);
@@ -108,14 +103,17 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create a new panel
         JPanel p = new JPanel();
-        c2 = new JComboBox();
+        // c2 = new JComboBox();
+        for(JLabel l: labelsOfStuff){
+            p.add(l);
+        }
         p.add(l);
-
+        p.add(totalCards);
         // add combobox to panel
         p.add(c1);
-        p.add(c2);
+        // p.add(c2);
         p.add(l1);
-        p.add(tf);
+        // p.add(tf);
         //p.add(b);
         p.add(b1);
 
@@ -135,11 +133,17 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         if(numberTimeDiscard <sizeOfDeck/2) {
             Resource r = player.getResourceByName((String) c1.getSelectedItem());
-            player.discardResourceCard(r);
-            numberTimeDiscard++;
-
-            totalCards.setText("you have this many cards " + "" + player.getResourceHandSize() );
-            System.out.println("I am in resource");
+            //make sure you do the check here for discard card of it doesn't exist
+            if(player.getResourceCount(r)<0){
+                JOptionPane.showMessageDialog(null, "You do not have enough of that resource!");
+                return;
+            }
+            else {
+                player.discardResourceCard(r);
+                numberTimeDiscard++;
+                totalCards.setText("you have this many cards " + "" + player.getResourceHandSize());
+                System.out.println("I am in resource");
+            }
         }
         else{
             System.out.print("this is where you are over!");
@@ -156,32 +160,41 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         int index = 0;
         for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
             labelsOfStuff.get(index).setText(entry.getKey().name() + " with " + "" + entry.getValue() + " remaining");
-           // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
+            // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
         }
 
+
+        //change
     }
-    
+
     public void itemStateChanged(ItemEvent e)
     {
         // if the state combobox is changed
-       // System.out.println("I am in item state change");
+        // System.out.println("I am in item state change");
         if (e.getSource() == c1) {
 
             l1.setText(c1.getSelectedItem() + " selected");
-            int count = player.getResourceCountString((String)c1.getSelectedItem());
-            if(count==0){
-                String [] num = {"0"};
-                c2 = new JComboBox(num);
-            }
-            else {
-                String[] numToRemove = new String[count + 1];
-                for (int i = 0; i < numToRemove.length; i++) {
-                    numToRemove[i] = "" + i;
-                }
+            try {
+                int count = player.getResourceCountString((String) c1.getSelectedItem());
+                if (count == 0) {
+                    String[] num = {"0"};
+                    c2 = new JComboBox(num);
+                } else {
+                    String[] numToRemove = new String[count + 1];
+                    for (int i = 0; i < numToRemove.length; i++) {
+                        numToRemove[i] = "" + i;
+                    }
 
-                c2 = new JComboBox(numToRemove);
+                    c2 = new JComboBox(numToRemove);
+                }
+            }
+            catch(Exception e2){
+                JOptionPane.showMessageDialog(null, "You cannot choose desert!");
+                numberTimeDiscard--;
+                numberOfResourceCards++;
             }
         }
 
     }
 }
+

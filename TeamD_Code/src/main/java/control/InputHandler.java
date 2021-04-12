@@ -34,6 +34,7 @@ public class InputHandler {
     Select1Frame devCardSelector;
     Select1Frame resourceNumberSelector;
     Select1Frame resourceSelector;
+    Select1Frame resourceSelector2;
 
     BuildingHandler propertyBuilder;
     
@@ -125,6 +126,7 @@ public class InputHandler {
         hexSelector = new Select2Frame(possibleHexRows, possibleHexCols, false, this);
         devCardSelector = new Select1Frame(possibleDevCardNames, possibleDevCards, true, this);
         resourceSelector = new Select1Frame(possibleResourceNames, possibleResources, false, this);
+        resourceSelector2 = new Select1Frame(possibleResourceNames, possibleResources, false, this);
     }
 
     public ResourceBundle getMessages() {
@@ -412,15 +414,13 @@ public class InputHandler {
 
     private void offerPlayerTwoFreeRoads() {
         for (int i = 0; i < 2; i++) {
-            optionalEdgeSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.10"),
-                    this.placeFreeRoad);
+            catanGame.input.selectInitialRoadPlacement();
         }
     }
 
-    private void offerPlayerTwoFreeResources() {
-        for (int i = 0; i < 2; i++) {
-            resourceSelector.selectAndApply("Select a resource", addResource);
-        }
+    void offerPlayerTwoFreeResources() {
+        resourceSelector.selectAndApply("Select a resource", addResource);
+        resourceSelector2.selectAndApply("Select a resource", addResource);
     }
 
     private void giveResourceToCurrentPlayer(Resource resource) {
