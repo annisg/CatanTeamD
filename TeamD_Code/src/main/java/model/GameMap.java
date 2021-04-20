@@ -75,11 +75,11 @@ public class GameMap {
     }
 
     public void moveRobberToClosestHex(Point mousePosition) {
-        this.hexMap.moveRobberToPosition(getClosestMapPositionToPoint(mousePosition));
+        this.hexMap.moveRobberToPosition(getClosestValidRobberPosition(mousePosition));
     }
 
-    public MapPosition getClosestMapPositionToPoint(Point mousePosition) {
-        return this.hexMap.getClosestMapPositionToPoint(mousePosition);
+    public MapPosition getClosestValidRobberPosition(Point mousePosition) {
+        return this.hexMap.getClosestValidRobberPosition(mousePosition);
     }
 
     private void placeBeginnerPieces(int numPlayers) {

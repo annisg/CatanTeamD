@@ -303,7 +303,7 @@ public class HexMap {
         return this.hexes[n].length;
     }
 
-    public MapPosition getClosestMapPositionToPoint(Point mousePosition) {
+    public MapPosition getClosestValidRobberPosition(Point mousePosition) {
         MapPosition minimumDistanceHexMapPosition = new MapPosition(0, 0);
         if(getHex(minimumDistanceHexMapPosition).hasRobber()) {
             minimumDistanceHexMapPosition = new MapPosition(1, 0);

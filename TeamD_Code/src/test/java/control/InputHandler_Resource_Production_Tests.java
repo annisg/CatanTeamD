@@ -198,7 +198,7 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
         EasyMock.expectLastCall().times(5);
         EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
-        EasyMock.expect(testGM.getClosestMapPositionToPoint(new Point(2, 2))).andReturn(new MapPosition(2, 2));
+        EasyMock.expect(testGM.getClosestValidRobberPosition(new Point(2, 2))).andReturn(new MapPosition(2, 2));
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);

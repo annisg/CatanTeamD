@@ -348,8 +348,8 @@ public class InputHandler {
     public Function<Point, Void> moveRobberTo = new Function<Point, Void>() {
         @Override
         public Void apply(Point mousePosition) {
+            selectPlayerToStealFromAtMapPosition(catanGame.getGameMap().getClosestValidRobberPosition(mousePosition));
             updateRobberPositionOnBoard(mousePosition);
-            selectPlayerToStealFromAtMapPosition(catanGame.getGameMap().getClosestMapPositionToPoint(mousePosition));
             return null;
         }
     };
