@@ -188,59 +188,6 @@ public class InputHandler_Resource_Production_Tests {
     }
 
     @Test
-    public void testMoveRobberSamePosition() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        CatanGame mockedCG = EasyMock.niceMock(CatanGame.class);
-        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
-        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
-
-        EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
-        EasyMock.expect(testGM.getClosestValidRobberPosition(new Point(2, 2))).andReturn(new MapPosition(2, 2));
-        EasyMock.replay(mockedRP, mockedCG, mockedPB);
-
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        try {
-            testIH.moveRobberTo.apply(new Point(2, 2));
-            fail();
-        } catch (IllegalRobberMoveException e) {
-        }
-        EasyMock.verify(mockedRP, mockedCG, mockedPB);
-    }
-
-    @Test
-    public void testMoveRobberBadPositions() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        CatanGame mockedCG = EasyMock.niceMock(CatanGame.class);
-        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
-        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
-
-        EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
-        EasyMock.replay(mockedRP, mockedCG, mockedPB);
-
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        try {
-            testIH.moveRobberTo.apply(new Point(0, 3));
-            fail();
-        } catch (InvalidHexPositionException e) {
-        }
-
-        try {
-            testIH.moveRobberTo.apply(new Point(3, 4));
-            fail();
-        } catch (InvalidHexPositionException e) {
-        }
-
-        EasyMock.verify(mockedRP, mockedCG, mockedPB);
-    }
-
-    @Test
     public void testTryToRollDiceRobberTurn() {
         ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
         CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
