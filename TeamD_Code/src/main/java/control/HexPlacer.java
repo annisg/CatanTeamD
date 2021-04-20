@@ -8,10 +8,10 @@ import gui.*;
 import model.*;
 
 public class HexPlacer {
-    private final int height = 800;
-    private final int heightOffset = 130;
-    private final int widthOffset = 75;
-    private final int leftMin = 450;
+    private static final int height = 800;
+    private static final int heightOffset = 130;
+    private static final int widthOffset = 75;
+    private static final int leftMin = 450;
 
     HexMap hexes;
     private ResourceBundle messages;
@@ -53,7 +53,7 @@ public class HexPlacer {
                 messages);
     }
 
-    private int[] calculatePosition(int row, int col) {
+    public static int[] calculatePosition(int row, int col) {
         int x = col * widthOffset * 2;
         int y = -row * heightOffset + height;
         if (row == 0 || row == 4) {

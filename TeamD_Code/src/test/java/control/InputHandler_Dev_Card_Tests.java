@@ -45,6 +45,7 @@ public class InputHandler_Dev_Card_Tests {
         Player mockedPlayer = EasyMock.strictMock(Player.class);
         KnightCard mockedKC = EasyMock.partialMockBuilder(KnightCard.class).addMockedMethod("use").mock();
         Select2Frame mockedSelector = EasyMock.strictMock(Select2Frame.class);
+        mockedCG.input = EasyMock.strictMock(InputComponent.class);
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer);
         EasyMock.replay(mockedCG);
@@ -53,7 +54,6 @@ public class InputHandler_Dev_Card_Tests {
 
         EasyMock.expect(mockedRP.rollDice()).andReturn(4);
         EasyMock.expect(mockedPlayer.getDevelopmentCard(KnightCard.class)).andReturn(mockedKC);
-        mockedSelector.selectAndApply("Select hex to place robber:", testIH.moveRobberTo);
         mockedKC.use(mockedPlayer);
         EasyMock.replay(mockedRP, mockedPB, mockedSelector, mockedPlayer, mockedKC);
 

@@ -1,12 +1,10 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
+import control.HexPlacer;
 import exception.*;
 
 public class HexMap {
@@ -303,5 +301,28 @@ public class HexMap {
             throw new InvalidHexPositionException();
         }
         return this.hexes[n].length;
+    }
+
+    public MapPosition getClosestMapPositionToPoint(Point mousePosition) {
+        MapPosition minimumDistanceHexMapPosition = new MapPosition(0, 0);
+        if(getHex(minimumDistanceHexMapPosition).hasRobber()) {
+            minimumDistanceHexMapPosition = new MapPosition(1, 0);
+        }
+        for(int row = 0; row < getNumberOfRows(); row++) {
+            for(int column = 0; column < getNumberOfHexesInRow(row); column++) {
+                MapPosition position = new MapPosition(row, column);
+                if(!getHex(position).hasRobber()) {
+                    if(getHexPosition(position).distance(mousePosition) < getHexPosition(minimumDistanceHexMapPosition).distance(mousePosition)) {
+                        minimumDistanceHexMapPosition = position;
+                    }
+                }
+            }
+        }
+        return minimumDistanceHexMapPosition;
+    }
+
+    private Point getHexPosition(MapPosition mapPosition) {
+        int[] position = HexPlacer.calculatePosition(mapPosition.getRow(), mapPosition.getColumn());
+        return new Point(position[0], position[1]);
     }
 }

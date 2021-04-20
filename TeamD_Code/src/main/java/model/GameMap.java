@@ -74,8 +74,12 @@ public class GameMap {
         return this.edgeMap.getEdge(new MapPosition(row, col));
     }
 
-    public void moveRobberToPosition(int row, int col) {
-        this.hexMap.moveRobberToPosition(new MapPosition(row, col));
+    public void moveRobberToClosestHex(Point mousePosition) {
+        this.hexMap.moveRobberToPosition(getClosestMapPositionToPoint(mousePosition));
+    }
+
+    public MapPosition getClosestMapPositionToPoint(Point mousePosition) {
+        return this.hexMap.getClosestMapPositionToPoint(mousePosition);
     }
 
     private void placeBeginnerPieces(int numPlayers) {
