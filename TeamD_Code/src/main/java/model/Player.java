@@ -18,7 +18,8 @@ public class Player {
     private TurnTracker turnTracker;
     private int numOfPlayersInEntireGame=0;
     private String name;
-  
+
+
     public Player(PlayerColor color) {
 
         this.color = color;
@@ -75,14 +76,19 @@ public class Player {
     }
 
     public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
-        if(amount>resources.get(resource)){
-            throw new TooFewItemsException();
-        }
+//        if(amount>resources.get(resource)){
+//            throw new TooFewItemsException();
+//        }
+        System.out.println(resources.toString());
         ArrayList<Resource> stuff = new ArrayList<Resource>();
         for(int i= 0; i<amount; i++){
             stuff.add(resource);
         }
+        System.out.println("The size of stuff is: " + stuff.size());
+        System.out.println("THe amount of things you have before: " + resources.get(resource));
         resources.put(resource, resources.get(resource)-amount);
+        System.out.println("THe amount of things you have after: " + resources.get(resource));
+
         return stuff;
     }
 
@@ -107,6 +113,7 @@ public class Player {
     public void discardHalfResourceHand(){
         removeCardsGUI = new RemoveCardsGUI(this);
 
+
     }
     public int getResourceCount(Resource r) {
 
@@ -126,6 +133,7 @@ public class Player {
 
     }
     public Resource getResourceByName(String name){
+        name = name.toUpperCase();
         if(name.equals("GRAIN")){
             return Resource.GRAIN;
         }
