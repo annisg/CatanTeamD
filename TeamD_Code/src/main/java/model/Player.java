@@ -42,7 +42,6 @@ public class Player {
 
     public void setPlayerName(String n){
         this.name = n;
-        System.out.println("Player name: " + this.name);
     }
     public PlayerColor getColor() {
         return color;
@@ -81,11 +80,7 @@ public class Player {
         for(int i= 0; i<amount; i++){
             stuff.add(resource);
         }
-        System.out.println("The size of stuff is: " + stuff.size());
-        System.out.println("THe amount of things you have before: " + resources.get(resource));
         resources.put(resource, resources.get(resource)-amount);
-        System.out.println("THe amount of things you have after: " + resources.get(resource));
-
         return stuff;
     }
 
@@ -109,7 +104,6 @@ public class Player {
 
     public void discardHalfResourceHand(){
         removeCardsGUI = new RemoveCardsGUI(this);
-
 
     }
     public int getResourceCount(Resource r) {
@@ -150,8 +144,6 @@ public class Player {
             return Resource.DESERT;
         }
     }
-
-    //GRAIN, BRICK, ORE, LUMBER, WOOL, DESERT
 
     public int getResourceHandSize() {
         int sum = 0;
