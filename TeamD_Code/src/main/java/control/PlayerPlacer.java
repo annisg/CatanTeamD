@@ -84,9 +84,9 @@ public class PlayerPlacer {
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
             HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
             //adding the player name
-            String playerName = ithPlayer.getName();
+            //String playerName = ithPlayer.getName();
             allPlayerGUIs
-                    .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages, playerName));
+                    .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages, "noon"));
         }
 
         return allPlayerGUIs;

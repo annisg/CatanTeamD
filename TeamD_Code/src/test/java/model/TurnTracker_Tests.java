@@ -172,6 +172,7 @@ public class TurnTracker_Tests {
         EasyMock.replay(tracker);
         
         tracker.setupPlayers(numPlayers);
+
         
         assertEquals(numPlayers, tracker.getNumPlayers());
         

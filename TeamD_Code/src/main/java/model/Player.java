@@ -76,9 +76,6 @@ public class Player {
     }
 
     public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
-//        if(amount>resources.get(resource)){
-//            throw new TooFewItemsException();
-//        }
         System.out.println(resources.toString());
         ArrayList<Resource> stuff = new ArrayList<Resource>();
         for(int i= 0; i<amount; i++){
@@ -102,7 +99,7 @@ public class Player {
     public int getResourceCountString(String name) {
 
         Resource r = getResourceByName(name);
-        if (r.equals(Resource.DESERT)) {
+        if (isResourceDesert(r)) {
             throw new IllegalArgumentException();
         }
 
@@ -118,7 +115,7 @@ public class Player {
     public int getResourceCount(Resource r) {
 
        // Resource r = getResourceByName(name);
-        if (r.equals(Resource.DESERT)) {
+        if (isResourceDesert(r)) {
             throw new IllegalArgumentException();
         }
         if(resources.get(r)==null){
@@ -168,7 +165,7 @@ public class Player {
 
     public void giveResource(Resource resource, int amount) {
 
-        if (resource.equals(Resource.DESERT) || amount < 0) {
+        if (isResourceDesert(resource) || amount < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -178,7 +175,7 @@ public class Player {
 
     public void removeResource(Resource resource, int amount) {
 
-        if (resource.equals(Resource.DESERT) || amount < 0) {
+        if (isResourceDesert(resource)|| amount < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -256,6 +253,10 @@ public class Player {
         this.giveResource(resource, qtyStolen);
 
         return qtyStolen;
+    }
+
+    public boolean isResourceDesert(Resource r){
+        return r.toString().equals("none");
     }
 
     public int getSettlementCount() {

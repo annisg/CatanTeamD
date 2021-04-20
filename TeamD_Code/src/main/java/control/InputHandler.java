@@ -304,20 +304,20 @@ public class InputHandler {
             this.displayMessage(this.catanGame.getMessages().getString("InputHandler.18"));
             return;
         }
-        discardCardsForEveryPlayer();
+
     }
 
         
           
           
     public void discardCardsForEveryPlayer(){
-//        if(catanGame==null || catanGame.turnTracker == null){
-//            return;
-//        }
+        if(catanGame==null || catanGame.turnTracker == null){
+            return;
+        }
         List<Player> people = this.catanGame.getPlayerTracker().getPlayers();
         System.out.println("I am in players");
         for(Player p : people){
-                if(p.getResourceHandSize()>0) {
+                if(p.getResourceHandSize()>7) {
                     p.discardHalfResourceHand();
                 }
 
