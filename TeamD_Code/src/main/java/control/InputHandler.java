@@ -414,7 +414,7 @@ public class InputHandler {
 
     private void offerPlayerTwoFreeRoads() {
         for (int i = 0; i < 2; i++) {
-            catanGame.input.selectInitialRoadPlacement();
+            catanGame.input.placeRoadWithCard();
         }
     }
 
