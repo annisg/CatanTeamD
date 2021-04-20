@@ -17,6 +17,7 @@ public class Player {
     private RemoveCardsGUI removeCardsGUI;
     private TurnTracker turnTracker;
     private int numOfPlayersInEntireGame=0;
+    private String name;
   
     public Player(PlayerColor color) {
 
@@ -38,10 +39,17 @@ public class Player {
         random = new Random();
     }
 
+    public void setPlayerName(String n){
+        this.name = n;
+        System.out.println("Player name: " + this.name);
+    }
     public PlayerColor getColor() {
         return color;
     }
 
+    public String getName(){
+        return this.name;
+    }
     public Set<Resource> getResourceTypes() {
         return resources.keySet();
     }

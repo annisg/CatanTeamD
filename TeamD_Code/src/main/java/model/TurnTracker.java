@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.util.*;
 
 public class TurnTracker {
@@ -53,6 +54,9 @@ public class TurnTracker {
         }
 
         for(int i =0; i<numPlayers; i++){
+
+            String playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+            players.get(i).setPlayerName(playerName);
             players.get(i).addTracker(this);
         }
         Collections.shuffle(players, random);
