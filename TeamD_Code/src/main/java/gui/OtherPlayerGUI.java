@@ -157,8 +157,8 @@ public class OtherPlayerGUI extends Drawable{
 
         g2.setColor(Color.black);
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
-        String developmentCardString = "DC";
-        g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
+        String knightCardString = "KC";
+        g2.drawString(knightCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
     }
 
 }
