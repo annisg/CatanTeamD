@@ -16,7 +16,27 @@ import control.*;
 public class InputComponent extends JPanel {
     private InputHandler handler;
 
-    private Queue<Function<Point, Void>> clickFunctionQueue = new LinkedList<>();
+    private class ClickFunctionAndDisplayString {
+        private Function<Point, Void> function;
+        private String descriptorString;
+
+        ClickFunctionAndDisplayString(Function<Point, Void> function, String descriptorString) {
+            this.function = function;
+            this.descriptorString = descriptorString;
+        }
+
+        public String getDescriptorString() {
+            return descriptorString;
+        }
+
+        public Function<Point, Void> getFunction() {
+            return function;
+        }
+    }
+
+    private JLabel nextClickActionLabel = new JLabel("");
+
+    private Queue<ClickFunctionAndDisplayString> clickFunctionQueue = new LinkedList<>();
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
         this.handler = handler;
@@ -33,7 +53,7 @@ public class InputComponent extends JPanel {
         buildRoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(handler.placeRoad);
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeRoad, "place road."));
             }
         });
 
@@ -41,7 +61,7 @@ public class InputComponent extends JPanel {
         buildSettlement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(handler.placeSettlement);
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeSettlement, "place settlement."));
             }
         });
 
@@ -49,7 +69,7 @@ public class InputComponent extends JPanel {
         buildCity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(handler.placeCity);
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeCity, "place city."));
             }
         });
 
@@ -73,7 +93,9 @@ public class InputComponent extends JPanel {
         endTurn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.endTurn();
+                if(clickFunctionQueue.isEmpty()) {
+                    handler.endTurn();
+                }
             }
         });
 
@@ -85,6 +107,7 @@ public class InputComponent extends JPanel {
             }
         });
 
+        this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
@@ -103,9 +126,9 @@ public class InputComponent extends JPanel {
         this.getParent().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                Function<Point, Void> function = clickFunctionQueue.peek();
-                if(function != null) {
+                if(!clickFunctionQueue.isEmpty()) {
                     try {
+                        Function<Point, Void> function = clickFunctionQueue.peek().getFunction();
                         function.apply(mouseEvent.getPoint());
                         clickFunctionQueue.poll();
                     } catch (PlaceBuildingException exception) {
@@ -113,25 +136,39 @@ public class InputComponent extends JPanel {
                     } catch (Exception exception) {
                         clickFunctionQueue.poll();
                     }
+                    updateNextActionLabel();
                 }
             }
         });
     }
 
     public void selectInitialRoadPlacement() {
-        clickFunctionQueue.add(handler.placeInitialRoad);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialRoad, "place road."));
     }
 
     public void selectInitialPlaceSettlement() {
-        clickFunctionQueue.add(handler.placeInitialSettlement);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialSettlement, "place settlement."));
     }
 
     public void selectInitialSettlementPlacementRound2() {
-        clickFunctionQueue.add(handler.placeInitialSettlementRound2);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialSettlementRound2, "place settlement."));
     }
 
     public void placeRoadWithCard() {
-        clickFunctionQueue.add(handler.placeRoadWithCard);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeRoadWithCard, "place road."));
+    }
+
+    private void addToQueueAndUpdateNextClickActionText(ClickFunctionAndDisplayString clickFunctionAndDisplayString) {
+        clickFunctionQueue.add(clickFunctionAndDisplayString);
+        updateNextActionLabel();
+    }
+
+    private void updateNextActionLabel() {
+        if(clickFunctionQueue.isEmpty()) {
+            nextClickActionLabel.setText("");
+        } else {
+            nextClickActionLabel.setText("Click to " + clickFunctionQueue.peek().getDescriptorString());
+        }
     }
 
     public void addMoveRobberToQueue() {
