@@ -35,6 +35,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
     JButton quitButton;
     // main class
 
+
     public RemoveCardsGUI(Player p) {
         this.player = p;
         this.sizeOfDeck = p.getResourceHandSize();
@@ -156,12 +157,27 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         numberTimeDiscard = numberTimeDiscard + particularAmt;
 
         System.out.println("Player hand before: " + player.getResourceCards().toString());
+
+        if(this.sizeOfDeck%2==0 && player.getResourceHandSize()<=this.sizeOfDeck/2){
+            frame.dispose();
+            return;
+        }
+        if(this.sizeOfDeck%2==1 && player.getResourceHandSize()<=this.sizeOfDeck/2 + 1){
+            frame.dispose();
+            return;
+        }
         //if the discard amount is too much leave
-        if (numberTimeDiscard > player.getResourceHandSize() / 2) {
+        if (numberTimeDiscard > this.sizeOfDeck/ 2 && player.getResourceHandSize()<this.sizeOfDeck/2) {
             JOptionPane.showMessageDialog(null, "You cannot discard anymore cards");
             frame.dispose();
             return;
         }
+        if(numberTimeDiscard>this.sizeOfDeck/2 && player.getResourceHandSize() >this.sizeOfDeck/2){
+            JOptionPane.showMessageDialog(null, "You selected too many cards to discard try again");
+            numberTimeDiscard = numberTimeDiscard - particularAmt;
+            return;
+        }
+
 
         //handle the discard
         player.removeResource(player.getResourceByName((String) typeOfCardToDiscard.getSelectedItem()), particularAmt);
