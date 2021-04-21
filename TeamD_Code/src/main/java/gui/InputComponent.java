@@ -91,7 +91,7 @@ public class InputComponent extends JPanel {
         cheatResources.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: CHEAT
+                handler.cheatResources();
             }
         });
         
