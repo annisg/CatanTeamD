@@ -185,5 +185,10 @@ public class CatanGame {
     public Player getCurrentPlayer() {
         return getPlayerTracker().getCurrentPlayer();
     }
+
+    public void endTurn() {
+        gui.showPopup();
+        drawPlayers();
+    }
 }
 

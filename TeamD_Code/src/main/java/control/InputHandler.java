@@ -460,7 +460,8 @@ public class InputHandler {
             this.hasNotRolled = true;
             playerTracker.passTurn();
         }
-        this.catanGame.drawPlayers();
+        //this.catanGame.drawPlayers();
+        this.catanGame.endTurn();
     }
 
     private Player getCurrentPlayer() {
