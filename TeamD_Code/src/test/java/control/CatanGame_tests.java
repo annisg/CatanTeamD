@@ -186,18 +186,15 @@ public class CatanGame_tests {
 
     private void drawModelAlwaysCalls() {
         HexMap mockedHM = EasyMock.strictMock(HexMap.class);
-        EdgeMap mockedEM = EasyMock.strictMock(EdgeMap.class);
-        IntersectionMap mockedIM = EasyMock.strictMock(IntersectionMap.class);
         ArrayList<Drawable> hexDrawables = new ArrayList<>();
 
+        this.mockedGUI.clearScreen();
         this.mockedGUI.fullResetMap();
         EasyMock.expect(this.mockedGameMap.getHexMap()).andReturn(mockedHM);
         this.mockedHexPlacer.refreshHexes(mockedHM);
         EasyMock.expect(this.mockedHexPlacer.getAllDrawables()).andReturn(hexDrawables);
         this.mockedGUI.addHexesAndHexNums(hexDrawables);
-        EasyMock.expect(this.mockedGameMap.getEdgeMap()).andReturn(mockedEM);
         this.mockedGUI.drawEdges(mockedGameMap, PlayerColor.NONE);
-        //EasyMock.expect(this.mockedGameMap.getIntersectionMap()).andReturn(mockedIM);
         this.mockedGUI.drawIntersections(mockedGameMap, PlayerColor.NONE);
         this.mockedGUI.drawFullMap();
     }
@@ -258,21 +255,13 @@ public class CatanGame_tests {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
         setupGame();
 
-        EdgeMap edgeMap = EasyMock.mock(EdgeMap.class);
-        EasyMock.expect(mockedGameMap.getEdgeMap()).andReturn(edgeMap);
-        IntersectionMap intersectionMap = EasyMock.mock(IntersectionMap.class);
-
         mockedGUI.drawEdges(mockedGameMap, PlayerColor.NONE);
         mockedGUI.drawIntersections(mockedGameMap, PlayerColor.NONE);
         mockedGUI.drawProperty();
 
         replayAll();
-        EasyMock.replay(edgeMap, intersectionMap);
-
         this.testCatan.justDrawProperty();
-
         verifyAll();
-        EasyMock.verify(edgeMap, intersectionMap);
     }
 
     @Test
