@@ -25,8 +25,8 @@ public abstract class SelectFrame {
     }
 
     void formatDialogBox(JButton submitButton) {
-        JButton quitButton = new JButton(handler.getMessages().getString("SelectFrame.1"));
-        quitButton.addActionListener(e -> {
+        JButton cancelButton = new JButton(handler.getMessages().getString("SelectFrame.1"));
+        cancelButton.addActionListener(e -> {
             if (isOptional) {
                 selectionFrame.dispose();
             } else {
@@ -35,7 +35,7 @@ public abstract class SelectFrame {
         });
 
         selectionFrame.add(selectionPanel);
-        endPanel.add(quitButton);
+        endPanel.add(cancelButton);
         endPanel.add(submitButton);
         selectionFrame.add(endPanel, BorderLayout.SOUTH);
         selectionFrame.pack();

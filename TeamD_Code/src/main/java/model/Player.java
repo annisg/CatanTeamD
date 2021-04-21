@@ -67,7 +67,7 @@ public class Player {
     }
 
     public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
-        if(amount>resources.get(resource)){
+        if(amount > resources.get(resource)){
             throw new TooFewItemsException();
         }
         ArrayList<Resource> stuff = new ArrayList<Resource>();
