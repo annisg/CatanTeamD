@@ -82,7 +82,7 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.expect(mockedCG.getPointCalculator()).andReturn(mockedPC);
         EasyMock.expect(mockedPC.isWinning(playerTracker.getCurrentPlayer())).andReturn(false);
 
-        mockedCG.drawPlayers();
+        mockedCG.endTurn();
         EasyMock.expect(mockedRP.rollDice()).andReturn(5);
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
 

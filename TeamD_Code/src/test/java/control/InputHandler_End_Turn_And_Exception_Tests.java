@@ -35,7 +35,7 @@ public class InputHandler_End_Turn_And_Exception_Tests {
         EasyMock.expect(mockedCG.getPointCalculator()).andReturn(mockedPC);
         EasyMock.expect(mockedPC.isWinning(playerTracker.getCurrentPlayer())).andReturn(false);
 
-        mockedCG.drawPlayers();
+        mockedCG.endTurn();
         EasyMock.replay(mockedRP, mockedCG, mockedPB, mockedPC);
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
@@ -65,8 +65,7 @@ public class InputHandler_End_Turn_And_Exception_Tests {
         EasyMock.expect(mockedCG.getPointCalculator()).andReturn(mockedPC);
         EasyMock.expect(mockedPC.isWinning(mockedPlayer)).andReturn(false);
         mockedTT.passTurn();
-
-        mockedCG.drawPlayers();
+        mockedCG.endTurn();
         EasyMock.replay(mockedRP, mockedCG, mockedPB, mockedPC, mockedPlayer, mockedTT);
 
         InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
@@ -122,7 +121,7 @@ public class InputHandler_End_Turn_And_Exception_Tests {
 
             EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
 
-            mockedCG.drawPlayers();
+            mockedCG.endTurn();
             EasyMock.replay(mockedRP, mockedCG, mockedPB, mockedPC);
             InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class)
                     .withConstructor(mockedRP, mockedCG, mockedPB).addMockedMethod("displayMessage").createStrictMock();

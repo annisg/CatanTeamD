@@ -176,6 +176,7 @@ public class CatanGame {
             gui.addPlayerViews(this.playerPlacer.getAllPlayerGUIs());
         } else {
             gui.addPlayerViews(this.playerPlacer.getCurrentPlayerGUI());
+            gui.addOtherPlayerViews(this.playerPlacer.getOtherPlayerGUIs());
         }
     }
 
@@ -185,6 +186,11 @@ public class CatanGame {
 
     public Player getCurrentPlayer() {
         return getPlayerTracker().getCurrentPlayer();
+    }
+
+    public void endTurn() {
+        gui.showPopup();
+        drawPlayers();
     }
 }
 

@@ -412,7 +412,7 @@ public class InputHandler {
 
     private void offerPlayerTwoFreeRoads() {
         for (int i = 0; i < 2; i++) {
-            catanGame.input.selectInitialRoadPlacement();
+            catanGame.input.placeRoadWithCard();
         }
     }
 
@@ -458,7 +458,8 @@ public class InputHandler {
             this.hasNotRolled = true;
             playerTracker.passTurn();
         }
-        this.catanGame.drawPlayers();
+        //this.catanGame.drawPlayers();
+        this.catanGame.endTurn();
     }
 
     private Player getCurrentPlayer() {
