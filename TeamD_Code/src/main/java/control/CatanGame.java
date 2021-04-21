@@ -75,11 +75,12 @@ public class CatanGame {
         return this.messages;
     }
 
-    public void makeBoard(GameStartState state, int numPlayers) {
+    public void makeBoard(GameStartState state, int numPlayers, boolean isDebug) {
         if (numPlayers < 3 || numPlayers > 4) {
             options.getOptionsFromUser(this);
         } else {
 
+            this.input.setDebugStatus(isDebug);
             this.turnTracker.setupPlayers(numPlayers);
 
             switch (state) {

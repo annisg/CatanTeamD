@@ -260,4 +260,29 @@ public class InputHandler_Resource_Production_Tests {
         testIH.tryToRollDice();
         EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH);
     }
+    
+    @Test
+    public void testCheatResources() {
+        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
+        CatanGame mockedCG = EasyMock.mock(CatanGame.class);
+        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        Player mockedPlayer = EasyMock.mock(Player.class);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        EasyMock.expect(mockedCG.getCurrentPlayer()).andReturn(mockedPlayer).times(5);
+        mockedCG.drawPlayers();
+        EasyMock.expectLastCall().times(5);
+        
+        for(Resource r: Resource.values()) {
+            if(r != Resource.DESERT) {
+                mockedPlayer.giveResource(r, 1);
+            }
+        }
+        
+        EasyMock.replay(mockedRP, mockedCG, mockedPB, mockedPlayer);
+
+        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
+
+        testIH.cheatResources();
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, mockedPlayer);
+    }
 }

@@ -480,4 +480,12 @@ public class InputHandler {
         exceptionHandler.handleException(e, row, col);
     }
 
+    public void cheatResources() {
+        for(Resource resource : Resource.values()) {
+            if(resource != Resource.DESERT) {
+                giveResourceToCurrentPlayer(resource);
+            }
+        }
+    }
+
 }

@@ -16,6 +16,9 @@ import control.*;
 public class InputComponent extends JPanel {
     private InputHandler handler;
 
+    
+    private JButton cheatResources;
+
     private class ClickFunctionAndDisplayString {
         private Function<Point, Void> function;
         private String descriptorString;
@@ -106,6 +109,15 @@ public class InputComponent extends JPanel {
                 handler.tradeWithPlayer();
             }
         });
+        
+        cheatResources = new JButton("Cheat Resources");
+        cheatResources.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.cheatResources();
+            }
+        });
+        
 
         this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
@@ -120,6 +132,8 @@ public class InputComponent extends JPanel {
         this.add(useDevCard);
         this.add(new JLabel(messages.getString("InputComponent.10")));
         this.add(endTurn);
+        this.add(cheatResources);
+        cheatResources.setVisible(false);
     }
 
     public void addMouseListenerToParent() {
@@ -172,6 +186,10 @@ public class InputComponent extends JPanel {
     }
 
     public void addMoveRobberToQueue() {
-        clickFunctionQueue.add(handler.moveRobberTo);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.moveRobberTo, "place robber."));
+    }
+
+    public void setDebugStatus(boolean isDebug) {
+        this.cheatResources.setVisible(isDebug);
     }
 }
