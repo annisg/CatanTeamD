@@ -25,6 +25,7 @@ import model.HexMap;
 import model.Intersection;
 import model.IntersectionMap;
 import model.MapPosition;
+import model.PlayerColor;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JComponent {
@@ -81,10 +82,12 @@ public class GameBoard extends JComponent {
         this.drawObjects(this.getGraphics(), this.propertyToDraw);
     }
 
-    public void drawIntersections(IntersectionMap intMap) {
+    public void drawIntersections(GameMap gameMap, PlayerColor playerColor) {
         int x = 0;
         int y = 0;
 
+        IntersectionMap intMap = gameMap.getIntersectionMap();
+        
         for (int i = 0; i < intMap.getNumberOfRows(); i++) {
             for (int j = 0; j < intMap.getNumberOfIntersectionsInRow(i); j++) {
                 x = j * 150;
@@ -102,29 +105,32 @@ public class GameBoard extends JComponent {
                 }
 
                 MapPosition pos = new MapPosition(i, j);
-                if (intMap.getIntersection(pos).hasSettlement()) {
-                    this.propertyToDraw
-                            .add(new SettlementGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
-                } else if (intMap.getIntersection(pos).hasCity()) {
-                    if (i % 2 != 0) {
-                        y += 10;
-                    } else {
-                        y -= 5;
+                Intersection intersection = intMap.getIntersection(pos);
+                if(gameMap.canSeeIntersection(intersection, playerColor))
+                    if (intersection.hasSettlement()) {
+                        this.propertyToDraw
+                                .add(new SettlementGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
+                    } else if (intersection.hasCity()) {
+                        if (i % 2 != 0) {
+                            y += 10;
+                        } else {
+                            y -= 5;
+                        }
+    
+                        this.propertyToDraw
+                                .add(new CityGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
                     }
-
-                    this.propertyToDraw
-                            .add(new CityGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
-                }
             }
         }
 
     }
 
-    public void drawEdges(EdgeMap edgeMap) {
+    public void drawEdges(GameMap gameMap, PlayerColor color) {
         int x = 0;
         int y = 0;
         EdgeDirection direction;
 
+        EdgeMap edgeMap = gameMap.getEdgeMap();
         for (int i = 0; i < edgeMap.getNumberOfRows(); i++) {
             for (int j = 0; j < edgeMap.getNumberOfEdgesInRow(i); j++) {
                 if (i % 2 != 0) {
@@ -161,7 +167,7 @@ public class GameBoard extends JComponent {
                 y = -i * 65 + 865;
 
                 MapPosition pos = new MapPosition(i, j);
-                if (edgeMap.getEdge(pos).hasRoad()) {
+                if (edgeMap.getEdge(pos).hasRoad() && gameMap.canSeeEdge(edgeMap.getEdge(pos), color)) {
                     this.propertyToDraw.add(new EdgeGUI(edgeMap.getEdge(pos).getRoadColor(), x, y, direction));
                 }
             }

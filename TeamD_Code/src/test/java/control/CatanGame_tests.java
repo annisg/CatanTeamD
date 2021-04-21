@@ -151,7 +151,7 @@ public class CatanGame_tests {
             this.component.selectInitialRoadPlacement();
         }
         replayAll();
-        testCatan.makeBoard(testState, testNumPlayers, false);
+        testCatan.makeBoard(testState, testNumPlayers, GameMode.NORMAL, false);
         verifyAll();
     }
 
@@ -196,9 +196,9 @@ public class CatanGame_tests {
         EasyMock.expect(this.mockedHexPlacer.getAllDrawables()).andReturn(hexDrawables);
         this.mockedGUI.addHexesAndHexNums(hexDrawables);
         EasyMock.expect(this.mockedGameMap.getEdgeMap()).andReturn(mockedEM);
-        this.mockedGUI.drawEdges(mockedEM);
-        EasyMock.expect(this.mockedGameMap.getIntersectionMap()).andReturn(mockedIM);
-        this.mockedGUI.drawIntersections(mockedIM);
+        this.mockedGUI.drawEdges(mockedGameMap, PlayerColor.NONE);
+        //EasyMock.expect(this.mockedGameMap.getIntersectionMap()).andReturn(mockedIM);
+        this.mockedGUI.drawIntersections(mockedGameMap, PlayerColor.NONE);
         this.mockedGUI.drawFullMap();
     }
 
@@ -261,10 +261,9 @@ public class CatanGame_tests {
         EdgeMap edgeMap = EasyMock.mock(EdgeMap.class);
         EasyMock.expect(mockedGameMap.getEdgeMap()).andReturn(edgeMap);
         IntersectionMap intersectionMap = EasyMock.mock(IntersectionMap.class);
-        EasyMock.expect(mockedGameMap.getIntersectionMap()).andReturn(intersectionMap);
 
-        mockedGUI.drawEdges(edgeMap);
-        mockedGUI.drawIntersections(intersectionMap);
+        mockedGUI.drawEdges(mockedGameMap, PlayerColor.NONE);
+        mockedGUI.drawIntersections(mockedGameMap, PlayerColor.NONE);
         mockedGUI.drawProperty();
 
         replayAll();

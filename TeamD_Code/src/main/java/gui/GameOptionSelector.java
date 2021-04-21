@@ -59,7 +59,7 @@ public class GameOptionSelector {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 startFrame.dispose();
-                catanController.makeBoard(selectedState, numPlayers, isDebug);
+                catanController.makeBoard(selectedState, numPlayers, selectedGameMode, isDebug);
             }
         });
         
