@@ -91,6 +91,23 @@ public class PlayerPlacer {
 
         return allPlayerGUIs;
     }
+    
+    public ArrayList<Drawable> getOtherPlayerGUIs() {
+        ArrayList<Drawable> otherPlayerGUIs = new ArrayList<Drawable>();
+        
+        for(int i = 0; i < this.numberOfPlayers; i++) {
+            Player ithPlayer = this.turnTracker.getPlayer(i);
+            Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
+            HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
+            HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
+            
+            OtherPlayerGUI opg = new OtherPlayerGUI(realColorOfPlayer, resourceAmounts.values(), developmentCardAmounts.values(), 
+                                            i, i, ithPlayer.getNumKnights());
+            otherPlayerGUIs.add(opg);
+        }
+        
+        return otherPlayerGUIs;
+    }
 
     private Color getColorFromPlayerColor(PlayerColor playerColor) {
         return this.colorConverter.playerColorToColor(playerColor);

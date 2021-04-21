@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +12,7 @@ import control.*;
 public class GameOptionSelector {
     private GameStartState selectedState = GameStartState.BEGINNER;
     private int numPlayers = 3;
+    private boolean isDebug = false;
 
     public void getOptionsFromUser(CatanGame catanController) {
         JFrame startFrame = new JFrame(Messages.getString("GameOptionSelector.0"));
@@ -35,17 +37,30 @@ public class GameOptionSelector {
         JRadioButton fourPlayers = createPlayerRadioButton(Messages.getString("GameOptionSelector.5"), 4, numPlayersSelector, playersPanel);
         threePlayers.setSelected(true);
 
+        ButtonGroup debugSelector = new ButtonGroup();
+        JPanel debugPanel = new JPanel();
+        debugPanel.add(new JLabel(Messages.getString("GameOptionSelector.11")));
+
+        JRadioButton debugDisabled = createDebugRadioButton(Messages.getString("GameOptionSelector.9"), false, debugSelector, debugPanel);
+        JRadioButton debugEnabled = createDebugRadioButton(Messages.getString("GameOptionSelector.10"), true, debugSelector, debugPanel);
+        debugDisabled.setSelected(true);
+        
         JButton startButton = new JButton(Messages.getString("GameOptionSelector.7"));
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 startFrame.dispose();
-                catanController.makeBoard(selectedState, numPlayers);
+                catanController.makeBoard(selectedState, numPlayers, isDebug);
             }
         });
-
-        startFrame.add(difficultyPanel, BorderLayout.NORTH);
-        startFrame.add(playersPanel, BorderLayout.CENTER);
+        
+        JPanel optionsPanel =  new JPanel(new GridLayout(3,1));
+        
+        optionsPanel.add(difficultyPanel, BorderLayout.NORTH);
+        optionsPanel.add(playersPanel, BorderLayout.CENTER);
+        optionsPanel.add(debugPanel, BorderLayout.SOUTH);
+        
+        startFrame.add(optionsPanel, BorderLayout.CENTER);
         startFrame.add(startButton, BorderLayout.SOUTH);
 
         startFrame.pack();
@@ -75,6 +90,21 @@ public class GameOptionSelector {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedState = state;
+            }
+        });
+        
+        return button;
+    }
+    
+
+    private JRadioButton createDebugRadioButton(String message, boolean state, ButtonGroup debugSelector, JPanel debugPanel) {
+        JRadioButton button = new JRadioButton(message);
+        debugSelector.add(button);
+        debugPanel.add(button);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isDebug = state;
             }
         });
         

@@ -75,13 +75,14 @@ public class CatanGame {
         return this.messages;
     }
 
-    public void makeBoard(GameStartState state, int numPlayers) {
+    public void makeBoard(GameStartState state, int numPlayers, boolean isDebug) {
         if (numPlayers < 3 || numPlayers > 4) {
             options.getOptionsFromUser(this);
         } else {
 
             //adding the etra if you want names
             this.turnTracker.enablePlayerNames();
+            this.input.setDebugStatus(isDebug);
             this.turnTracker.setupPlayers(numPlayers);
 
             switch (state) {
@@ -177,6 +178,7 @@ public class CatanGame {
             gui.addPlayerViews(this.playerPlacer.getAllPlayerGUIs());
         } else {
             gui.addPlayerViews(this.playerPlacer.getCurrentPlayerGUI());
+            gui.addOtherPlayerViews(this.playerPlacer.getOtherPlayerGUIs());
         }
     }
 
@@ -186,6 +188,11 @@ public class CatanGame {
 
     public Player getCurrentPlayer() {
         return getPlayerTracker().getCurrentPlayer();
+    }
+
+    public void endTurn() {
+        gui.showPopup();
+        drawPlayers();
     }
 }
 

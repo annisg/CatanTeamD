@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +9,11 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 
 import control.GameStartState;
 import control.Main;
@@ -21,7 +25,6 @@ import model.HexMap;
 import model.Intersection;
 import model.IntersectionMap;
 import model.MapPosition;
-import model.Resource;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JComponent {
@@ -29,13 +32,20 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> hexesAndNumbersToDraw;
     ArrayList<Drawable> propertyToDraw;
     ArrayList<Drawable> playersToDraw;
+    ArrayList<Drawable> otherPlayersToDraw;
     ArrayList<Drawable> specialCardsToDraw;
+    JTextPane popup;
 
     public GameBoard() {
         this.hexesAndNumbersToDraw = new ArrayList<Drawable>();
         this.propertyToDraw = new ArrayList<Drawable>();
         this.playersToDraw = new ArrayList<Drawable>();
+        this.otherPlayersToDraw = new ArrayList<Drawable>();
         this.specialCardsToDraw = new ArrayList<Drawable>();
+        
+        popup = new JTextPane();
+        popup.setText("Hand computer to next player. Press OK when ready to continue");
+        popup.setPreferredSize(new Dimension(1550, 900));
     }
 
     public void addHexesAndHexNums(ArrayList<Drawable> hexesAndNums) {
@@ -45,6 +55,11 @@ public class GameBoard extends JComponent {
     public void addPlayerViews(ArrayList<Drawable> players) {
         this.playersToDraw = players;
         this.drawObjects(this.getGraphics(), this.playersToDraw);
+    }
+    
+    public void addOtherPlayerViews(ArrayList<Drawable> otherPlayers) {
+        this.otherPlayersToDraw = otherPlayers;
+        this.drawObjects(this.getGraphics(), this.otherPlayersToDraw);
     }
 
     public void addSpecialCards(ArrayList<Drawable> cards) {
@@ -156,6 +171,7 @@ public class GameBoard extends JComponent {
     protected void paintComponent(Graphics g) {
         drawObjects(g, this.hexesAndNumbersToDraw);
         drawObjects(g, this.playersToDraw);
+        drawObjects(g, this.otherPlayersToDraw);
         drawObjects(g, this.propertyToDraw);
         drawObjects(g, this.specialCardsToDraw);
     }
@@ -164,5 +180,9 @@ public class GameBoard extends JComponent {
         for (Drawable h : objects) {
             h.drawComponent(g);
         }
+    }
+
+    public void showPopup() {
+       JOptionPane.showMessageDialog(this, popup, "Title", JOptionPane.INFORMATION_MESSAGE);
     }
 }
