@@ -186,7 +186,7 @@ public class InputComponent extends JPanel {
     }
 
     public void addMoveRobberToQueue() {
-        clickFunctionQueue.add(handler.moveRobberTo);
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.moveRobberTo, "place robber."));
     }
 
     public void setDebugStatus(boolean isDebug) {
