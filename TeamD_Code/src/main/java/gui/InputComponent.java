@@ -34,6 +34,8 @@ public class InputComponent extends JPanel {
         }
     }
 
+    private JLabel nextClickActionLabel = new JLabel("");
+
     private Queue<ClickFunctionAndDisplayString> clickFunctionQueue = new LinkedList<>();
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
@@ -51,7 +53,7 @@ public class InputComponent extends JPanel {
         buildRoad.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeRoad, "place road."));
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeRoad, "place road."));
             }
         });
 
@@ -59,7 +61,7 @@ public class InputComponent extends JPanel {
         buildSettlement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeSettlement, "place settlement."));
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeSettlement, "place settlement."));
             }
         });
 
@@ -67,7 +69,7 @@ public class InputComponent extends JPanel {
         buildCity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeCity, "place city."));
+                addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeCity, "place city."));
             }
         });
 
@@ -103,6 +105,7 @@ public class InputComponent extends JPanel {
             }
         });
 
+        this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
@@ -121,9 +124,9 @@ public class InputComponent extends JPanel {
         this.getParent().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                Function<Point, Void> function = clickFunctionQueue.peek().getFunction();
-                if(function != null) {
+                if(!clickFunctionQueue.isEmpty()) {
                     try {
+                        Function<Point, Void> function = clickFunctionQueue.peek().getFunction();
                         function.apply(mouseEvent.getPoint());
                         clickFunctionQueue.poll();
                     } catch (PlaceBuildingException exception) {
@@ -131,24 +134,38 @@ public class InputComponent extends JPanel {
                     } catch (Exception exception) {
                         clickFunctionQueue.poll();
                     }
+                    updateNextActionLabel();
                 }
             }
         });
     }
 
     public void selectInitialRoadPlacement() {
-        clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeInitialRoad, "place road."));
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialRoad, "place road."));
     }
 
     public void selectInitialPlaceSettlement() {
-        clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeInitialSettlement, "place settlement."));
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialSettlement, "place settlement."));
     }
 
     public void selectInitialSettlementPlacementRound2() {
-        clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeInitialSettlementRound2, "place settlement."));
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeInitialSettlementRound2, "place settlement."));
     }
 
     public void placeRoadWithCard() {
-        clickFunctionQueue.add(new ClickFunctionAndDisplayString(handler.placeRoadWithCard, "place road."));
+        addToQueueAndUpdateNextClickActionText(new ClickFunctionAndDisplayString(handler.placeRoadWithCard, "place road."));
+    }
+
+    private void addToQueueAndUpdateNextClickActionText(ClickFunctionAndDisplayString clickFunctionAndDisplayString) {
+        clickFunctionQueue.add(clickFunctionAndDisplayString);
+        updateNextActionLabel();
+    }
+
+    private void updateNextActionLabel() {
+        if(clickFunctionQueue.isEmpty()) {
+            nextClickActionLabel.setText("");
+        } else {
+            nextClickActionLabel.setText("Click to " + clickFunctionQueue.peek().getDescriptorString());
+        }
     }
 }
