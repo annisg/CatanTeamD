@@ -133,4 +133,8 @@ public class InputComponent extends JPanel {
     public void placeRoadWithCard() {
         clickFunctionQueue.add(handler.placeRoadWithCard);
     }
+
+    public void addMoveRobberToQueue() {
+        clickFunctionQueue.add(handler.moveRobberTo);
+    }
 }
