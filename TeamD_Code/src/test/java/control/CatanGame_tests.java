@@ -144,13 +144,14 @@ public class CatanGame_tests {
     }
 
     private void runTestsMakeBoard(GameStartState testState, int testNumPlayers) {
+        this.component.setDebugStatus(false);
         if (testState == GameStartState.ADVANCED && testNumPlayers >= 3 && testNumPlayers <= 4) {
             EasyMock.expect(mockedTurnTracker.getNumPlayers()).andStubReturn(testNumPlayers);
             this.component.selectInitialPlaceSettlement();
             this.component.selectInitialRoadPlacement();
         }
         replayAll();
-        testCatan.makeBoard(testState, testNumPlayers);
+        testCatan.makeBoard(testState, testNumPlayers, false);
         verifyAll();
     }
 
