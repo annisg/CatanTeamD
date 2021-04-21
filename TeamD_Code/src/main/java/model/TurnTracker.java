@@ -64,11 +64,14 @@ public class TurnTracker {
         for(int i =0; i<numPlayers; i++) {
 
             if (wantPlayerNames ==true){
-                String playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+                String playerName = "";
+                while(playerName!=null || playerName.length()==0){
+                    playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+                }
                 players.get(i).setPlayerName(playerName);
             }
             else{
-                players.get(i).setPlayerName("Player " + ("" + (i+1)));
+                players.get(i).setPlayerName(players.get(i).getColor().toString());
 
             }
             players.get(i).addTracker(this);
