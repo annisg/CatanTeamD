@@ -157,6 +157,7 @@ public class CatanGame_tests {
     @Test
     public void testDrawModelCallsEverything() {
         ArrayList<Drawable> playerGUIs = new ArrayList<>();
+        ArrayList<Drawable> otherPlayerGUIs = new ArrayList<>();
         ArrayList<Drawable> cardGUIs = new ArrayList<>();
 
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).mock();
@@ -164,8 +165,10 @@ public class CatanGame_tests {
         this.testCatan.showAllPlayers = false;
         drawModelAlwaysCalls();
         EasyMock.expect(this.mockedPlayerPlacer.getCurrentPlayerGUI()).andReturn(playerGUIs);
+        EasyMock.expect(this.mockedPlayerPlacer.getOtherPlayerGUIs()).andReturn(otherPlayerGUIs);
         EasyMock.expect(this.mockedCardPlacer.getSpecialCards()).andReturn(cardGUIs);
         this.mockedGUI.addPlayerViews(playerGUIs);
+        this.mockedGUI.addOtherPlayerViews(otherPlayerGUIs);
         this.mockedGUI.addSpecialCards(cardGUIs);
         runTestDrawModel();
 

@@ -32,6 +32,7 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> hexesAndNumbersToDraw;
     ArrayList<Drawable> propertyToDraw;
     ArrayList<Drawable> playersToDraw;
+    ArrayList<Drawable> otherPlayersToDraw;
     ArrayList<Drawable> specialCardsToDraw;
     JTextPane popup;
 
@@ -39,6 +40,7 @@ public class GameBoard extends JComponent {
         this.hexesAndNumbersToDraw = new ArrayList<Drawable>();
         this.propertyToDraw = new ArrayList<Drawable>();
         this.playersToDraw = new ArrayList<Drawable>();
+        this.otherPlayersToDraw = new ArrayList<Drawable>();
         this.specialCardsToDraw = new ArrayList<Drawable>();
         
         popup = new JTextPane();
@@ -53,6 +55,11 @@ public class GameBoard extends JComponent {
     public void addPlayerViews(ArrayList<Drawable> players) {
         this.playersToDraw = players;
         this.drawObjects(this.getGraphics(), this.playersToDraw);
+    }
+    
+    public void addOtherPlayerViews(ArrayList<Drawable> otherPlayers) {
+        this.otherPlayersToDraw = otherPlayers;
+        this.drawObjects(this.getGraphics(), this.otherPlayersToDraw);
     }
 
     public void addSpecialCards(ArrayList<Drawable> cards) {
@@ -164,6 +171,7 @@ public class GameBoard extends JComponent {
     protected void paintComponent(Graphics g) {
         drawObjects(g, this.hexesAndNumbersToDraw);
         drawObjects(g, this.playersToDraw);
+        drawObjects(g, this.otherPlayersToDraw);
         drawObjects(g, this.propertyToDraw);
         drawObjects(g, this.specialCardsToDraw);
     }

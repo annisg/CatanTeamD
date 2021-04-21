@@ -175,6 +175,7 @@ public class CatanGame {
             gui.addPlayerViews(this.playerPlacer.getAllPlayerGUIs());
         } else {
             gui.addPlayerViews(this.playerPlacer.getCurrentPlayerGUI());
+            gui.addOtherPlayerViews(this.playerPlacer.getOtherPlayerGUIs());
         }
     }
 
