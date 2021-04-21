@@ -17,7 +17,9 @@ public class Player {
     private RemoveCardsGUI removeCardsGUI;
     private TurnTracker turnTracker;
     private int numOfPlayersInEntireGame=0;
-  
+    private String name;
+
+
     public Player(PlayerColor color) {
 
         this.color = color;
@@ -38,10 +40,16 @@ public class Player {
         random = new Random();
     }
 
+    public void setPlayerName(String n){
+        this.name = n;
+    }
     public PlayerColor getColor() {
         return color;
     }
 
+    public String getName(){
+        return this.name;
+    }
     public Set<Resource> getResourceTypes() {
         return resources.keySet();
     }
@@ -67,9 +75,7 @@ public class Player {
     }
 
     public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
-        if(amount>resources.get(resource)){
-            throw new TooFewItemsException();
-        }
+        System.out.println(resources.toString());
         ArrayList<Resource> stuff = new ArrayList<Resource>();
         for(int i= 0; i<amount; i++){
             stuff.add(resource);
@@ -88,7 +94,7 @@ public class Player {
     public int getResourceCountString(String name) {
 
         Resource r = getResourceByName(name);
-        if (r.equals(Resource.DESERT)) {
+        if (isResourceDesert(r)) {
             throw new IllegalArgumentException();
         }
 
@@ -103,7 +109,7 @@ public class Player {
     public int getResourceCount(Resource r) {
 
        // Resource r = getResourceByName(name);
-        if (r.equals(Resource.DESERT)) {
+        if (isResourceDesert(r)) {
             throw new IllegalArgumentException();
         }
         if(resources.get(r)==null){
@@ -118,6 +124,7 @@ public class Player {
 
     }
     public Resource getResourceByName(String name){
+        name = name.toUpperCase();
         if(name.equals("GRAIN")){
             return Resource.GRAIN;
         }
@@ -138,8 +145,6 @@ public class Player {
         }
     }
 
-    //GRAIN, BRICK, ORE, LUMBER, WOOL, DESERT
-
     public int getResourceHandSize() {
         int sum = 0;
 
@@ -152,7 +157,7 @@ public class Player {
 
     public void giveResource(Resource resource, int amount) {
 
-        if (resource.equals(Resource.DESERT) || amount < 0) {
+        if (isResourceDesert(resource) || amount < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -162,7 +167,7 @@ public class Player {
 
     public void removeResource(Resource resource, int amount) {
 
-        if (resource.equals(Resource.DESERT) || amount < 0) {
+        if (isResourceDesert(resource)|| amount < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -240,6 +245,10 @@ public class Player {
         this.giveResource(resource, qtyStolen);
 
         return qtyStolen;
+    }
+
+    public boolean isResourceDesert(Resource r){
+        return r.toString().equals("none");
     }
 
     public int getSettlementCount() {
