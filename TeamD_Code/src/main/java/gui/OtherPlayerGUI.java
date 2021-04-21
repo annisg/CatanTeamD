@@ -19,7 +19,7 @@ public class OtherPlayerGUI extends Drawable{
     
     private final int xPlayerPosition = 1225;
     private final int yPlayerSpaceInitial = 250;
-    private final int yPlayerSpace = 25;
+    private final int yPlayerSpace = 20;
     private final int playerWidth = 300;
     private final int playerHeight = 150;
     private final int borderWidth = 10;
