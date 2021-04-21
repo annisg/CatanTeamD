@@ -80,6 +80,8 @@ public class CatanGame {
             options.getOptionsFromUser(this);
         } else {
 
+            //adding the etra if you want names
+            this.turnTracker.enablePlayerNames();
             this.turnTracker.setupPlayers(numPlayers);
 
             switch (state) {

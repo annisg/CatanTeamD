@@ -18,11 +18,7 @@ public class DevelopmentCardBehaviorTest {
 
     }
 
-    @Test
-    public void testGetDevelopmentCardName() {
-        DevelopmentCard card = new KnightCard(null, null);
-        assertEquals("Knight", card.getName());
-    }
+
 
     @Test
     public void testMakeCardPlayable() {

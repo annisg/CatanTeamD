@@ -12,16 +12,24 @@ public class TurnTracker {
 
     int currentPlayerIndex;
     boolean isInitialFirstRound;
-
+    boolean wantPlayerNames = false;
     public TurnTracker(Random random) {
 
         this.players = new ArrayList<Player>();
         this.random = random;
         this.currentPlayerIndex = 0;
         this.isInitialFirstRound = true;
+        wantPlayerNames = false;
 
     }
 
+    public void enablePlayerNames(){
+        wantPlayerNames = true;
+    }
+
+    public void disablePlayerNames(){
+        wantPlayerNames = false;
+    }
     public int getNumPlayers() {
         return players.size();
     }
@@ -53,10 +61,16 @@ public class TurnTracker {
             players.add(makePlayer(colors[i]));
         }
 
-        for(int i =0; i<numPlayers; i++){
+        for(int i =0; i<numPlayers; i++) {
 
-            String playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
-            players.get(i).setPlayerName(playerName);
+            if (wantPlayerNames ==true){
+                String playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+                players.get(i).setPlayerName(playerName);
+            }
+            else{
+                players.get(i).setPlayerName("Player " + ("" + (i+1)));
+
+            }
             players.get(i).addTracker(this);
         }
         Collections.shuffle(players, random);

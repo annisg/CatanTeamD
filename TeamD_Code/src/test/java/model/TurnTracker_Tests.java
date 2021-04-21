@@ -170,7 +170,8 @@ public class TurnTracker_Tests {
         
         TurnTracker tracker = makeTurnTrackerWithPlayerMocks(new Random(randomSeed));
         EasyMock.replay(tracker);
-        
+
+        tracker.disablePlayerNames();//PlayerNames();
         tracker.setupPlayers(numPlayers);
 
         
@@ -179,7 +180,7 @@ public class TurnTracker_Tests {
         for(int i = 0; i < numPlayers; i++) {
             
             Player player = tracker.getPlayer(i);
-            
+            player.setPlayerName("Player " + ("" + (i + 1)));
             assertEquals(expectedOrder.get(i), player.getColor());
             
         }
@@ -203,6 +204,7 @@ public class TurnTracker_Tests {
         TurnTracker tracker = EasyMock.partialMockBuilder(TurnTracker.class).addMockedMethod("makePlayer").withConstructor(random).createMock();
                 
         for(PlayerColor color : colors) {
+
             EasyMock.expect(tracker.makePlayer(color)).andStubReturn(mockedPlayer(color, tracker));
         }
         
@@ -215,6 +217,7 @@ public class TurnTracker_Tests {
         
         EasyMock.expect(player.getColor()).andStubReturn(color);
         player.addTracker(tracker);
+        player.setPlayerName("loogie");
         EasyMock.replay(player);
         
         return player;

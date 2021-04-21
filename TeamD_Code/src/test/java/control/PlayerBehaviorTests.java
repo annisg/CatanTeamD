@@ -37,7 +37,7 @@ public class PlayerBehaviorTests {
     public void testGiveResourceCards(){
         superPlayer.giveResource(Resource.GRAIN, 1);
         int grainSize = superPlayer.getResourceCount(Resource.GRAIN);
-        assertEquals(9, grainSize);
+        assertEquals(11, grainSize);
    }
 
    @Test

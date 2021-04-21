@@ -68,6 +68,7 @@ public class CatanGame_tests {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
         mockedGameMap.setUpBeginnerMap(3);
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(3);
         mockedTurnTracker.setupBeginnerResourcesAndPieces();
         mockedPlayerPlacer.refreshPlayerNumber();
@@ -80,6 +81,7 @@ public class CatanGame_tests {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
         mockedGameMap.setUpBeginnerMap(4);
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(4);
         mockedTurnTracker.setupBeginnerResourcesAndPieces();
         mockedPlayerPlacer.refreshPlayerNumber();
@@ -92,6 +94,7 @@ public class CatanGame_tests {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
         mockedGameMap.setUpAdvancedMap();
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(3);
         mockedPlayerPlacer.refreshPlayerNumber();
         testCatan.buildModelFrame();
@@ -103,6 +106,7 @@ public class CatanGame_tests {
         this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("buildModelFrame").mock();
         setupGame();
         mockedGameMap.setUpAdvancedMap();
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(4);
         mockedPlayerPlacer.refreshPlayerNumber();
         testCatan.buildModelFrame();
@@ -118,7 +122,7 @@ public class CatanGame_tests {
         List<Integer> availableNumbers = Arrays.asList(2);
         EasyMock.expect(mockedHexMap.getStandardResources()).andReturn(resources);
         EasyMock.expect(mockedHexMap.getStandardResourceNumbers()).andReturn(availableNumbers);
-        
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(3);
         mockedPlayerPlacer.refreshPlayerNumber();
         handler.selectCustomHexPlacement(resources, availableNumbers);
@@ -135,7 +139,7 @@ public class CatanGame_tests {
         List<Integer> availableNumbers = Arrays.asList(2);
         EasyMock.expect(mockedHexMap.getStandardResources()).andReturn(resources);
         EasyMock.expect(mockedHexMap.getStandardResourceNumbers()).andReturn(availableNumbers);
-        
+        mockedTurnTracker.enablePlayerNames();
         mockedTurnTracker.setupPlayers(4);
         mockedPlayerPlacer.refreshPlayerNumber();
         handler.selectCustomHexPlacement(resources, availableNumbers);
