@@ -17,6 +17,8 @@ public class InputComponent extends JPanel {
     private InputHandler handler;
 
     private Queue<Function<Point, Void>> clickFunctionQueue = new LinkedList<>();
+    
+    private JButton cheatResources;
 
     public InputComponent(InputHandler handler, ResourceBundle messages) {
         this.handler = handler;
@@ -84,6 +86,15 @@ public class InputComponent extends JPanel {
                 handler.tradeWithPlayer();
             }
         });
+        
+        cheatResources = new JButton("Cheat Resources");
+        cheatResources.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO: CHEAT
+            }
+        });
+        
 
         this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
@@ -97,6 +108,8 @@ public class InputComponent extends JPanel {
         this.add(useDevCard);
         this.add(new JLabel(messages.getString("InputComponent.10")));
         this.add(endTurn);
+        this.add(cheatResources);
+        cheatResources.setVisible(false);
     }
 
     public void addMouseListenerToParent() {
@@ -132,5 +145,9 @@ public class InputComponent extends JPanel {
 
     public void placeRoadWithCard() {
         clickFunctionQueue.add(handler.placeRoadWithCard);
+    }
+
+    public void setDebugStatus(boolean isDebug) {
+        this.cheatResources.setVisible(isDebug);
     }
 }

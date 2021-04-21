@@ -42,7 +42,7 @@ public class GameOptionSelector {
         debugPanel.add(new JLabel(Messages.getString("GameOptionSelector.11")));
 
         JRadioButton debugDisabled = createDebugRadioButton(Messages.getString("GameOptionSelector.9"), false, debugSelector, debugPanel);
-        JRadioButton debugEnabled = createDebugRadioButton(Messages.getString("GameOptionSelector.10"), false, debugSelector, debugPanel);
+        JRadioButton debugEnabled = createDebugRadioButton(Messages.getString("GameOptionSelector.10"), true, debugSelector, debugPanel);
         debugDisabled.setSelected(true);
         
         JButton startButton = new JButton(Messages.getString("GameOptionSelector.7"));
@@ -50,7 +50,7 @@ public class GameOptionSelector {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 startFrame.dispose();
-                catanController.makeBoard(selectedState, numPlayers);
+                catanController.makeBoard(selectedState, numPlayers, isDebug);
             }
         });
         
