@@ -37,6 +37,9 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> specialCardsToDraw;
     JTextPane popup;
 
+    private int preferredWidth = 1550;
+    private int preferredHeight = 900;
+    
     public GameBoard() {
         this.hexesAndNumbersToDraw = new ArrayList<Drawable>();
         this.propertyToDraw = new ArrayList<Drawable>();
@@ -46,7 +49,7 @@ public class GameBoard extends JComponent {
         
         popup = new JTextPane();
         popup.setText("Hand computer to next player. Press OK when ready to continue");
-        popup.setPreferredSize(new Dimension(1550, 900));
+        popup.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
     }
 
     public void addHexesAndHexNums(ArrayList<Drawable> hexesAndNums) {
@@ -80,6 +83,10 @@ public class GameBoard extends JComponent {
 
     public void drawProperty() {
         this.drawObjects(this.getGraphics(), this.propertyToDraw);
+    }
+    
+    public void clearScreen() {
+        this.getGraphics().clearRect(0, 0, preferredWidth, preferredHeight);
     }
 
     public void drawIntersections(GameMap gameMap, PlayerColor playerColor) {

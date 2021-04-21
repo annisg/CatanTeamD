@@ -159,6 +159,7 @@ public class CatanGame {
     }
 
     public void drawScreen() {
+        gui.clearScreen();
         drawMap();
         drawPlayers();
         drawSpecialCards();
