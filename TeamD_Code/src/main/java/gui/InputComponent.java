@@ -73,15 +73,6 @@ public class InputComponent extends JPanel {
             }
         });
         JButton rollDiceButton = new JButton(messages.getString("InputComponent.0"));
-        rollDiceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.tryToRollDice();
-                rollDiceButton.setEnabled(false);
-                buyDevCard.setEnabled(true);
-                useDevCard.setEnabled(true);
-            }
-        });
         JButton endTurn = new JButton(messages.getString("InputComponent.6"));
         endTurn.addActionListener(new ActionListener() {
             @Override
@@ -90,11 +81,26 @@ public class InputComponent extends JPanel {
                 rollDiceButton.setEnabled(true);
                 useDevCard.setEnabled(false);
                 buyDevCard.setEnabled(false);
+                endTurn.setEnabled(false);
             }
         });
 
+
+        rollDiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.tryToRollDice();
+                rollDiceButton.setEnabled(false);
+                buyDevCard.setEnabled(true);
+                useDevCard.setEnabled(true);
+                endTurn.setEnabled(true);
+            }
+        });
+
+
         buyDevCard.setEnabled(false);
         useDevCard.setEnabled(false);
+        endTurn.setEnabled(false);
         this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
