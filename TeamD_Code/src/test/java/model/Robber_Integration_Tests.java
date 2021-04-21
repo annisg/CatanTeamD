@@ -2,11 +2,11 @@ package model;
 
 import static org.junit.Assert.*;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 
-import control.CatanGame;
 import exception.*;
+
+import java.awt.*;
 
 public class Robber_Integration_Tests {
 
@@ -45,31 +45,8 @@ public class Robber_Integration_Tests {
     public void testMoveRobberFromGameMap() {
         GameMap testGM = new GameMap();
         testGM.setUpBeginnerMap(3);
-        testGM.moveRobberToPosition(1, 1);
-        assertTrue(testGM.getHex(1, 1).hasRobber);
+        testGM.moveRobberToClosestHex(new Point(0, 0));
+        assertTrue(testGM.getHex(4, 0).hasRobber);
         assertFalse(testGM.getHex(2, 2).hasRobber);
     }
-    
-    @Test
-    public void testMoveRobberFromGameMapBadPosition() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        try {
-            testGM.moveRobberToPosition(-1, 0);
-            fail();
-        }catch(InvalidHexPositionException e) {}
-    }
-    
-    @Test
-    public void testMoveRobberFromGameMapSameRobberPosition() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        try {
-            testGM.moveRobberToPosition(2, 2);
-            fail();
-        }catch(IllegalRobberMoveException e) {
-            assertTrue(testGM.getHex(2, 2).hasRobber);
-        }
-    }
-    
 }

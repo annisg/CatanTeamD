@@ -2,11 +2,12 @@ package control;
 
 import static org.junit.Assert.*;
 
+import java.awt.*;
 import java.util.Locale;
-import java.text.MessageFormat;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+import gui.InputComponent;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -175,73 +176,22 @@ public class InputHandler_Resource_Production_Tests {
 
         // Above mocks test calls in constructor, hence the separate replay below
         InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class).withConstructor(mockedRP, mockedCG,
-                mockedPB).addMockedMethod("selectPlayerToStealFrom", Integer.TYPE, Integer.TYPE).mock();
-        testIH.selectPlayerToStealFrom(1,1);
+                mockedPB).addMockedMethod("selectPlayerToStealFromAtMapPosition", MapPosition.class).mock();
+        testIH.selectPlayerToStealFromAtMapPosition(new MapPosition(4,0));
         EasyMock.replay(testIH);
 
-        testIH.moveRobberTo(1, 1);
-        assertTrue(testGM.getHex(1, 1).hasRobber());
+        testIH.moveRobberTo.apply(new Point(0, 0));
+        assertTrue(testGM.getHex(4, 0).hasRobber());
         assertFalse(testGM.getHex(2, 2).hasRobber());
 
         EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH);
     }
 
     @Test
-    public void testMoveRobberSamePosition() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
-        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
-        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
-
-        EasyMock.expect(mockedCG.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(testGM);
-        EasyMock.replay(mockedRP, mockedCG, mockedPB);
-
-        InputHandler testIH = new InputHandler(mockedRP, mockedCG, mockedPB);
-        try {
-            testIH.moveRobberTo(2, 2);
-            fail();
-        } catch (IllegalRobberMoveException e) {
-        }
-        EasyMock.verify(mockedRP, mockedCG, mockedPB);
-    }
-
-    @Test
-    public void testMoveRobberBadPositions() {
-        GameMap testGM = new GameMap();
-        testGM.setUpBeginnerMap(3);
-        CatanGame mockedCM = EasyMock.strictMock(CatanGame.class);
-        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
-        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
-
-        EasyMock.expect(mockedCM.getMessages()).andReturn(messages);
-        EasyMock.expectLastCall().times(5);
-        EasyMock.expect(mockedCM.getGameMap()).andReturn(testGM);
-        EasyMock.expect(mockedCM.getGameMap()).andReturn(testGM);
-        EasyMock.replay(mockedRP, mockedCM, mockedPB);
-
-        InputHandler testIH = new InputHandler(mockedRP, mockedCM, mockedPB);
-        try {
-            testIH.moveRobberTo(0, 3);
-            fail();
-        } catch (InvalidHexPositionException e) {
-        }
-
-        try {
-            testIH.moveRobberTo(3, 4);
-            fail();
-        } catch (InvalidHexPositionException e) {
-        }
-
-        EasyMock.verify(mockedRP, mockedCM, mockedPB);
-    }
-
-    @Test
     public void testTryToRollDiceRobberTurn() {
         ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
         CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
+        mockedCG.input = EasyMock.strictMock(InputComponent.class);
         PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
         EasyMock.replay(mockedRP, mockedCG, mockedPB);
@@ -255,7 +205,6 @@ public class InputHandler_Resource_Production_Tests {
         EasyMock.expect(testIH.rollDice()).andReturn(7);
         EasyMock.expect(testIH.isRobberTurn(7)).andReturn(true);
         testIH.displayMessage(messages.getString("InputHandler.15"));
-        mockedHexSelector.selectAndApply(messages.getString("InputHandler.16"), testIH.moveRobberTo);
 
         EasyMock.replay(testIH, mockedHexSelector);
 

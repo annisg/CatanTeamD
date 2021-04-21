@@ -240,7 +240,7 @@ public class InputHandler {
         DevelopmentCard card = player.getDevelopmentCard(selected);
 
         if (card instanceof KnightCard) {
-            promptToMoveRobber();
+            moveRobber();
         } else if (card instanceof YearOfPlentyCard) {
             offerPlayerTwoFreeResources();
         } else if (card instanceof RoadBuildingCard) {
@@ -337,27 +337,25 @@ public class InputHandler {
 
     private void rolledSeven() {
         this.displayMessage(this.catanGame.getMessages().getString("InputHandler.15"));
-        promptToMoveRobber();
+        moveRobber();
         discardCardsForEveryPlayer();
     }
 
-    private void promptToMoveRobber() {
-        hexSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.13"),
-                this.moveRobberTo);
+    private void moveRobber() {
+        catanGame.input.addMoveRobberToQueue();
     }
 
-    public Function<Integer[], Void> moveRobberTo = hexCoordinates -> {
-        moveRobberTo(hexCoordinates[0], hexCoordinates[1]);
-        return null;
+    public Function<Point, Void> moveRobberTo = new Function<Point, Void>() {
+        @Override
+        public Void apply(Point mousePosition) {
+            selectPlayerToStealFromAtMapPosition(catanGame.getGameMap().getClosestValidRobberPosition(mousePosition));
+            updateRobberPositionOnBoard(mousePosition);
+            return null;
+        }
     };
 
-    void moveRobberTo(int row, int col) {
-        updateRobberPositionOnBoard(row, col);
-        selectPlayerToStealFrom(row, col);
-    }
-
-    void selectPlayerToStealFrom(int row, int col) {
-        ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(row, col);
+    void selectPlayerToStealFromAtMapPosition(MapPosition mapPosition) {
+        ArrayList<Intersection> intersections = catanGame.getGameMap().getAllIntersectionsFromHex(mapPosition.getRow(), mapPosition.getColumn());
 
         LinkedHashSet<PlayerColor> adjacentColorsSet = new LinkedHashSet<>();
         for (Intersection i : intersections) {
@@ -430,8 +428,8 @@ public class InputHandler {
         this.catanGame.drawPlayers();
     }
 
-    void updateRobberPositionOnBoard(int row, int col) {
-        this.catanGame.getGameMap().moveRobberToPosition(row, col);
+    void updateRobberPositionOnBoard(Point mousePosition) {
+        this.catanGame.getGameMap().moveRobberToClosestHex(mousePosition);
         this.catanGame.drawScreen();
     }
     
