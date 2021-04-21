@@ -93,7 +93,9 @@ public class InputComponent extends JPanel {
         endTurn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.endTurn();
+                if(clickFunctionQueue.isEmpty()) {
+                    handler.endTurn();
+                }
             }
         });
 
