@@ -62,46 +62,6 @@ public class InputHandler {
         return null;
     };
 
-    private List<Resource> hexPlacementResources;
-    private List<Integer> hexPlacementNumbers;
-    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object number) {
-            Integer currentResourceNumber = (Integer) number;
-            orderedResourceNumbers.add(currentResourceNumber);
-            for (int i = 0; i < hexPlacementNumbers.size(); i++) {
-                if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
-                    hexPlacementNumbers.remove(i);
-                    break;
-                }
-            }
-
-            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            return null;
-        }
-    };
-    public Function<Object, Void> selectResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object resource) {
-            Resource currentResource = (Resource) resource;
-            orderedResources.add(currentResource);
-            for (int i = 0; i < hexPlacementResources.size(); i++) {
-                if (hexPlacementResources.get(i).equals(currentResource)) {
-                    hexPlacementResources.remove(i);
-                    break;
-                }
-            }
-            if (!resource.equals(Resource.DESERT)) {
-                resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"),
-                        selectResourceNumber);
-            } else {
-                selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            }
-            return null;
-        }
-    };
-
-
     public InputHandler(ResourceProducer resourceProducer, CatanGame game, PieceBuilder builder) {
         this.resourceProducer = resourceProducer;
         this.catanGame = game;
@@ -182,6 +142,8 @@ public class InputHandler {
         }
     };
     
+    private List<Resource> hexPlacementResources;
+    private List<Integer> hexPlacementNumbers;
     public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
         hexPlacementResources = availableResources;
         hexPlacementNumbers = availableNumbers;
@@ -195,6 +157,52 @@ public class InputHandler {
             this.catanGame.getGameMap().getHexMap().setUpCustomMap(orderedResources, orderedResourceNumbers);
             this.catanGame.buildModelFrame();
             this.catanGame.advancedInitialPlacement();
+        }
+    }
+    
+    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object number) {
+            Integer currentResourceNumber = (Integer) number;
+            applyCustomResourceNumber(currentResourceNumber);
+            return null;
+        }
+    };
+    
+    private void applyCustomResourceNumber(Integer currentResourceNumber) {
+        orderedResourceNumbers.add(currentResourceNumber);
+        for (int i = 0; i < hexPlacementNumbers.size(); i++) {
+            if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
+                hexPlacementNumbers.remove(i);
+                break;
+            }
+        }
+
+        selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
+    }
+    
+    public Function<Object, Void> selectResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object resource) {
+            Resource currentResource = (Resource) resource;
+            applyCustomHexResource(currentResource);
+            return null;
+        }
+    };
+    
+    private void applyCustomHexResource(Resource currentResource) {
+        orderedResources.add(currentResource);
+        for (int i = 0; i < hexPlacementResources.size(); i++) {
+            if (hexPlacementResources.get(i).equals(currentResource)) {
+                hexPlacementResources.remove(i);
+                break;
+            }
+        }
+        if (!currentResource.equals(Resource.DESERT)) {
+            resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"),
+                    selectResourceNumber);
+        } else {
+            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
         }
     }
 
