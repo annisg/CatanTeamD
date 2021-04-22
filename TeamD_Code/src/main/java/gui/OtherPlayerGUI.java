@@ -38,13 +38,15 @@ public class OtherPlayerGUI extends Drawable{
     private String playerDisplay;
     private ObjectToColorConverter colorConverter;
     int numKnights;
+    String playerName;
 
     public OtherPlayerGUI(Color colorOfPlayer, Collection<Integer> numbersOfResources,
-            Collection<Integer> numbersOfDevCards, int position, int playerOrder, int numKnights) {
+            Collection<Integer> numbersOfDevCards, int position, int playerOrder, int numKnights, String playerName) {
         this.playerColor = colorOfPlayer;
         this.playersPosition = position;
         this.numKnights = numKnights;
         this.colorConverter = new ObjectToColorConverter();
+        this.playerName = playerName;
         
         for(int i : numbersOfResources) {
             numOfResources += i;
@@ -54,7 +56,7 @@ public class OtherPlayerGUI extends Drawable{
             numOfDevelopmentCards += i;
         }
         
-        this.playerDisplay = MessageFormat.format("Player {0}", playerOrder + 1);
+        this.playerDisplay = MessageFormat.format("{0}", playerName);
     }
 
     @Override
