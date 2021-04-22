@@ -36,6 +36,14 @@ public class GameMap {
 
     void setUpAdvancedMap(Random rand) {
         this.hexMap.setUpAdvancedMap(rand);
+        setUpCustomPorts(rand);
+    }
+    
+    public void setUpCustomPorts() {
+        setUpCustomPorts(new Random());
+    }
+    
+    void setUpCustomPorts(Random rand) {
         this.portMap = new PortMap(rand);
         this.portMap.addPortsToIntersectionMap(intersectionMap);
     }

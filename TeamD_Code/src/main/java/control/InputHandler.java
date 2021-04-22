@@ -154,6 +154,7 @@ public class InputHandler {
                     this.selectResource);
         } else {
             this.catanGame.getGameMap().getHexMap().setUpCustomMap(orderedResources, orderedResourceNumbers);
+            this.catanGame.getGameMap().setUpCustomPorts();
             this.catanGame.buildModelFrame();
             this.catanGame.advancedInitialPlacement();
         }

@@ -116,8 +116,9 @@ public class InputHandler_Custom_Board_Tests {
         List<Integer> availableNumbers = Arrays.asList();
         
         EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
-        EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM);
+        EasyMock.expect(mockedCG.getGameMap()).andReturn(mockedGM).times(2);
         EasyMock.expect(mockedGM.getHexMap()).andReturn(mockedHM);
+        mockedGM.setUpCustomPorts();
         mockedHM.setUpCustomMap(availableResources, availableNumbers);
         mockedCG.buildModelFrame();
         mockedCG.advancedInitialPlacement();
