@@ -65,7 +65,7 @@ public class TurnTracker {
 
             if (wantPlayerNames ==true){
                 String playerName = "";
-                playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+                playerName = promptForPlayerName(i);
                 if(playerName==null || playerName.length()==0){
                     playerName = players.get(i).getColor().toString();
                 }
@@ -79,6 +79,10 @@ public class TurnTracker {
         }
         Collections.shuffle(players, random);
 
+    }
+
+    public String promptForPlayerName(int i) {
+        return JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
     }
 
     public void setupBeginnerResourcesAndPieces() {

@@ -9,7 +9,7 @@ import model.*;
 
 public class PlayerPlacer {
 
-    private final int xPlayerBackground = 1200;
+    private final int xPlayerBackground = 1550;
     private final int yPlayerBackground = 25;
     private final int playerBackgroundWidth = 350;
 
