@@ -17,10 +17,10 @@ import model.Resource;
 
 public class OtherPlayerGUI extends Drawable{
     
-    private final int xPlayerPosition = 1225;
+    private final int xPlayerPosition = 1365;
     private final int yPlayerSpaceInitial = 250;
     private final int yPlayerSpace = 20;
-    private final int playerWidth = 300;
+    private final int playerWidth = 160;
     private final int playerHeight = 150;
     private final int borderWidth = 10;
     private final int fontSize = 25;
@@ -100,7 +100,8 @@ public class OtherPlayerGUI extends Drawable{
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
         g2.drawString(
                 MessageFormat.format("{0}", numOfResources),
-                cardX + borderWidth, cardY + fontSize + borderWidth);
+                cardX + borderWidth + 4, cardY + fontSize + borderWidth);
+        
         
         cardY = boxYPos + relativeLabelOffsetY;
 
@@ -109,8 +110,9 @@ public class OtherPlayerGUI extends Drawable{
 
         g2.setColor(Color.black);
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
+        
         String developmentCardString = "RC";
-        g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
+        g2.drawString(developmentCardString, cardX + borderWidth / 2 - 2, cardY + fontSize + borderWidth);
     }
     
     private void drawDevCardNum(Graphics2D g2) {
@@ -125,7 +127,7 @@ public class OtherPlayerGUI extends Drawable{
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
         g2.drawString(
                 MessageFormat.format("{0}", numOfDevelopmentCards),
-                cardX + borderWidth, cardY + fontSize + borderWidth);
+                cardX + borderWidth + 4, cardY + fontSize + borderWidth);
         
         cardY = boxYPos + relativeLabelOffsetY;
 
@@ -134,8 +136,9 @@ public class OtherPlayerGUI extends Drawable{
 
         g2.setColor(Color.black);
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
+        
         String developmentCardString = "DC";
-        g2.drawString(developmentCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
+        g2.drawString(developmentCardString, cardX + borderWidth / 2 - 2, cardY + fontSize + borderWidth);
     }
     
     private void drawKnightNum(Graphics2D g2) {
@@ -150,7 +153,7 @@ public class OtherPlayerGUI extends Drawable{
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
         g2.drawString(
                 MessageFormat.format("{0}", numKnights),
-                cardX + borderWidth, cardY + fontSize + borderWidth);
+                cardX + borderWidth + 4, cardY + fontSize + borderWidth);
         
         cardY = boxYPos + relativeLabelOffsetY;
 
@@ -159,8 +162,9 @@ public class OtherPlayerGUI extends Drawable{
 
         g2.setColor(Color.black);
         g2.drawRect(cardX, cardY, cardWidth, cardHeight);
+        
         String knightCardString = "KC";
-        g2.drawString(knightCardString, cardX + borderWidth / 2, cardY + fontSize + borderWidth);
+        g2.drawString(knightCardString, cardX + borderWidth / 2 - 2, cardY + fontSize + borderWidth);
     }
 
 }
