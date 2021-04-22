@@ -1,10 +1,9 @@
 package model;
 
+import exception.InvalidIntersectionPositionException;
+
 import java.awt.*;
 import java.util.ArrayList;
-
-import exception.*;
-import gui.EdgeDirection;
 
 public class IntersectionMap {
 
@@ -45,14 +44,14 @@ public class IntersectionMap {
 
     public MapPosition getAdjacentHex(MapPosition intersectionPos, Direction givenDirection) {
         switch (givenDirection) {
-        case ZERO:
-            return getHexDirection0(intersectionPos);
-        case ONE:
-            return getHexDirection1(intersectionPos);
-        case TWO:
-            return getHexDirection2(intersectionPos);
-        default:
-            throw new IllegalArgumentException();
+            case ZERO:
+                return getHexDirection0(intersectionPos);
+            case ONE:
+                return getHexDirection1(intersectionPos);
+            case TWO:
+                return getHexDirection2(intersectionPos);
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -124,14 +123,14 @@ public class IntersectionMap {
 
     public MapPosition getAdjacentEdge(MapPosition intersectionPos, Direction givenDirection) {
         switch (givenDirection) {
-        case ZERO:
-            return getEdgeDirection0(intersectionPos);
-        case ONE:
-            return getEdgeDirection1(intersectionPos);
-        case TWO:
-            return getEdgeDirection2(intersectionPos);
-        default:
-            throw new IllegalArgumentException();
+            case ZERO:
+                return getEdgeDirection0(intersectionPos);
+            case ONE:
+                return getEdgeDirection1(intersectionPos);
+            case TWO:
+                return getEdgeDirection2(intersectionPos);
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -207,13 +206,13 @@ public class IntersectionMap {
         }
         return this.intersectionMap[pos.getRow()][pos.getColumn()];
     }
-    
+
     public Intersection getClosestIntersectionToPoint(Point point) {
         Intersection closestIntersection = intersectionMap[3][3];
-        for(int i = 0; i < intersectionMap.length; i++) {
+        for (int i = 0; i < intersectionMap.length; i++) {
             for (int j = 0; j < intersectionMap.length; j++) {
-                if(!isNotValidPosition(new MapPosition(i, j))) {
-                    if(closestIntersection == null) {
+                if (!isNotValidPosition(new MapPosition(i, j))) {
+                    if (closestIntersection == null) {
                         closestIntersection = intersectionMap[i][j];
                     }
                     if (getIntersectionDistanceFromPoint(new MapPosition(i, j), point) <
@@ -225,11 +224,11 @@ public class IntersectionMap {
         }
         return closestIntersection;
     }
-    
+
     public double getIntersectionDistanceFromPoint(MapPosition mapPosition, Point point) {
         int row = mapPosition.getRow();
         int column = mapPosition.getColumn();
-    
+
         int intersectionX = column * 150;
         int intersectionY = -row * 64 + 890;
         if ((row == 0 || row == 11) && column <= 2) {
@@ -241,7 +240,7 @@ public class IntersectionMap {
         } else if ((row == 5 || row == 6) && column <= 5) {
             intersectionX += 375;
         }
-    
+
         return Math.sqrt((intersectionX - point.x) * (intersectionX - point.x) + (intersectionY - point.y) * (intersectionY - point.y));
     }
 
@@ -295,5 +294,36 @@ public class IntersectionMap {
 
     public int getNumberOfRows() {
         return 12;
+    }
+
+    public boolean playerOwnsGenericHarbor(Player player) {
+        return playerOwnsHarbor(player, Resource.DESERT);   // Desert is special case for generic harbor
+    }
+
+    public boolean playerOwnsSpecialHarbor(Player player, Resource resource) {
+        if (resource.equals(Resource.DESERT))
+            throw new IllegalArgumentException("Player cannot own a desert harbor");
+
+        return playerOwnsHarbor(player, resource);
+    }
+
+    private boolean playerOwnsHarbor(Player player, Resource resource) {
+        for (Intersection[] intersections : intersectionMap) {
+            for (Intersection intersection : intersections) {
+                if (intersection.getBuildingColor().equals(player.getColor())) {
+                    Port port = intersection.getPort();
+                    if (resource.equals(Resource.DESERT)) { // Generic Harbor
+                        if (port instanceof GenericPort) return true;
+                    } else {
+                        if (port instanceof SpecificPort) {
+                            SpecificPort specificPort = (SpecificPort) port;
+
+                            if (specificPort.portResource.equals(resource)) return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

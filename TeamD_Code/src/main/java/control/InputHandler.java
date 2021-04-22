@@ -24,7 +24,7 @@ public class InputHandler {
     private final Integer[] possibleHexCols = {1, 2, 3, 4, 5};
     private final Object[] possibleDevCards = {KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
             VictoryPointCard.class, RoadBuildingCard.class};
-    private final Object[] possibleResources = {Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
+    public final Object[] possibleResources = {Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
             Resource.WOOL};
     Select2Frame optionalIntersectionSelector;
     Select2Frame optionalEdgeSelector;
@@ -49,7 +49,7 @@ public class InputHandler {
     List<Integer> orderedResourceNumbers;
     List<Resource> orderedResources;
     private String[] possibleDevCardNames;
-    private String[] possibleResourceNames;
+    public String[] possibleResourceNames;
     private ResourceProducer resourceProducer;
     private CatanGame catanGame;
 
@@ -465,7 +465,7 @@ public class InputHandler {
         this.catanGame.endTurn();
     }
 
-    private Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return catanGame.getCurrentPlayer();
     }
 

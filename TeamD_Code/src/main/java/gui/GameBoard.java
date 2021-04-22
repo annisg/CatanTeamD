@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import model.*;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
 @SuppressWarnings("serial")
 public class GameBoard extends JComponent {
 
@@ -15,18 +19,20 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> playersToDraw;
     ArrayList<Drawable> otherPlayersToDraw;
     ArrayList<Drawable> specialCardsToDraw;
+    ArrayList<Drawable> portsToDraw;
     JTextPane popup;
 
     private int preferredWidth = 1550;
     private int preferredHeight = 900;
     
     public GameBoard() {
-        this.hexesAndNumbersToDraw = new ArrayList<Drawable>();
-        this.propertyToDraw = new ArrayList<Drawable>();
-        this.playersToDraw = new ArrayList<Drawable>();
-        this.otherPlayersToDraw = new ArrayList<Drawable>();
-        this.specialCardsToDraw = new ArrayList<Drawable>();
-        
+        this.hexesAndNumbersToDraw = new ArrayList<>();
+        this.propertyToDraw = new ArrayList<>();
+        this.playersToDraw = new ArrayList<>();
+        this.otherPlayersToDraw = new ArrayList<>();
+        this.specialCardsToDraw = new ArrayList<>();
+        this.portsToDraw = new ArrayList<>();
+
         popup = new JTextPane();
         popup.setText("Hand computer to next player. Press OK when ready to continue");
         popup.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -40,7 +46,7 @@ public class GameBoard extends JComponent {
         this.playersToDraw = players;
         this.drawObjects(this.getGraphics(), this.playersToDraw);
     }
-    
+
     public void addOtherPlayerViews(ArrayList<Drawable> otherPlayers) {
         this.otherPlayersToDraw = otherPlayers;
         this.drawObjects(this.getGraphics(), this.otherPlayersToDraw);
@@ -52,11 +58,13 @@ public class GameBoard extends JComponent {
     }
 
     public void fullResetMap() {
+        this.portsToDraw.clear();
         this.hexesAndNumbersToDraw.clear();
         this.propertyToDraw.clear();
     }
 
     public void drawFullMap() {
+        this.drawObjects(this.getGraphics(), portsToDraw);
         this.drawObjects(this.getGraphics(), this.hexesAndNumbersToDraw);
         this.drawObjects(this.getGraphics(), this.propertyToDraw);
     }
@@ -92,7 +100,14 @@ public class GameBoard extends JComponent {
                 }
 
                 MapPosition pos = new MapPosition(i, j);
+
                 Intersection intersection = intMap.getIntersection(pos);
+
+
+                if (intersection.hasPort()) {
+                    this.portsToDraw.add(new DrawablePort(intersection.getPort(), pos, x, y));
+                }
+
                 if(gameMap.canSeeIntersection(intersection, currentPlayer))
                     if (intersection.hasSettlement()) {
                         this.propertyToDraw
@@ -162,6 +177,7 @@ public class GameBoard extends JComponent {
     }
 
     protected void paintComponent(Graphics g) {
+        drawObjects(g, this.portsToDraw);
         drawObjects(g, this.hexesAndNumbersToDraw);
         drawObjects(g, this.playersToDraw);
         drawObjects(g, this.otherPlayersToDraw);

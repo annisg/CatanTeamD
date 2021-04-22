@@ -15,6 +15,7 @@ import control.*;
 
 public class InputComponent extends JPanel {
     private InputHandler handler;
+    private final MaritimeTradeManager maritimeTradeManager;
 
     
     private JButton cheatResources;
@@ -41,10 +42,9 @@ public class InputComponent extends JPanel {
 
     private Queue<ClickFunctionAndDisplayString> clickFunctionQueue = new LinkedList<>();
 
-    public InputComponent(InputHandler handler, ResourceBundle messages) {
+    public InputComponent(InputHandler handler, ResourceBundle messages, MaritimeTradeManager maritimeTradeManager) {
         this.handler = handler;
-
-
+        this.maritimeTradeManager = maritimeTradeManager;
 
         JButton buildRoad = new JButton(messages.getString("InputComponent.1"));
         buildRoad.addActionListener(new ActionListener() {
@@ -86,9 +86,7 @@ public class InputComponent extends JPanel {
             }
         });
 
-
-
-        JButton tradeWithPlayer = new JButton("Trade");
+        JButton tradeWithPlayer = new JButton("Domestic Trading");
         tradeWithPlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -111,7 +109,6 @@ public class InputComponent extends JPanel {
             }
         });
 
-
         rollDiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -130,7 +127,9 @@ public class InputComponent extends JPanel {
                 handler.cheatResources();
             }
         });
-        
+
+        JButton tradeWithPort = new JButton("Maritime Trading");
+        tradeWithPort.addActionListener(e -> maritimeTradeManager.trade());
 
 
         buyDevCard.setEnabled(false);
@@ -140,6 +139,7 @@ public class InputComponent extends JPanel {
         nextClickActionLabel.setForeground(Color.RED);
         this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
+        this.add(tradeWithPort);
         this.add(new JLabel(messages.getString("InputComponent.7")));
         this.add(rollDiceButton);
         this.add(new JLabel(messages.getString("InputComponent.8")));

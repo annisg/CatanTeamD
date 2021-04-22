@@ -5,13 +5,9 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.List;
-
-import static control.GameStartState.ADVANCED;
 
 public class CatanGame {
     GameBoard gui;
@@ -23,6 +19,7 @@ public class CatanGame {
     Random random;
     TurnTracker turnTracker;
     GameOptionSelector options;
+    MaritimeTradeManager maritimeTradeManager;
     InputHandler inputHandler;
     VictoryPointCalculator pointCalculator;
     int initialRound;
@@ -46,7 +43,8 @@ public class CatanGame {
                 new DevelopmentDeck(largestArmy, this.messages));
         pointCalculator = new VictoryPointCalculator(longestRoad, largestArmy);
         inputHandler = new InputHandler(new ResourceProducer(random), this, builder);
-        input = new InputComponent(this.inputHandler, this.messages);
+        maritimeTradeManager = new MaritimeTradeManager(inputHandler, this);
+        input = new InputComponent(this.inputHandler, this.messages, maritimeTradeManager);
         specialCardPlacer = new SpecialCardPlacer(longestRoad, largestArmy, this.messages);
 
         isFogOfWar = false;

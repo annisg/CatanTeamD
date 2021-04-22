@@ -26,6 +26,7 @@ public class GameMap {
 
         this.hexMap.setUpBeginnerMap();
         this.portMap = new PortMap();
+        this.portMap.addPortsToIntersectionMap(intersectionMap);
         placeBeginnerPieces(numPlayers);
     }
 
@@ -36,6 +37,7 @@ public class GameMap {
     void setUpAdvancedMap(Random rand) {
         this.hexMap.setUpAdvancedMap(rand);
         this.portMap = new PortMap(rand);
+        this.portMap.addPortsToIntersectionMap(intersectionMap);
     }
 
     public HexMap getHexMap() {

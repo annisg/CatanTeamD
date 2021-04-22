@@ -1,10 +1,18 @@
 package model;
 
 public class Intersection {
-
     private boolean hasSettlement = false;
     private boolean hasCity = false;
     private PlayerColor buildingColor = PlayerColor.NONE;
+    private Port port;
+
+    public Port getPort() {
+        return port;
+    }
+
+    public void setPort(Port port) {
+        this.port = port;
+    }
 
     public boolean hasSettlement() {
         return hasSettlement;
@@ -32,5 +40,9 @@ public class Intersection {
         hasSettlement = false;
         hasCity = color != PlayerColor.NONE;
         buildingColor = color;
+    }
+
+    public boolean hasPort() {
+        return port != null;
     }
 }

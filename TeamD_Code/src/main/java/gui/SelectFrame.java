@@ -16,6 +16,7 @@ public abstract class SelectFrame {
     public SelectFrame(InputHandler handler, boolean isOptional) {
         this.handler = handler;
         this.isOptional = isOptional;
+
     }
 
     void resetComponents() {
@@ -25,8 +26,8 @@ public abstract class SelectFrame {
     }
 
     void formatDialogBox(JButton submitButton) {
-        JButton quitButton = new JButton(handler.getMessages().getString("SelectFrame.1"));
-        quitButton.addActionListener(e -> {
+        JButton cancelButton = new JButton(handler.getMessages().getString("SelectFrame.1"));
+        cancelButton.addActionListener(e -> {
             if (isOptional) {
                 selectionFrame.dispose();
             } else {
@@ -35,11 +36,11 @@ public abstract class SelectFrame {
         });
 
         selectionFrame.add(selectionPanel);
-        endPanel.add(quitButton);
+        endPanel.add(cancelButton);
         endPanel.add(submitButton);
         selectionFrame.add(endPanel, BorderLayout.SOUTH);
         selectionFrame.pack();
         selectionFrame.setVisible(true);
-        selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        selectionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 }
