@@ -16,6 +16,7 @@ public abstract class SelectFrame {
     public SelectFrame(InputHandler handler, boolean isOptional) {
         this.handler = handler;
         this.isOptional = isOptional;
+
     }
 
     void resetComponents() {
@@ -40,6 +41,6 @@ public abstract class SelectFrame {
         selectionFrame.add(endPanel, BorderLayout.SOUTH);
         selectionFrame.pack();
         selectionFrame.setVisible(true);
-        selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        selectionFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 }
