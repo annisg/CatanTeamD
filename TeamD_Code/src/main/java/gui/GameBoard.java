@@ -1,30 +1,11 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-
-import control.GameStartState;
-import control.Main;
-import model.Edge;
-import model.EdgeMap;
-import model.GameMap;
-import model.Hex;
-import model.HexMap;
-import model.Intersection;
-import model.IntersectionMap;
-import model.MapPosition;
+import javax.swing.*;
+import model.*;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JComponent {

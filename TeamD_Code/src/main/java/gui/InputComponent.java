@@ -137,6 +137,7 @@ public class InputComponent extends JPanel {
         useDevCard.setEnabled(false);
         endTurn.setEnabled(false);
         
+        nextClickActionLabel.setForeground(Color.RED);
         this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
         this.add(new JLabel(messages.getString("InputComponent.7")));
