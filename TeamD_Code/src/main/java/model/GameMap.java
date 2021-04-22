@@ -230,4 +230,51 @@ public class GameMap {
 
         return intersections;
     }
+    
+    public boolean canSeeIntersection(Intersection givenIntersection, PlayerColor color) {
+        
+        if(color == PlayerColor.NONE || givenIntersection.getBuildingColor() == PlayerColor.NONE) {
+            return true;
+        }
+        
+        if(givenIntersection.getBuildingColor() == color) {
+            return true;
+        } else {
+            ArrayList<Edge> adjacentEdges = getAllEdgesFromIntersection(givenIntersection);
+            for(Edge edge : adjacentEdges) {
+                if(edge.getRoadColor() == color) {
+                    return true;
+                }
+                //Don't check adjacent intersections because a building cannot be physically placed there
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean canSeeEdge(Edge givenEdge, PlayerColor color) {
+        
+        if(color == PlayerColor.NONE || givenEdge.getRoadColor() == PlayerColor.NONE) {
+            return true;
+        }
+        
+        if(givenEdge.getRoadColor() == color) {
+            return true;
+        } else {
+            ArrayList<Intersection> adjacentIntersections = getAllIntersectionsFromEdge(givenEdge);
+            for(Intersection intersection : adjacentIntersections) {
+                if(intersection.getBuildingColor() == color) {
+                    return true;
+                }
+                ArrayList<Edge> adjacentEdges = getAllEdgesFromIntersection(intersection);
+                for(Edge edge : adjacentEdges) {
+                    if(edge.getRoadColor() == color) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
 }

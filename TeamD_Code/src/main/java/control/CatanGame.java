@@ -28,6 +28,7 @@ public class CatanGame {
     int initialRound;
     boolean showAllPlayers = false;
     ResourceBundle messages;
+    private boolean isFogOfWar;
 
     public CatanGame(ResourceBundle message) {
         this.messages = message;
@@ -48,7 +49,12 @@ public class CatanGame {
         input = new InputComponent(this.inputHandler, this.messages);
         specialCardPlacer = new SpecialCardPlacer(longestRoad, largestArmy, this.messages);
 
+        isFogOfWar = false;
         initialRound = 0;
+    }
+    
+    void setFogOfWar(boolean value) {
+        this.isFogOfWar = value;
     }
 
     void startGame() {
@@ -75,7 +81,7 @@ public class CatanGame {
         return this.messages;
     }
 
-    public void makeBoard(GameStartState state, int numPlayers, boolean isDebug) {
+    public void makeBoard(GameStartState state, int numPlayers, GameMode gamemode, boolean isDebug) {
         if (numPlayers < 3 || numPlayers > 4) {
             options.getOptionsFromUser(this);
         } else {
@@ -100,12 +106,17 @@ public class CatanGame {
 
             this.playerPlacer.refreshPlayerNumber();
             
+            if(gamemode == GameMode.FOG) {
+                setFogOfWar(true);
+            }
+            
             if (state != GameStartState.CUSTOM) {
                 buildModelFrame();
                 if (state != GameStartState.BEGINNER) {
                     advancedInitialPlacement();
                 }
             }
+            
         }
     }
 
@@ -150,6 +161,7 @@ public class CatanGame {
     }
 
     public void drawScreen() {
+        gui.clearScreen();
         drawMap();
         drawPlayers();
         drawSpecialCards();
@@ -161,15 +173,17 @@ public class CatanGame {
         this.hexesAndHexNumPlacer.refreshHexes(model.getHexMap());
         gui.addHexesAndHexNums(this.hexesAndHexNumPlacer.getAllDrawables());
 
-        gui.drawEdges(model.getEdgeMap());
-        gui.drawIntersections(model.getIntersectionMap());
+        PlayerColor currentColor = getColorForFogOfWar();
+        gui.drawEdges(model, currentColor);
+        gui.drawIntersections(model, currentColor);
 
         gui.drawFullMap();
     }
 
     public void justDrawProperty() {
-        gui.drawEdges(model.getEdgeMap());
-        gui.drawIntersections(model.getIntersectionMap());
+        PlayerColor currentColor = getColorForFogOfWar();
+        gui.drawEdges(model, currentColor);
+        gui.drawIntersections(model, currentColor);
         gui.drawProperty();
     }
 
@@ -179,6 +193,15 @@ public class CatanGame {
         } else {
             gui.addPlayerViews(this.playerPlacer.getCurrentPlayerGUI());
             gui.addOtherPlayerViews(this.playerPlacer.getOtherPlayerGUIs());
+        }
+    }
+    
+    private PlayerColor getColorForFogOfWar() {
+        if(isFogOfWar) {
+            return turnTracker.getCurrentPlayer().getColor();
+        }
+        else {
+            return PlayerColor.NONE;
         }
     }
 
@@ -192,7 +215,7 @@ public class CatanGame {
 
     public void endTurn() {
         gui.showPopup();
-        drawPlayers();
+        drawScreen();
     }
 }
 
