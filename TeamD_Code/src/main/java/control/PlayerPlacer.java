@@ -102,7 +102,7 @@ public class PlayerPlacer {
             HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
             
             OtherPlayerGUI opg = new OtherPlayerGUI(realColorOfPlayer, resourceAmounts.values(), developmentCardAmounts.values(), 
-                                            i, i, ithPlayer.getNumKnights());
+                                            i, i, ithPlayer.getNumKnights(), ithPlayer.getName());
             otherPlayerGUIs.add(opg);
         }
         
