@@ -233,7 +233,7 @@ public class GameMap {
     
     public boolean canSeeIntersection(Intersection givenIntersection, PlayerColor color) {
         
-        if(color == PlayerColor.NONE) {
+        if(color == PlayerColor.NONE || givenIntersection.getBuildingColor() == PlayerColor.NONE) {
             return true;
         }
         
@@ -254,7 +254,7 @@ public class GameMap {
     
     public boolean canSeeEdge(Edge givenEdge, PlayerColor color) {
         
-        if(color == PlayerColor.NONE) {
+        if(color == PlayerColor.NONE || givenEdge.getRoadColor() == PlayerColor.NONE) {
             return true;
         }
         

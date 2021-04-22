@@ -89,7 +89,7 @@ public class GameBoard extends JComponent {
         this.getGraphics().clearRect(0, 0, preferredWidth, preferredHeight);
     }
 
-    public void drawIntersections(GameMap gameMap, PlayerColor playerColor) {
+    public void drawIntersections(GameMap gameMap, PlayerColor currentPlayer) {
         int x = 0;
         int y = 0;
 
@@ -113,7 +113,7 @@ public class GameBoard extends JComponent {
 
                 MapPosition pos = new MapPosition(i, j);
                 Intersection intersection = intMap.getIntersection(pos);
-                if(gameMap.canSeeIntersection(intersection, playerColor))
+                if(gameMap.canSeeIntersection(intersection, currentPlayer))
                     if (intersection.hasSettlement()) {
                         this.propertyToDraw
                                 .add(new SettlementGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
@@ -132,7 +132,7 @@ public class GameBoard extends JComponent {
 
     }
 
-    public void drawEdges(GameMap gameMap, PlayerColor color) {
+    public void drawEdges(GameMap gameMap, PlayerColor currentPlayer) {
         int x = 0;
         int y = 0;
         EdgeDirection direction;
@@ -174,7 +174,7 @@ public class GameBoard extends JComponent {
                 y = -i * 65 + 865;
 
                 MapPosition pos = new MapPosition(i, j);
-                if (edgeMap.getEdge(pos).hasRoad() && gameMap.canSeeEdge(edgeMap.getEdge(pos), color)) {
+                if (edgeMap.getEdge(pos).hasRoad() && gameMap.canSeeEdge(edgeMap.getEdge(pos), currentPlayer)) {
                     this.propertyToDraw.add(new EdgeGUI(edgeMap.getEdge(pos).getRoadColor(), x, y, direction));
                 }
             }
