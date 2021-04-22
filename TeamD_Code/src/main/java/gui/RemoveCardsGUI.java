@@ -94,7 +94,7 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create a object
 
-        System.out.println("console");
+       // System.out.println("console");
         // set layout of frame
         frame = new JFrame("My Trading GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,17 +157,17 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         frame.add(cardRemainingToLose);
         //frame.add(quitButton);
         frame.setVisible(true);
-        System.out.println("I am in the beginning");
+
     }
 
     // if button is pressed
     public void actionPerformed(ActionEvent e) {
-        System.out.println("I am in remove");
+
         String particularResourceToDiscardAmt = (String) numOfResourceToDiscard.getSelectedItem();
         int particularAmt = Integer.parseInt(particularResourceToDiscardAmt);
         numberTimeDiscard = numberTimeDiscard + particularAmt;
 
-        System.out.println("Player hand before: " + player.getResourceCards().toString());
+        //System.out.println("Player hand before: " + player.getResourceCards().toString());
 
         if(this.sizeOfDeck%2==0 && player.getResourceHandSize()<=this.sizeOfDeck/2){
             frame.dispose();
