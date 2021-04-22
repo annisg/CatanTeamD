@@ -58,7 +58,6 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         int index = 0;
         for (Resource r : set) {
             array2[index] = r.toString();
-            System.out.println("Resources: " + r);
             index++;
         }
         return array2;

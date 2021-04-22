@@ -315,7 +315,6 @@ public class InputHandler {
             return;
         }
         List<Player> people = this.catanGame.getPlayerTracker().getPlayers();
-        System.out.println("I am in players");
         for(Player p : people){
                 if(p.getResourceHandSize()>7) {
                     p.discardHalfResourceHand();

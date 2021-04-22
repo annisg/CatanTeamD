@@ -75,7 +75,6 @@ public class Player {
     }
 
     public ArrayList<Resource> giveResourceForTrading(Resource resource, int amount){
-        System.out.println(resources.toString());
         ArrayList<Resource> stuff = new ArrayList<Resource>();
         for(int i= 0; i<amount; i++){
             stuff.add(resource);

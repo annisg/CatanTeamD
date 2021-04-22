@@ -112,7 +112,6 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         int index =0;
         for(Resource r: set){
             array2[index] = r.toString();
-            System.out.println("Resources: " + r);
             index++;
         }
         return array2;
@@ -131,7 +130,6 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         //chose the resource to trade
         //pick the player number
         //read the number in the text
-       // System.out.println("You selected: " + typeOfCardToTrade.getSelectedItem());
         Resource source = currentPlayer.getResourceByName((String) typeOfCardToTrade.getSelectedItem());
         playerToTrade = getPlayerByName((String)playerMenu.getSelectedItem());
         int numToTrade = parseInteger();
