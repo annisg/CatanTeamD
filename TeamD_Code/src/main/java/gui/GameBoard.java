@@ -108,7 +108,6 @@ public class GameBoard extends JComponent {
                     this.portsToDraw.add(new DrawablePort(intersection.getPort(), pos, x, y));
                 }
 
-                Intersection intersection = intMap.getIntersection(pos);
                 if(gameMap.canSeeIntersection(intersection, currentPlayer))
                     if (intersection.hasSettlement()) {
                         this.propertyToDraw
