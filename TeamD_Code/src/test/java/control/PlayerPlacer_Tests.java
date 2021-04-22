@@ -91,7 +91,7 @@ public class PlayerPlacer_Tests {
         Player currentPlayer = new Player(PlayerColor.WHITE);
         TurnTracker threePlayers = EasyMock.strictMock(TurnTracker.class);
         PlayerGUI correctGUI = EasyMock.partialMockBuilder(PlayerGUI.class).withConstructor(Color.WHITE,
-                new HashMap<Resource, Integer>(), new HashMap<String, Integer>(), 0, 0, messages).mock();
+                new HashMap<Resource, Integer>(), new HashMap<String, Integer>(), 0, 0, messages, "noob").mock();
 
         EasyMock.expect(threePlayers.getNumPlayers()).andReturn(3);
         EasyMock.expect(threePlayers.getCurrentPlayer()).andReturn(currentPlayer);

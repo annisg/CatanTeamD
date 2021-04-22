@@ -36,9 +36,9 @@ public class PlayerGUI extends Drawable {
     private String playerOrderDisplay;
     private ObjectToColorConverter colorConverter;
     private ResourceBundle messages;
-
+    private String playerName;
     public PlayerGUI(Color colorOfPlayer, HashMap<Resource, Integer> numPerResourceMap,
-            HashMap<String, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages) {
+            HashMap<String, Integer> numPerDevelopmentCard, int position, int playerOrder, ResourceBundle messages, String playerName) {
         this.messages = messages;
         this.playerColor = colorOfPlayer;
         this.numOfEachResource = numPerResourceMap;
@@ -46,6 +46,7 @@ public class PlayerGUI extends Drawable {
         this.playersPosition = position;
         this.playerOrderDisplay = MessageFormat.format(messages.getString("PlayerGUI.1"), playerOrder + 1);
         this.colorConverter = new ObjectToColorConverter();
+        this.playerName = playerName;
     }
 
 
@@ -74,7 +75,7 @@ public class PlayerGUI extends Drawable {
         int boxYPos = yPlayerSpace + playersPosition * (yPlayerSpace + playerHeight);
         g2.setColor(Color.black);
         g2.setFont(writingFont);
-        g2.drawString(this.playerOrderDisplay, xPlayerPosition + borderWidth, boxYPos + borderWidth + fontSize);
+        g2.drawString(this.playerName, xPlayerPosition + borderWidth, boxYPos + borderWidth + fontSize);
     }
 
     private void drawDevelopmentCards(Graphics2D g2) {

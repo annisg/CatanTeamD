@@ -38,6 +38,20 @@ public class DevelopmentDeck {
 
     }
 
+    public void populateDeckUniqueCard(){
+        deck.add(new VictoryPointCard(messages));
+        deck.add(new KnightCard(largestArmy, messages));
+        deck.add(new RoadBuildingCard(messages));
+        deck.add(new YearOfPlentyCard(messages));
+        deck.add(new VictoryPointCard(null));
+        deck.add(new KnightCard(null, null));
+        deck.add(new RoadBuildingCard(null));
+        deck.add(new YearOfPlentyCard(null));
+    }
+
+    public List<DevelopmentCard> getDeck(){
+        return deck;
+    }
     public int size() {
         return deck.size();
     }

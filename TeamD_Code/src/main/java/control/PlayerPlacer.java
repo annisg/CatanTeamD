@@ -58,7 +58,7 @@ public class PlayerPlacer {
         HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(currentPlayer);
         HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(currentPlayer);
         playerGUI.add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, 0, currentPlayerOrder,
-                messages));
+                messages, currentPlayer.getName()));
 
         return playerGUI;
     }
@@ -83,9 +83,10 @@ public class PlayerPlacer {
             Color realColorOfPlayer = getColorFromPlayerColor(ithPlayer.getColor());
             HashMap<Resource, Integer> resourceAmounts = getAllNonDesertResourceMap(ithPlayer);
             HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
-
+            //adding the player name
+            //String playerName = ithPlayer.getName();
             allPlayerGUIs
-                    .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages));
+                    .add(new PlayerGUI(realColorOfPlayer, resourceAmounts, developmentCardAmounts, i, i, messages, "noon"));
         }
 
         return allPlayerGUIs;
@@ -101,7 +102,7 @@ public class PlayerPlacer {
             HashMap<String, Integer> developmentCardAmounts = getDevelopmentCardMapAmount(ithPlayer);
             
             OtherPlayerGUI opg = new OtherPlayerGUI(realColorOfPlayer, resourceAmounts.values(), developmentCardAmounts.values(), 
-                                            i, i, ithPlayer.getNumKnights());
+                                            i, i, ithPlayer.getNumKnights(), ithPlayer.getName());
             otherPlayerGUIs.add(opg);
         }
         
