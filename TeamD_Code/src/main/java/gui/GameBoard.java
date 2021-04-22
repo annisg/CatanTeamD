@@ -1,9 +1,11 @@
 package gui;
 
-import model.EdgeMap;
-import model.Intersection;
-import model.IntersectionMap;
-import model.MapPosition;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +22,9 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> portsToDraw;
     JTextPane popup;
 
+    private int preferredWidth = 1550;
+    private int preferredHeight = 900;
+    
     public GameBoard() {
         this.hexesAndNumbersToDraw = new ArrayList<>();
         this.propertyToDraw = new ArrayList<>();
@@ -30,7 +35,7 @@ public class GameBoard extends JComponent {
 
         popup = new JTextPane();
         popup.setText("Hand computer to next player. Press OK when ready to continue");
-        popup.setPreferredSize(new Dimension(1550, 900));
+        popup.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
     }
 
     public void addHexesAndHexNums(ArrayList<Drawable> hexesAndNums) {
@@ -67,11 +72,17 @@ public class GameBoard extends JComponent {
     public void drawProperty() {
         this.drawObjects(this.getGraphics(), this.propertyToDraw);
     }
+    
+    public void clearScreen() {
+        this.getGraphics().clearRect(0, 0, preferredWidth, preferredHeight);
+    }
 
-    public void drawIntersections(IntersectionMap intMap) {
+    public void drawIntersections(GameMap gameMap, PlayerColor currentPlayer) {
         int x = 0;
         int y = 0;
 
+        IntersectionMap intMap = gameMap.getIntersectionMap();
+        
         for (int i = 0; i < intMap.getNumberOfRows(); i++) {
             for (int j = 0; j < intMap.getNumberOfIntersectionsInRow(i); j++) {
                 x = j * 150;
@@ -90,37 +101,39 @@ public class GameBoard extends JComponent {
 
                 MapPosition pos = new MapPosition(i, j);
 
-
                 Intersection intersection = intMap.getIntersection(pos);
+
 
                 if (intersection.hasPort()) {
                     this.portsToDraw.add(new DrawablePort(intersection.getPort(), pos, x, y));
                 }
 
-                if (intersection.hasSettlement()) {
-                    this.propertyToDraw
-                            .add(new SettlementGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
-                } else if (intersection.hasCity()) {
-                    if (i % 2 != 0) {
-                        y += 10;
-                    } else {
-                        y -= 5;
+                Intersection intersection = intMap.getIntersection(pos);
+                if(gameMap.canSeeIntersection(intersection, currentPlayer))
+                    if (intersection.hasSettlement()) {
+                        this.propertyToDraw
+                                .add(new SettlementGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
+                    } else if (intersection.hasCity()) {
+                        if (i % 2 != 0) {
+                            y += 10;
+                        } else {
+                            y -= 5;
+                        }
+    
+                        this.propertyToDraw
+                                .add(new CityGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
                     }
-
-                    this.propertyToDraw
-                            .add(new CityGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
-                }
-
             }
         }
 
     }
 
-    public void drawEdges(EdgeMap edgeMap) {
+    public void drawEdges(GameMap gameMap, PlayerColor currentPlayer) {
         int x = 0;
         int y = 0;
         EdgeDirection direction;
 
+        EdgeMap edgeMap = gameMap.getEdgeMap();
         for (int i = 0; i < edgeMap.getNumberOfRows(); i++) {
             for (int j = 0; j < edgeMap.getNumberOfEdgesInRow(i); j++) {
                 if (i % 2 != 0) {
@@ -157,7 +170,7 @@ public class GameBoard extends JComponent {
                 y = -i * 65 + 865;
 
                 MapPosition pos = new MapPosition(i, j);
-                if (edgeMap.getEdge(pos).hasRoad()) {
+                if (edgeMap.getEdge(pos).hasRoad() && gameMap.canSeeEdge(edgeMap.getEdge(pos), currentPlayer)) {
                     this.propertyToDraw.add(new EdgeGUI(edgeMap.getEdge(pos).getRoadColor(), x, y, direction));
                 }
             }

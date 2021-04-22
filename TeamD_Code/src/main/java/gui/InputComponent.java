@@ -46,14 +46,6 @@ public class InputComponent extends JPanel {
         this.handler = handler;
         this.maritimeTradeManager = maritimeTradeManager;
 
-        JButton rollDiceButton = new JButton(messages.getString("InputComponent.0"));
-        rollDiceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.tryToRollDice();
-            }
-        });
-
         JButton buildRoad = new JButton(messages.getString("InputComponent.1"));
         buildRoad.addActionListener(new ActionListener() {
             @Override
@@ -94,21 +86,37 @@ public class InputComponent extends JPanel {
             }
         });
 
-        JButton endTurn = new JButton(messages.getString("InputComponent.6"));
-        endTurn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(clickFunctionQueue.isEmpty()) {
-                    handler.endTurn();
-                }
-            }
-        });
-
         JButton tradeWithPlayer = new JButton("Domestic Trading");
         tradeWithPlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handler.tradeWithPlayer();
+            }
+        });
+        JButton rollDiceButton = new JButton(messages.getString("InputComponent.0"));
+        JButton endTurn = new JButton(messages.getString("InputComponent.6"));
+        endTurn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(clickFunctionQueue.isEmpty()) {
+                    handler.endTurn();
+                    rollDiceButton.setEnabled(true);
+                    useDevCard.setEnabled(false);
+                    buyDevCard.setEnabled(false);
+                    endTurn.setEnabled(false);
+                }
+            }
+        });
+
+        rollDiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handler.tryToRollDice();
+                rollDiceButton.setEnabled(false);
+                buyDevCard.setEnabled(true);
+                useDevCard.setEnabled(true);
+                endTurn.setEnabled(true);
             }
         });
         
@@ -123,6 +131,12 @@ public class InputComponent extends JPanel {
         JButton tradeWithPort = new JButton("Maritime Trading");
         tradeWithPort.addActionListener(e -> maritimeTradeManager.trade());
 
+
+        buyDevCard.setEnabled(false);
+        useDevCard.setEnabled(false);
+        endTurn.setEnabled(false);
+        
+        nextClickActionLabel.setForeground(Color.RED);
         this.add(nextClickActionLabel);
         this.add(tradeWithPlayer);
         this.add(tradeWithPort);

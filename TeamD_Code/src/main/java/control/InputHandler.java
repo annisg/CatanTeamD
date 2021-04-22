@@ -287,6 +287,7 @@ public class InputHandler {
     }
 
     public void tryToRollDice() {
+
         int numRolled;
 
         try {
@@ -296,12 +297,14 @@ public class InputHandler {
               this.rolledSeven();
             }
             else {
+
                 this.produceResources(numRolled);
             }
         } catch (IllegalStateException resourceException) {
             this.displayMessage(this.catanGame.getMessages().getString("InputHandler.18"));
             return;
         }
+
     }
 
         
@@ -311,20 +314,20 @@ public class InputHandler {
         if(catanGame==null || catanGame.turnTracker == null){
             return;
         }
-        List<Player> people = catanGame.turnTracker.getPlayers();
-        if(people.size()==0){
-            return;
-        }
+        List<Player> people = this.catanGame.getPlayerTracker().getPlayers();
+        System.out.println("I am in players");
         for(Player p : people){
-            if(p.getResourceHandSize()>7){
-                p.discardHalfResourceHand();
-            }
+                if(p.getResourceHandSize()>7) {
+                    p.discardHalfResourceHand();
+                }
+
         }
     }
 
     public void tradeWithPlayer(){
-        Player p = this.catanGame.getPlayerTracker().getCurrentPlayer();
-        TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(p);
+        List<Player> playerList  = this.catanGame.getPlayerTracker().getPlayers();
+        Player currentPlayer = this.catanGame.getCurrentPlayer();
+        TradeWithSpecificPlayerGUI tradeGUI = new TradeWithSpecificPlayerGUI(currentPlayer, playerList);
 
     }
     public int rollDice() {
@@ -458,7 +461,7 @@ public class InputHandler {
             this.hasNotRolled = true;
             playerTracker.passTurn();
         }
-        //this.catanGame.drawPlayers();
+
         this.catanGame.endTurn();
     }
 

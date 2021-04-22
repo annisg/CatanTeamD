@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.util.*;
 
 public class TurnTracker {
@@ -11,16 +12,24 @@ public class TurnTracker {
 
     int currentPlayerIndex;
     boolean isInitialFirstRound;
-
+    boolean wantPlayerNames = false;
     public TurnTracker(Random random) {
 
         this.players = new ArrayList<Player>();
         this.random = random;
         this.currentPlayerIndex = 0;
         this.isInitialFirstRound = true;
+        wantPlayerNames = false;
 
     }
 
+    public void enablePlayerNames(){
+        wantPlayerNames = true;
+    }
+
+    public void disablePlayerNames(){
+        wantPlayerNames = false;
+    }
     public int getNumPlayers() {
         return players.size();
     }
@@ -52,7 +61,20 @@ public class TurnTracker {
             players.add(makePlayer(colors[i]));
         }
 
-        for(int i =0; i<numPlayers; i++){
+        for(int i =0; i<numPlayers; i++) {
+
+            if (wantPlayerNames ==true){
+                String playerName = "";
+                playerName = JOptionPane.showInputDialog(null, "Enter in the name for Player " + ("" + (i + 1)));
+                if(playerName==null || playerName.length()==0){
+                    playerName = players.get(i).getColor().toString();
+                }
+                players.get(i).setPlayerName(playerName);
+            }
+            else{
+                players.get(i).setPlayerName(players.get(i).getColor().toString());
+
+            }
             players.get(i).addTracker(this);
         }
         Collections.shuffle(players, random);

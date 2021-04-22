@@ -11,6 +11,7 @@ import control.*;
 
 public class GameOptionSelector {
     private GameStartState selectedState = GameStartState.BEGINNER;
+    private GameMode selectedGameMode = GameMode.NORMAL;
     private int numPlayers = 3;
     private boolean isDebug = false;
 
@@ -37,6 +38,14 @@ public class GameOptionSelector {
         JRadioButton fourPlayers = createPlayerRadioButton(Messages.getString("GameOptionSelector.5"), 4, numPlayersSelector, playersPanel);
         threePlayers.setSelected(true);
 
+        ButtonGroup gamemodeSelector = new ButtonGroup();
+        JPanel gamemodePanel = new JPanel();
+        gamemodePanel.add(new JLabel(Messages.getString("GameOptionSelector.12")));
+
+        JRadioButton normalMode = createGameModeRadioButton(Messages.getString("GameOptionSelector.13"), GameMode.NORMAL, gamemodeSelector, gamemodePanel);
+        JRadioButton fogMode = createGameModeRadioButton(Messages.getString("GameOptionSelector.14"), GameMode.FOG, gamemodeSelector, gamemodePanel);
+        normalMode.setSelected(true);
+        
         ButtonGroup debugSelector = new ButtonGroup();
         JPanel debugPanel = new JPanel();
         debugPanel.add(new JLabel(Messages.getString("GameOptionSelector.11")));
@@ -50,15 +59,15 @@ public class GameOptionSelector {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 startFrame.dispose();
-                catanController.makeBoard(selectedState, numPlayers, isDebug);
+                catanController.makeBoard(selectedState, numPlayers, selectedGameMode, isDebug);
             }
         });
         
-        JPanel optionsPanel =  new JPanel(new GridLayout(3,1));
-        
-        optionsPanel.add(difficultyPanel, BorderLayout.NORTH);
-        optionsPanel.add(playersPanel, BorderLayout.CENTER);
-        optionsPanel.add(debugPanel, BorderLayout.SOUTH);
+        JPanel optionsPanel =  new JPanel(new GridLayout(4,1));
+        optionsPanel.add(difficultyPanel);
+        optionsPanel.add(playersPanel);
+        optionsPanel.add(gamemodePanel);
+        optionsPanel.add(debugPanel);
         
         startFrame.add(optionsPanel, BorderLayout.CENTER);
         startFrame.add(startButton, BorderLayout.SOUTH);
@@ -70,10 +79,7 @@ public class GameOptionSelector {
     }
 
     private JRadioButton createPlayerRadioButton(String message, int newNumPlayers, ButtonGroup numPlayersSelector, JPanel playersPanel) {
-        JRadioButton button = new JRadioButton(message);
-        numPlayersSelector.add(button);
-        playersPanel.add(button);
-        button.addActionListener(new ActionListener() {
+        JRadioButton button = createLinkedRadioButton(message, numPlayersSelector, playersPanel, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 numPlayers = newNumPlayers;
@@ -83,31 +89,41 @@ public class GameOptionSelector {
     }
 
     private JRadioButton createStateRadioButton(String message, GameStartState state, ButtonGroup startStateSelector, JPanel difficultyPanel) {
-        JRadioButton button = new JRadioButton(message);
-        startStateSelector.add(button);
-        difficultyPanel.add(button);
-        button.addActionListener(new ActionListener() {
+        JRadioButton button = createLinkedRadioButton(message, startStateSelector, difficultyPanel,
+            new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedState = state;
             }
         });
-        
         return button;
     }
     
+    private JRadioButton createGameModeRadioButton(String message, GameMode state, ButtonGroup gamemodeSelector, JPanel gamemodePanel) {
+        JRadioButton button = createLinkedRadioButton(message, gamemodeSelector, gamemodePanel, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedGameMode = state;
+            }
+        });
+        return button;
+    }
 
     private JRadioButton createDebugRadioButton(String message, boolean state, ButtonGroup debugSelector, JPanel debugPanel) {
-        JRadioButton button = new JRadioButton(message);
-        debugSelector.add(button);
-        debugPanel.add(button);
-        button.addActionListener(new ActionListener() {
+        JRadioButton button = createLinkedRadioButton(message, debugSelector, debugPanel, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isDebug = state;
             }
         });
-        
+        return button;
+    }
+    
+    private JRadioButton createLinkedRadioButton(String message, ButtonGroup group, JPanel panel, ActionListener listener) {
+        JRadioButton button = new JRadioButton(message);
+        group.add(button);
+        panel.add(button);
+        button.addActionListener(listener);
         return button;
     }
 }
