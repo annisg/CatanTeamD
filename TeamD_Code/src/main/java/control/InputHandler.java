@@ -207,7 +207,7 @@ public class InputHandler {
             numberObjs[i] = availableNumbers.get(i);
         }
 
-        return new Select1Frame(numberStrings, numberObjs, false, this);
+        return buildNewSelect1Frame(numberStrings, numberObjs);
     }
 
     Select1Frame buildResourceSelector(List<Resource> availableResources) {
@@ -219,7 +219,11 @@ public class InputHandler {
             resourceObjs[i] = availableResources.get(i);
         }
 
-        return new Select1Frame(resourceStrings, resourceObjs, false, this);
+        return buildNewSelect1Frame(resourceStrings, resourceObjs);
+    }
+    
+    Select1Frame buildNewSelect1Frame(String[] displayStrings, Object[] underlyingObjs) {
+        return new Select1Frame(displayStrings, underlyingObjs, false, this);
     }
 
     public void buyDevelopmentCard() {

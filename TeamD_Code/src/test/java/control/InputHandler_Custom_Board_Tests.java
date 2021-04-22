@@ -47,6 +47,62 @@ public class InputHandler_Custom_Board_Tests {
         testIH.selectCustomHexPlacement(availableResources, availableNumbers);
         EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH, mockedRS, mockedRNS);
     }
+    
+    @Test
+    public void testBuildResourceSelector() {
+        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
+        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
+        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        
+        EasyMock.replay(mockedCG);
+        
+        Select1Frame mockedRS = EasyMock.strictMock(Select1Frame.class);
+        
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class)
+                .withConstructor(mockedRP, mockedCG, mockedPB)
+                .addMockedMethod("buildNewSelect1Frame")
+                .mock();
+        
+        List<Integer> availableNumbersList = Arrays.asList(2, 6 ,12);
+        Integer[] availableNumbers = {2, 6, 12};
+        String[] availableNumberStrings = {"2", "6", "12"};
+        
+        EasyMock.expect(testIH.buildNewSelect1Frame(availableNumberStrings, availableNumbers)).andReturn(mockedRS);
+        
+        EasyMock.replay(mockedRP, mockedPB, testIH, mockedRS);
+
+        testIH.buildResourceNumberSelector(availableNumbersList);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH, mockedRS);
+    }
+    
+    @Test
+    public void testBuildResourceNumberSelector() {
+        ResourceProducer mockedRP = EasyMock.strictMock(ResourceProducer.class);
+        CatanGame mockedCG = EasyMock.strictMock(CatanGame.class);
+        PieceBuilder mockedPB = EasyMock.strictMock(PieceBuilder.class);
+        EasyMock.expect(mockedCG.getMessages()).andStubReturn(messages);
+        
+        EasyMock.replay(mockedCG);
+        
+        Select1Frame mockedRS = EasyMock.strictMock(Select1Frame.class);
+        
+        InputHandler testIH = EasyMock.partialMockBuilder(InputHandler.class)
+                .withConstructor(mockedRP, mockedCG, mockedPB)
+                .addMockedMethod("buildNewSelect1Frame")
+                .mock();
+        
+        List<Resource> availableResourcesList = Arrays.asList(Resource.WOOL, Resource.BRICK);
+        Resource[] availableResources = {Resource.WOOL, Resource.BRICK};
+        String[] availableResourceStrings = {"WOOL", "BRICK"};
+        
+        EasyMock.expect(testIH.buildNewSelect1Frame(availableResourceStrings, availableResources)).andReturn(mockedRS);
+        
+        EasyMock.replay(mockedRP, mockedPB, testIH, mockedRS);
+
+        testIH.buildResourceSelector(availableResourcesList);
+        EasyMock.verify(mockedRP, mockedCG, mockedPB, testIH, mockedRS);
+    }
 
     @Test
     public void testSetCustomHexPlacementFinished() {
