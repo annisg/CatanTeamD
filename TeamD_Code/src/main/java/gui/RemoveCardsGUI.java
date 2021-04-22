@@ -94,9 +94,8 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
 
         // create a object
 
-       // System.out.println("console");
         // set layout of frame
-        frame = new JFrame("My Trading GUI");
+        frame = new JFrame("Discard Cards");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 600);
         frame.setLayout(new GridLayout(10, 1));
@@ -137,14 +136,8 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         chooseNumberInstruction = new JLabel("Select the number of resource below you want to discard", SwingConstants.CENTER);
         chooseNumberInstruction.setFont(new Font("SansSerif", Font.PLAIN, 20));
         discardButton.addActionListener(this);
-//        quitButton = new JButton("CANCEL PAYMENT");
-//        quitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                frame.dispose();
-//            }
-//        });
-        cardRemainingToLose = new JLabel("You have to loose " + ("" + numToLose) + " cards.", SwingConstants.CENTER);
+
+        cardRemainingToLose = new JLabel("You have to lose " + ("" + numToLose) + " cards.", SwingConstants.CENTER);
         cardRemainingToLose.setFont(new Font("TimeNewRoman", Font.ITALIC, 50));
         frame.add(playerNameLabel);
         frame.add(playerResourcesLabel);
@@ -166,8 +159,6 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         String particularResourceToDiscardAmt = (String) numOfResourceToDiscard.getSelectedItem();
         int particularAmt = Integer.parseInt(particularResourceToDiscardAmt);
         numberTimeDiscard = numberTimeDiscard + particularAmt;
-
-        //System.out.println("Player hand before: " + player.getResourceCards().toString());
 
         if(this.sizeOfDeck%2==0 && player.getResourceHandSize()<=this.sizeOfDeck/2){
             frame.dispose();
@@ -213,7 +204,6 @@ public class RemoveCardsGUI extends JFrame implements ItemListener, ActionListen
         int index = 0;
         for (Map.Entry<Resource, Integer> entry : resourceMap.entrySet()) {
             labelsOfStuff.get(index).setText(entry.getKey().name() + " with " + "" + entry.getValue() + " remaining");
-            // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
         }
 
 
