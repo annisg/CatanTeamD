@@ -147,7 +147,10 @@ public class CatanGame {
 
     public void buildModelFrame() {
         JFrame gameFrame = new JFrame(Messages.getString("CatanGame.0"));
-        gameFrame.setSize(1600, 1000);
+        gameFrame.setSize(1920, 1000);
+
+        gameFrame.setExtendedState(gameFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+
 
         gameFrame.setVisible(true);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
