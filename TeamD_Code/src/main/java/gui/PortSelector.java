@@ -5,7 +5,7 @@ import control.InputHandler;
 public class PortSelector extends Select1Frame {
     public enum PortTypes {
         DEFAULT("Default Harbor (4:1)"),
-        GENERIC("Basic Harbor (3:1)"),
+        GENERIC("Generic Harbor (3:1)"),
         SPECIAL("Special Harbor (2:1)");
 
         private final String title;

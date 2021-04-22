@@ -11,6 +11,10 @@ public class SpecificPort implements Port {
         this.portResource = specificResource;
     }
 
+    public Resource getPortResource() {
+        return portResource;
+    }
+
     @Override
     public int tradeRatioXto1ForResource(Resource resourceOffering) {
         if (resourceOffering == Resource.DESERT) {

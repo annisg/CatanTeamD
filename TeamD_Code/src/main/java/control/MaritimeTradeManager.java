@@ -15,12 +15,23 @@ public class MaritimeTradeManager {
     private final CatanGame catanGame;
     private Resource soldResource;
     private Resource boughtResource;
+    public Function<Object, Void> tradeViaPort = selected -> {
+        tradeViaPort((PortSelector.PortTypes) selected);
+        return null;
+    };
+    private Function<Object, Void> buyResource = selectedResource -> {
+        buyResource((Resource) selectedResource);
+        return null;
+    };
+    private Function<Object, Void> sellResource = selectedResource -> {
+        sellResource((Resource) selectedResource);
+        return null;
+    };
 
     public MaritimeTradeManager(InputHandler inputHandler, CatanGame catanGame) {
         this.inputHandler = inputHandler;
         this.catanGame = catanGame;
     }
-
 
     public void trade() {
         if (inputHandler.hasNotRolled) {
@@ -32,11 +43,6 @@ public class MaritimeTradeManager {
         sellingResourceSelector.selectAndApply("Select the resource you would like to sell.", sellResource);
     }
 
-    private Function<Object, Void> sellResource = selectedResource -> {
-        sellResource((Resource) selectedResource);
-        return null;
-    };
-
     private void sellResource(Resource resource) {
         soldResource = resource;
 
@@ -44,22 +50,12 @@ public class MaritimeTradeManager {
         buyingResourceSelector.selectAndApply("Select the resource you would like to buy.", buyResource);
     }
 
-    private Function<Object, Void> buyResource = selectedResource -> {
-        buyResource((Resource) selectedResource);
-        return null;
-    };
-
     private void buyResource(Resource resource) {
         this.boughtResource = resource;
 
         PortSelector portSelector = new PortSelector(inputHandler);
         portSelector.selectAndApply("Select the port you would like to trade with.", tradeViaPort);
     }
-
-    public Function<Object,Void> tradeViaPort = selected -> {
-        tradeViaPort((PortSelector.PortTypes) selected);
-        return null;
-    };
 
     private void tradeViaPort(PortSelector.PortTypes portType) {
         switch (portType) {
@@ -76,21 +72,33 @@ public class MaritimeTradeManager {
     }
 
 
-
     private void defaultPortTrade() {
         exchangeResourcesWithBank(DAFAULT_TRADE_COST);
     }
 
     private void genericPortTrade() {
-        // TODO: Verify player owns correct harbor
-
-        exchangeResourcesWithBank(GENERIC_TRADE_COST);
+        if (playerOwnsGenericHarbor()) {
+            exchangeResourcesWithBank(GENERIC_TRADE_COST);
+        } else {
+            inputHandler.displayMessage("You do not own a Generic Harbor.");
+        }
     }
 
-    private void specialPortTrade() {
-        // TODO: Verify Player owns correct harbor
 
-        exchangeResourcesWithBank(SPECIAL_TRADE_COST);
+    private void specialPortTrade() {
+        if (playerOwnsSpecialHarbor(soldResource)) {
+            exchangeResourcesWithBank(SPECIAL_TRADE_COST);
+        } else {
+            inputHandler.displayMessage(String.format("You do not own a Special Harbor for %s", soldResource.toString()));
+        }
+    }
+
+    private boolean playerOwnsGenericHarbor() {
+        return catanGame.getGameMap().getIntersectionMap().playerOwnsGenericHarbor(catanGame.getCurrentPlayer());
+    }
+
+    private boolean playerOwnsSpecialHarbor(Resource resource) {
+        return catanGame.getGameMap().getIntersectionMap().playerOwnsSpecialHarbor(catanGame.getCurrentPlayer(), resource);
     }
 
     private void exchangeResourcesWithBank(int tradeCost) {

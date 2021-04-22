@@ -1,30 +1,13 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-
-import control.GameStartState;
-import control.Main;
-import model.Edge;
 import model.EdgeMap;
-import model.GameMap;
-import model.Hex;
-import model.HexMap;
 import model.Intersection;
 import model.IntersectionMap;
 import model.MapPosition;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JComponent {
@@ -34,15 +17,17 @@ public class GameBoard extends JComponent {
     ArrayList<Drawable> playersToDraw;
     ArrayList<Drawable> otherPlayersToDraw;
     ArrayList<Drawable> specialCardsToDraw;
+    ArrayList<Drawable> portsToDraw;
     JTextPane popup;
 
     public GameBoard() {
-        this.hexesAndNumbersToDraw = new ArrayList<Drawable>();
-        this.propertyToDraw = new ArrayList<Drawable>();
-        this.playersToDraw = new ArrayList<Drawable>();
-        this.otherPlayersToDraw = new ArrayList<Drawable>();
-        this.specialCardsToDraw = new ArrayList<Drawable>();
-        
+        this.hexesAndNumbersToDraw = new ArrayList<>();
+        this.propertyToDraw = new ArrayList<>();
+        this.playersToDraw = new ArrayList<>();
+        this.otherPlayersToDraw = new ArrayList<>();
+        this.specialCardsToDraw = new ArrayList<>();
+        this.portsToDraw = new ArrayList<>();
+
         popup = new JTextPane();
         popup.setText("Hand computer to next player. Press OK when ready to continue");
         popup.setPreferredSize(new Dimension(1550, 900));
@@ -56,7 +41,7 @@ public class GameBoard extends JComponent {
         this.playersToDraw = players;
         this.drawObjects(this.getGraphics(), this.playersToDraw);
     }
-    
+
     public void addOtherPlayerViews(ArrayList<Drawable> otherPlayers) {
         this.otherPlayersToDraw = otherPlayers;
         this.drawObjects(this.getGraphics(), this.otherPlayersToDraw);
@@ -68,11 +53,13 @@ public class GameBoard extends JComponent {
     }
 
     public void fullResetMap() {
+        this.portsToDraw.clear();
         this.hexesAndNumbersToDraw.clear();
         this.propertyToDraw.clear();
     }
 
     public void drawFullMap() {
+        this.drawObjects(this.getGraphics(), portsToDraw);
         this.drawObjects(this.getGraphics(), this.hexesAndNumbersToDraw);
         this.drawObjects(this.getGraphics(), this.propertyToDraw);
     }
@@ -102,10 +89,18 @@ public class GameBoard extends JComponent {
                 }
 
                 MapPosition pos = new MapPosition(i, j);
-                if (intMap.getIntersection(pos).hasSettlement()) {
+
+
+                Intersection intersection = intMap.getIntersection(pos);
+
+                if (intersection.hasPort()) {
+                    this.portsToDraw.add(new DrawablePort(intersection.getPort(), pos, x, y));
+                }
+
+                if (intersection.hasSettlement()) {
                     this.propertyToDraw
-                            .add(new SettlementGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
-                } else if (intMap.getIntersection(pos).hasCity()) {
+                            .add(new SettlementGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
+                } else if (intersection.hasCity()) {
                     if (i % 2 != 0) {
                         y += 10;
                     } else {
@@ -113,8 +108,9 @@ public class GameBoard extends JComponent {
                     }
 
                     this.propertyToDraw
-                            .add(new CityGUI(intMap.getIntersection(pos).getBuildingColor(), x, y, i % 2 != 0));
+                            .add(new CityGUI(intersection.getBuildingColor(), x, y, i % 2 != 0));
                 }
+
             }
         }
 
@@ -169,6 +165,7 @@ public class GameBoard extends JComponent {
     }
 
     protected void paintComponent(Graphics g) {
+        drawObjects(g, this.portsToDraw);
         drawObjects(g, this.hexesAndNumbersToDraw);
         drawObjects(g, this.playersToDraw);
         drawObjects(g, this.otherPlayersToDraw);

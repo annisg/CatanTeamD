@@ -97,4 +97,13 @@ public class PortMap {
         }
         throw new InvalidPortPositionException();
     }
+
+    public HashMap<MapPosition, Port> getPositionsToPorts() {
+        return positionsToPorts;
+    }
+
+    public void addPortsToIntersectionMap(IntersectionMap map) {
+        getPositionsToPorts().forEach((position, port) ->
+                map.getIntersection(position).setPort(port));
+    }
 }
