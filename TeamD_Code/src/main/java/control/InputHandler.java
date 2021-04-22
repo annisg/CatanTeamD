@@ -142,15 +142,14 @@ public class InputHandler {
         }
     };
     
-    private List<Resource> hexPlacementResources;
-    private List<Integer> hexPlacementNumbers;
+    List<Resource> hexPlacementResources;
+    List<Integer> hexPlacementNumbers;
     public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
         hexPlacementResources = availableResources;
         hexPlacementNumbers = availableNumbers;
 
         if (availableResources.size() != 0) {
-            resourceSelector = buildResourceSelector(availableResources);
-            resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
+            buildCustomSelectors(availableResources, availableNumbers);
             resourceSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.27"),
                     this.selectResource);
         } else {
@@ -159,17 +158,21 @@ public class InputHandler {
             this.catanGame.advancedInitialPlacement();
         }
     }
+
+    void buildCustomSelectors(List<Resource> availableResources, List<Integer> availableNumbers) {
+        resourceSelector = buildResourceSelector(availableResources);
+        resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
+    }
     
     public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
         @Override
         public Void apply(Object number) {
-            Integer currentResourceNumber = (Integer) number;
-            applyCustomResourceNumber(currentResourceNumber);
+            applyCustomResourceNumber((Integer) number);
             return null;
         }
     };
     
-    private void applyCustomResourceNumber(Integer currentResourceNumber) {
+    void applyCustomResourceNumber(Integer currentResourceNumber) {
         orderedResourceNumbers.add(currentResourceNumber);
         for (int i = 0; i < hexPlacementNumbers.size(); i++) {
             if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
@@ -184,13 +187,12 @@ public class InputHandler {
     public Function<Object, Void> selectResource = new Function<Object, Void>() {
         @Override
         public Void apply(Object resource) {
-            Resource currentResource = (Resource) resource;
-            applyCustomHexResource(currentResource);
+            applyCustomHexResource((Resource) resource);
             return null;
         }
     };
     
-    private void applyCustomHexResource(Resource currentResource) {
+    void applyCustomHexResource(Resource currentResource) {
         orderedResources.add(currentResource);
         for (int i = 0; i < hexPlacementResources.size(); i++) {
             if (hexPlacementResources.get(i).equals(currentResource)) {
