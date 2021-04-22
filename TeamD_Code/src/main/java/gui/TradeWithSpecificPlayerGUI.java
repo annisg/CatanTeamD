@@ -75,9 +75,7 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         frame.add(playerToTradeInstruction);
         frame.add(playerMenu);
         frame.add(instruction);
-       // frame.add(numberOfCardsToTrade);
         frame.add(numOfResourceToTrade);
-        //frame.add(playerMenu);
         frame.add(tradeButton); // Adds Button to content pane of frame
         frame.setVisible(true);
     }
@@ -133,25 +131,20 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         //chose the resource to trade
         //pick the player number
         //read the number in the text
-        System.out.println("You selected: " + typeOfCardToTrade.getSelectedItem());
+       // System.out.println("You selected: " + typeOfCardToTrade.getSelectedItem());
         Resource source = currentPlayer.getResourceByName((String) typeOfCardToTrade.getSelectedItem());
         playerToTrade = getPlayerByName((String)playerMenu.getSelectedItem());
         int numToTrade = parseInteger();
-        System.out.print("I want to trade this many cards: " + numToTrade);
         //huge try catch just to take care of exceptions
           if(numToTrade==0){
               JOptionPane.showMessageDialog(null, "You don't have any of that resource");
               frame.dispose();
               return;
           }
-           System.out.println("Current player  before : " + currentPlayer.getResourceCards().toString());
             ArrayList<Resource> stuff = currentPlayer.giveResourceForTrading(source, numToTrade);
             String message = "You have traded " + ("" + numToTrade) + " of "  + source.toString();
             JOptionPane.showMessageDialog(null, message);
-        System.out.println("Current player  after: " + currentPlayer.getResourceCards().toString());
-        System.out.println("Player to trade before: " + playerToTrade.getResourceCards().toString());
             playerToTrade.receiveResourceForTrading(stuff);
-        System.out.println("Player to trade after : " + playerToTrade.getResourceCards().toString());
             frame.dispose();
 
 
@@ -178,7 +171,6 @@ public class TradeWithSpecificPlayerGUI implements ItemListener, ActionListener 
         int index = 0;
         for (Map.Entry<Resource,Integer> entry : resourceMap.entrySet()){
             labelsOfStuff.get(index).setText(entry.getKey().name() + " with " + "" + entry.getValue() + " remaining");
-            // labelsOfStuff.add(new JLabel(entry.getKey().name() + " with " + "" + entry.getValue() + "remaining"));
         }
 
     }
