@@ -200,7 +200,7 @@ public class MaritimeTradeManager_Tests {
 
         EasyMock.verify(handlerM, mtm, sellingSelector, buyingSelector);
     }
-    
+
     private void addMockedSelectors(MaritimeTradeManager mtm) {
         mtm.buyingResourceSelector = buyingSelector;
         mtm.sellingResourceSelector = sellingSelector;
