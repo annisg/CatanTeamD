@@ -98,25 +98,14 @@ public class InputComponent extends JPanel {
         endTurn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                if(clickFunctionQueue.isEmpty()) {
-                    handler.endTurn();
-                    rollDiceButton.setEnabled(true);
-                    useDevCard.setEnabled(false);
-                    buyDevCard.setEnabled(false);
-                    endTurn.setEnabled(false);
-                }
+                endTurnClicked(handler, rollDiceButton, useDevCard, buyDevCard, endTurn);
             }
         });
 
         rollDiceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handler.tryToRollDice();
-                rollDiceButton.setEnabled(false);
-                buyDevCard.setEnabled(true);
-                useDevCard.setEnabled(true);
-                endTurn.setEnabled(true);
+                rollDiceClicked(handler, rollDiceButton, buyDevCard, useDevCard, endTurn);
             }
         });
         
@@ -153,6 +142,24 @@ public class InputComponent extends JPanel {
         this.add(endTurn);
         this.add(cheatResources);
         cheatResources.setVisible(false);
+    }
+
+    static void rollDiceClicked(InputHandler handler, JButton rollDiceButton, JButton buyDevCard, JButton useDevCard, JButton endTurn) {
+        handler.tryToRollDice();
+        rollDiceButton.setEnabled(false);
+        buyDevCard.setEnabled(true);
+        useDevCard.setEnabled(true);
+        endTurn.setEnabled(true);
+    }
+
+    void endTurnClicked(InputHandler handler, JButton rollDiceButton, JButton useDevCard, JButton buyDevCard, JButton endTurn) {
+        if(clickFunctionQueue.isEmpty()) {
+            handler.endTurn();
+            rollDiceButton.setEnabled(true);
+            useDevCard.setEnabled(false);
+            buyDevCard.setEnabled(false);
+            endTurn.setEnabled(false);
+        }
     }
 
     public void addMouseListenerToParent() {
