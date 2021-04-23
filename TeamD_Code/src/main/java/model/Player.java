@@ -90,17 +90,6 @@ public class Player {
         resources.put(r, amt);
     }
 
-    public int getResourceCountString(String name) {
-
-        Resource r = getResourceByName(name);
-        if (isResourceDesert(r)) {
-            throw new IllegalArgumentException();
-        }
-
-
-        return resources.get(r);
-    }
-
     public void discardHalfResourceHand(){
         removeCardsGUI = new RemoveCardsGUI(this);
 
@@ -119,9 +108,6 @@ public class Player {
         return resources.get(r);
     }
 
-    public void giveCardsToPlayer(Player player){
-
-    }
     public Resource getResourceByName(String name){
         name = name.toUpperCase();
         if(name.equals("GRAIN")){
