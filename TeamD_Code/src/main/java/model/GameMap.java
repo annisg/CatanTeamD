@@ -287,4 +287,12 @@ public class GameMap {
         
         return false;
     }
+
+    public boolean doesPlayerOwnsGenericHarbor(Player currentPlayer) {
+        return intersectionMap.doesPlayerOwnsGenericHarbor(currentPlayer);
+    }
+
+    public boolean doesPlayerOwnsSpecialHarbor(Player currentPlayer, Resource resource) {
+        return intersectionMap.doesPlayerOwnsSpecialHarbor(currentPlayer, resource);
+    }
 }

@@ -48,7 +48,6 @@ public class PlayerPlacer {
     public ArrayList<Drawable> getCurrentPlayerGUI() {
         ArrayList<Drawable> playerGUI = new ArrayList<Drawable>();
 
-        // changing / to * will not fail a test, it is only visually inspected
         playerGUI.add(new PlayerDisplayBackground(xPlayerBackground, yPlayerBackground, playerBackgroundWidth,
                 playerBackgroundHeight / numberOfPlayers));
 
@@ -172,37 +171,23 @@ public class PlayerPlacer {
         for (String card : abbreviations) {
             cardMap.put(card, 0);
         }
-
         for (DevelopmentCard card : player.getDevelopmentCards()) {
-
             String s;
             if (card instanceof KnightCard) {
-
                     s="K";
-
             } else if (card instanceof MonopolyCard) {
-
                     s="M";
             } else if (card instanceof  RoadBuildingCard) {
-
                    s="R";
-
             } else if (card instanceof VictoryPointCard) {
-
                     s="V";
-
             } else if (card instanceof YearOfPlentyCard) {
-
                     s = "Y";
-
             } else {
                 throw new RuntimeException();
             }
-
             int previousCount = cardMap.get(s);
             cardMap.put(s, previousCount + 1);
-
-
         }
 
         return cardMap;

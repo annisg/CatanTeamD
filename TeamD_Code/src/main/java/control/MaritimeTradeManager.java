@@ -13,8 +13,8 @@ public class MaritimeTradeManager {
     public static final int SPECIAL_TRADE_COST = 2;
     private final InputHandler inputHandler;
     private final CatanGame catanGame;
-    private Resource soldResource;
-    private Resource boughtResource;
+    Resource soldResource;
+    Resource boughtResource;
     public Function<Object, Void> tradeViaPort = selected -> {
         tradeViaPort((PortSelector.PortTypes) selected);
         return null;
@@ -57,7 +57,7 @@ public class MaritimeTradeManager {
         portSelector.selectAndApply("Select the port you would like to trade with.", tradeViaPort);
     }
 
-    private void tradeViaPort(PortSelector.PortTypes portType) {
+    void tradeViaPort(PortSelector.PortTypes portType) {
         switch (portType) {
             case DEFAULT:
                 defaultPortTrade();
@@ -76,7 +76,7 @@ public class MaritimeTradeManager {
         exchangeResourcesWithBank(DAFAULT_TRADE_COST);
     }
 
-    private void genericPortTrade() {
+    void genericPortTrade() {
         if (playerOwnsGenericHarbor()) {
             exchangeResourcesWithBank(GENERIC_TRADE_COST);
         } else {
@@ -85,7 +85,7 @@ public class MaritimeTradeManager {
     }
 
 
-    private void specialPortTrade() {
+    void specialPortTrade() {
         if (playerOwnsSpecialHarbor(soldResource)) {
             exchangeResourcesWithBank(SPECIAL_TRADE_COST);
         } else {
@@ -93,12 +93,12 @@ public class MaritimeTradeManager {
         }
     }
 
-    private boolean playerOwnsGenericHarbor() {
-        return catanGame.getGameMap().getIntersectionMap().playerOwnsGenericHarbor(catanGame.getCurrentPlayer());
+    boolean playerOwnsGenericHarbor() {
+        return catanGame.doesCurrentPlayerOwnGenericHarbor();
     }
 
     private boolean playerOwnsSpecialHarbor(Resource resource) {
-        return catanGame.getGameMap().getIntersectionMap().playerOwnsSpecialHarbor(catanGame.getCurrentPlayer(), resource);
+        return catanGame.doesCurrentPlayerOwnSpecialHarbor(resource);
     }
 
     private void exchangeResourcesWithBank(int tradeCost) {
