@@ -10,6 +10,7 @@ import java.util.function.Function;
 import javax.swing.JOptionPane;
 
 import exception.*;
+import gui.ResourceSelector;
 import gui.Select1Frame;
 import gui.Select2Frame;
 import gui.TradeWithSpecificPlayerGUI;
@@ -24,8 +25,6 @@ public class InputHandler {
     private final Integer[] possibleHexCols = {1, 2, 3, 4, 5};
     private final Object[] possibleDevCards = {KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
             VictoryPointCard.class, RoadBuildingCard.class};
-    public final Object[] possibleResources = {Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
-            Resource.WOOL};
     Select2Frame optionalIntersectionSelector;
     Select2Frame optionalEdgeSelector;
     Select2Frame mandatoryIntersectionSelector;
@@ -49,7 +48,6 @@ public class InputHandler {
     List<Integer> orderedResourceNumbers;
     List<Resource> orderedResources;
     private String[] possibleDevCardNames;
-    public String[] possibleResourceNames;
     private ResourceProducer resourceProducer;
     private CatanGame catanGame;
 
@@ -76,8 +74,6 @@ public class InputHandler {
                 this.catanGame.getMessages().getString("InputHandler.2"),
                 this.catanGame.getMessages().getString("InputHandler.1"),
                 this.catanGame.getMessages().getString("InputHandler.0")};
-        // TODO: extract strings
-        possibleResourceNames = new String[]{"Brick", "Grain", "Lumber", "Ore", "Wool"};
         optionalIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, true, this);
         optionalEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, true, this);
         mandatoryIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, false,
@@ -85,8 +81,8 @@ public class InputHandler {
         mandatoryEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, false, this);
         hexSelector = new Select2Frame(possibleHexRows, possibleHexCols, false, this);
         devCardSelector = new Select1Frame(possibleDevCardNames, possibleDevCards, true, this);
-        resourceSelector = new Select1Frame(possibleResourceNames, possibleResources, false, this);
-        resourceSelector2 = new Select1Frame(possibleResourceNames, possibleResources, false, this);
+        resourceSelector = new ResourceSelector(false, this);
+        resourceSelector2 = new ResourceSelector(false, this);
     }
 
     public ResourceBundle getMessages() {
