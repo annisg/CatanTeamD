@@ -16,7 +16,7 @@ import model.*;
 
 public class PlayerGUI extends Drawable {
 
-    private final int xPlayerPosition = 1225;
+    private final int xPlayerPosition = 1575;
     private final int yPlayerSpace = 50;
     private final int playerWidth = 300;
     private final int playerHeight = 150;

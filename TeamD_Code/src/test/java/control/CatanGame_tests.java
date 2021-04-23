@@ -2,7 +2,10 @@ package control;
 
 import static org.junit.Assert.*;
 
+import java.awt.BorderLayout;
 import java.util.*;
+
+import javax.swing.JFrame;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
@@ -348,6 +351,32 @@ public class CatanGame_tests {
         replayAll();
         this.testCatan.advancedInitialPlacementRoundTwoOneTurn();
         verifyAll();
+    }
+    
+    @Test
+    public void testSetupModelFrame() {
+        this.testCatan = EasyMock.partialMockBuilder(CatanGame.class).addMockedMethod("drawScreen").mock();
+        JFrame mockedJFrame = EasyMock.mock(JFrame.class);
+        setupGame();
+        
+        mockedJFrame.setSize(1920, 1000);
+        EasyMock.expect(mockedJFrame.getExtendedState()).andReturn(JFrame.NORMAL);
+        mockedJFrame.setExtendedState(JFrame.NORMAL | JFrame.MAXIMIZED_BOTH);
+
+
+        mockedJFrame.setVisible(true);
+        mockedJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        mockedJFrame.add(mockedGUI, BorderLayout.CENTER);
+        mockedJFrame.add(component, BorderLayout.SOUTH);
+        component.addMouseListenerToParent();
+        testCatan.drawScreen();
+
+        replayAll();
+        EasyMock.replay(mockedJFrame);
+        this.testCatan.setupModelFrame(mockedJFrame);
+        verifyAll();
+        EasyMock.verify(mockedJFrame);
     }
 
 }

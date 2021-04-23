@@ -10,6 +10,7 @@ import java.util.function.Function;
 import javax.swing.JOptionPane;
 
 import exception.*;
+import gui.ResourceSelector;
 import gui.Select1Frame;
 import gui.Select2Frame;
 import gui.TradeWithSpecificPlayerGUI;
@@ -24,8 +25,6 @@ public class InputHandler {
     private final Integer[] possibleHexCols = {1, 2, 3, 4, 5};
     private final Object[] possibleDevCards = {KnightCard.class, MonopolyCard.class, YearOfPlentyCard.class,
             VictoryPointCard.class, RoadBuildingCard.class};
-    public final Object[] possibleResources = {Resource.BRICK, Resource.GRAIN, Resource.LUMBER, Resource.ORE,
-            Resource.WOOL};
     Select2Frame optionalIntersectionSelector;
     Select2Frame optionalEdgeSelector;
     Select2Frame mandatoryIntersectionSelector;
@@ -49,7 +48,6 @@ public class InputHandler {
     List<Integer> orderedResourceNumbers;
     List<Resource> orderedResources;
     private String[] possibleDevCardNames;
-    public String[] possibleResourceNames;
     private ResourceProducer resourceProducer;
     private CatanGame catanGame;
 
@@ -61,46 +59,6 @@ public class InputHandler {
         giveResourceToCurrentPlayer((Resource) selected);
         return null;
     };
-
-    private List<Resource> hexPlacementResources;
-    private List<Integer> hexPlacementNumbers;
-    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object number) {
-            Integer currentResourceNumber = (Integer) number;
-            orderedResourceNumbers.add(currentResourceNumber);
-            for (int i = 0; i < hexPlacementNumbers.size(); i++) {
-                if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
-                    hexPlacementNumbers.remove(i);
-                    break;
-                }
-            }
-
-            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            return null;
-        }
-    };
-    public Function<Object, Void> selectResource = new Function<Object, Void>() {
-        @Override
-        public Void apply(Object resource) {
-            Resource currentResource = (Resource) resource;
-            orderedResources.add(currentResource);
-            for (int i = 0; i < hexPlacementResources.size(); i++) {
-                if (hexPlacementResources.get(i).equals(currentResource)) {
-                    hexPlacementResources.remove(i);
-                    break;
-                }
-            }
-            if (!resource.equals(Resource.DESERT)) {
-                resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"),
-                        selectResourceNumber);
-            } else {
-                selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
-            }
-            return null;
-        }
-    };
-
 
     public InputHandler(ResourceProducer resourceProducer, CatanGame game, PieceBuilder builder) {
         this.resourceProducer = resourceProducer;
@@ -116,8 +74,6 @@ public class InputHandler {
                 this.catanGame.getMessages().getString("InputHandler.2"),
                 this.catanGame.getMessages().getString("InputHandler.1"),
                 this.catanGame.getMessages().getString("InputHandler.0")};
-        // TODO: extract strings
-        possibleResourceNames = new String[]{"Brick", "Grain", "Lumber", "Ore", "Wool"};
         optionalIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, true, this);
         optionalEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, true, this);
         mandatoryIntersectionSelector = new Select2Frame(possibleIntersectionRows, possibleIntersectionCols, false,
@@ -125,8 +81,8 @@ public class InputHandler {
         mandatoryEdgeSelector = new Select2Frame(possibleEdgeRows, possibleEdgeCols, false, this);
         hexSelector = new Select2Frame(possibleHexRows, possibleHexCols, false, this);
         devCardSelector = new Select1Frame(possibleDevCardNames, possibleDevCards, true, this);
-        resourceSelector = new Select1Frame(possibleResourceNames, possibleResources, false, this);
-        resourceSelector2 = new Select1Frame(possibleResourceNames, possibleResources, false, this);
+        resourceSelector = new ResourceSelector(false, this);
+        resourceSelector2 = new ResourceSelector(false, this);
     }
 
     public ResourceBundle getMessages() {
@@ -182,19 +138,70 @@ public class InputHandler {
         }
     };
     
+    List<Resource> hexPlacementResources;
+    List<Integer> hexPlacementNumbers;
     public void selectCustomHexPlacement(List<Resource> availableResources, List<Integer> availableNumbers) {
         hexPlacementResources = availableResources;
         hexPlacementNumbers = availableNumbers;
 
         if (availableResources.size() != 0) {
-            resourceSelector = buildResourceSelector(availableResources);
-            resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
+            buildCustomSelectors(availableResources, availableNumbers);
             resourceSelector.selectAndApply(this.catanGame.getMessages().getString("InputHandler.27"),
                     this.selectResource);
         } else {
             this.catanGame.getGameMap().getHexMap().setUpCustomMap(orderedResources, orderedResourceNumbers);
+            this.catanGame.getGameMap().setUpCustomPorts();
             this.catanGame.buildModelFrame();
             this.catanGame.advancedInitialPlacement();
+        }
+    }
+
+    void buildCustomSelectors(List<Resource> availableResources, List<Integer> availableNumbers) {
+        resourceSelector = buildResourceSelector(availableResources);
+        resourceNumberSelector = buildResourceNumberSelector(availableNumbers);
+    }
+    
+    public Function<Object, Void> selectResourceNumber = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object number) {
+            applyCustomResourceNumber((Integer) number);
+            return null;
+        }
+    };
+    
+    void applyCustomResourceNumber(Integer currentResourceNumber) {
+        orderedResourceNumbers.add(currentResourceNumber);
+        for (int i = 0; i < hexPlacementNumbers.size(); i++) {
+            if (hexPlacementNumbers.get(i).equals(currentResourceNumber)) {
+                hexPlacementNumbers.remove(i);
+                break;
+            }
+        }
+
+        selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
+    }
+    
+    public Function<Object, Void> selectResource = new Function<Object, Void>() {
+        @Override
+        public Void apply(Object resource) {
+            applyCustomHexResource((Resource) resource);
+            return null;
+        }
+    };
+    
+    void applyCustomHexResource(Resource currentResource) {
+        orderedResources.add(currentResource);
+        for (int i = 0; i < hexPlacementResources.size(); i++) {
+            if (hexPlacementResources.get(i).equals(currentResource)) {
+                hexPlacementResources.remove(i);
+                break;
+            }
+        }
+        if (!currentResource.equals(Resource.DESERT)) {
+            resourceNumberSelector.selectAndApply(catanGame.getMessages().getString("InputHandler.28"),
+                    selectResourceNumber);
+        } else {
+            selectCustomHexPlacement(hexPlacementResources, hexPlacementNumbers);
         }
     }
 
@@ -207,7 +214,7 @@ public class InputHandler {
             numberObjs[i] = availableNumbers.get(i);
         }
 
-        return new Select1Frame(numberStrings, numberObjs, false, this);
+        return buildNewSelect1Frame(numberStrings, numberObjs);
     }
 
     Select1Frame buildResourceSelector(List<Resource> availableResources) {
@@ -219,7 +226,11 @@ public class InputHandler {
             resourceObjs[i] = availableResources.get(i);
         }
 
-        return new Select1Frame(resourceStrings, resourceObjs, false, this);
+        return buildNewSelect1Frame(resourceStrings, resourceObjs);
+    }
+    
+    Select1Frame buildNewSelect1Frame(String[] displayStrings, Object[] underlyingObjs) {
+        return new Select1Frame(displayStrings, underlyingObjs, false, this);
     }
 
     public void buyDevelopmentCard() {
