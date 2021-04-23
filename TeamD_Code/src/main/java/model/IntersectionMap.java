@@ -296,11 +296,11 @@ public class IntersectionMap {
         return 12;
     }
 
-    public boolean playerOwnsGenericHarbor(Player player) {
+    public boolean doesPlayerOwnsGenericHarbor(Player player) {
         return playerOwnsHarbor(player, Resource.DESERT);   // Desert is special case for generic harbor
     }
 
-    public boolean playerOwnsSpecialHarbor(Player player, Resource resource) {
+    public boolean doesPlayerOwnsSpecialHarbor(Player player, Resource resource) {
         if (resource.equals(Resource.DESERT))
             throw new IllegalArgumentException("Player cannot own a desert harbor");
 

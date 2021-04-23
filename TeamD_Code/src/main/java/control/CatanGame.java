@@ -221,5 +221,12 @@ public class CatanGame {
         gui.showPopup();
         drawScreen();
     }
-}
 
+    public boolean doesCurrentPlayerOwnGenericHarbor() {
+        return model.doesPlayerOwnsGenericHarbor(getCurrentPlayer());
+    }
+
+    public boolean doesCurrentPlayerOwnSpecialHarbor(Resource resource) {
+        return model.doesPlayerOwnsSpecialHarbor(getCurrentPlayer(), resource);
+    }
+}

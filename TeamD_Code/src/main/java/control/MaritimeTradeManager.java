@@ -14,6 +14,7 @@ public class MaritimeTradeManager {
     private final InputHandler inputHandler;
     private final CatanGame catanGame;
 
+
     ResourceSelector sellingResourceSelector;
     ResourceSelector buyingResourceSelector;
     PortSelector portSelector;
@@ -22,6 +23,7 @@ public class MaritimeTradeManager {
     Resource boughtResource;
 
     Function<Object, Void> tradeViaPort = selected -> {
+
         tradeViaPort((PortSelector.PortTypes) selected);
         return null;
     };
@@ -37,7 +39,7 @@ public class MaritimeTradeManager {
     public MaritimeTradeManager(InputHandler inputHandler, CatanGame catanGame) {
         this.inputHandler = inputHandler;
         this.catanGame = catanGame;
-         portSelector = new PortSelector(inputHandler);
+        portSelector = new PortSelector(inputHandler);
         sellingResourceSelector = new ResourceSelector(true, inputHandler);
         buyingResourceSelector = new ResourceSelector(true, inputHandler);
     }
@@ -63,7 +65,8 @@ public class MaritimeTradeManager {
         portSelector.selectAndApply("Select the port you would like to trade with.", tradeViaPort);
     }
 
-     void tradeViaPort(PortSelector.PortTypes portType) {
+    void tradeViaPort(PortSelector.PortTypes portType) {
+
         switch (portType) {
             case DEFAULT:
                 defaultPortTrade();
@@ -78,11 +81,12 @@ public class MaritimeTradeManager {
     }
 
 
-     void defaultPortTrade() {
+    void defaultPortTrade() {
         exchangeResourcesWithBank(DAFAULT_TRADE_COST);
     }
 
-     void genericPortTrade() {
+    void genericPortTrade() {
+
         if (playerOwnsGenericHarbor()) {
             exchangeResourcesWithBank(GENERIC_TRADE_COST);
         } else {
@@ -91,7 +95,8 @@ public class MaritimeTradeManager {
     }
 
 
-     void specialPortTrade() {
+    void specialPortTrade() {
+
         if (playerOwnsSpecialHarbor(soldResource)) {
             exchangeResourcesWithBank(SPECIAL_TRADE_COST);
         } else {
@@ -100,16 +105,15 @@ public class MaritimeTradeManager {
         }
     }
 
-     boolean playerOwnsGenericHarbor() {
-        return catanGame.getGameMap().getIntersectionMap().playerOwnsGenericHarbor(catanGame.getCurrentPlayer());
+    boolean playerOwnsGenericHarbor() {
+        return catanGame.doesCurrentPlayerOwnGenericHarbor();
     }
 
-     boolean playerOwnsSpecialHarbor(Resource resource) {
-        return catanGame.getGameMap().getIntersectionMap().playerOwnsSpecialHarbor(catanGame.getCurrentPlayer(),
-                resource);
+    boolean playerOwnsSpecialHarbor(Resource resource) {
+        return catanGame.doesCurrentPlayerOwnSpecialHarbor(resource);
     }
 
-     void exchangeResourcesWithBank(int tradeCost) {
+    void exchangeResourcesWithBank(int tradeCost) {
         Player player = inputHandler.getCurrentPlayer();
 
         try {
