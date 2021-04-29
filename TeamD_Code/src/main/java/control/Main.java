@@ -8,9 +8,13 @@ public class Main {
         runGame((ResourceBundle) selected);
         return null;
     };
-    static LocalizationSelector localizationSelector = new LocalizationSelector();
+    static LocalizationSelector localizationSelector = null;
 
     public static void main(String[] args) {
+        if (localizationSelector == null) {
+            localizationSelector = new LocalizationSelector();
+        }
+
         localizationSelector.promptForLocalizationBundle(useResourceBundle);
     }
 
