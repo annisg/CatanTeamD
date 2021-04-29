@@ -1,10 +1,10 @@
 package control;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import model.PlayerColor;
 import model.Resource;

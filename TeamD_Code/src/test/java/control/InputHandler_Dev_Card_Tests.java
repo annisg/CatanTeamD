@@ -1,19 +1,20 @@
 package control;
 
-import static org.junit.Assert.*;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import gui.InputComponent;
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import exception.ItemNotFoundException;
 import exception.VictoryPointPlayedException;
 import gui.Select1Frame;
 import gui.Select2Frame;
 import model.*;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class InputHandler_Dev_Card_Tests {
 
