@@ -89,6 +89,34 @@ package "control"
         -possibleDevCardNames: String[*]
         -hexPlacementNumbers: int[*]
         +InputHandler(resourceProducer: ResourceProducer, game: CatanGame, builder: PieceBuilder)
+        +selectCustomHexPlacement(availableResources: Resources[*], availableNumbers: int[*]): void
+        ~buildCustomSelectors(availableResources: Resource[*], availableNumbers: int[*]): void
+        ~applyCustomResourceNumber(currentResourceNumber: int)
+        ~applyCustomHexResource(currentResource: Resource)
+        ~buildResourceNumberSelector(availableNumbers: int[*]): Select1Frame
+        ~buildResourceSelector(availableResources: Resource[*]): Select1Frame
+        ~buildNewSelect1Frame(displayStrings: String[*], underlyingObjs: Object[*]): Select1Frame
+        +buyDevelopmentCard(): void
+        +selectAndUseDevCard(): void
+        ~playDevelopmentCard(selected: Class): void
+        -promptForStealingAllOfResource(): void
+        -stealAllOfResource(resource: Resource): void
+        +tryToROllDice(): void
+        +discardCardsForEveryPlayer(): void
+        +tradeWithPlayer(): void
+        +rollDice(): int
+        -rolledSeven(): void
+        -moveRobber(): void
+        ~selectPlayerToStealFromAtMapPosition(mapPosition: MapPosition): void
+        +isRobberTurn(numRolled: int): boolean
+        +produceResources((numRolled: int): void
+        -stealFromPlayer(selectedPlayerColor: PlayerColor): void
+        -offerPlayerTwoFreeRoads(): void
+        -offerPlayerTwoFreeResources(): void
+        -giveResourceToCurrentPlayer(resource: Resource): void
+        ~updateRobberPositionOnBoard(mousePosition: Point): void
+        +endTurn(): void
+        +cheatResources(): void
     }
     InputHandler --> Select1Frame: devCardSelector, resourceNumberSelector, resourceSelector, resourceSelector2
     InputHandler --> Select2Frame: optionalIntersectionSelector, optionalEdgeSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
