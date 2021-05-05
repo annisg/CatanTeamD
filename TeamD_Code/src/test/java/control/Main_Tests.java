@@ -1,7 +1,7 @@
 package control;
 
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Main_Tests {
     @Test

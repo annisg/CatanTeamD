@@ -1,13 +1,13 @@
 package control;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import exception.*;
 import model.*;

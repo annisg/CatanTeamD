@@ -5,11 +5,10 @@ import gui.ResourceSelector;
 import model.Player;
 import model.Resource;
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MaritimeTradeManager_Tests {
     InputHandler handlerM;
     CatanGame gameM;
@@ -18,7 +17,7 @@ public class MaritimeTradeManager_Tests {
     ResourceSelector buyingSelector;
     PortSelector portSelector;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         handlerM = EasyMock.niceMock(InputHandler.class);
         gameM = EasyMock.strictMock(CatanGame.class);

@@ -1,27 +1,16 @@
 package model;
 
-import exception.VictoryPointPlayedException;
-import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.time.Year;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class DevelopmentCardBehaviorTest {
-    @Before
-    public void setUpCards() {
-
-    }
-
-
-
     @Test
     public void testMakeCardPlayable() {
         DevelopmentCard card = new YearOfPlentyCard(null);
@@ -38,7 +27,6 @@ public class DevelopmentCardBehaviorTest {
 
         int size2 = owner.getDevelopmentCards().size();
         assertEquals(-1, size1 - size2);
-
     }
 
     @Test
@@ -70,11 +58,10 @@ public class DevelopmentCardBehaviorTest {
                 monopolyCardNum++;
             }
         }
+
         assertEquals(16, knightCardNum);
         assertEquals(4, victoryPointCardNum);
         assertEquals(4, roadbuildingCardNum);
         assertEquals(9, monopolyCardNum);
-
-
     }
 }

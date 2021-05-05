@@ -1,6 +1,6 @@
 package control;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.BorderLayout;
 import java.util.*;
@@ -8,7 +8,7 @@ import java.util.*;
 import javax.swing.JFrame;
 
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import gui.*;
 import model.*;

@@ -3,14 +3,14 @@ package gui;
 import control.InputHandler;
 import control.MaritimeTradeManager;
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InputComponent_Tests {
 
