@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class PlayerPlayerTrackerIntegration_Test {
     @Test
@@ -66,6 +67,16 @@ public class PlayerPlayerTrackerIntegration_Test {
             assertEquals(turnTracker.getPlayer(colors.get(i)), players.get(i));
         }
 
+    }
+
+    @Test
+    public void testPassTurn(){
+        TurnTracker turnTracker = new TurnTracker(new Random());
+        turnTracker.setupPlayers(3);
+        Player before = turnTracker.getCurrentPlayer();
+        turnTracker.passInitialTurn();
+        Player after = turnTracker.getCurrentPlayer();
+        assertNotEquals(before, after);
     }
 
 
