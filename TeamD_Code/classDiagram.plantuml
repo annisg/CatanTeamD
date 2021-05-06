@@ -1,6 +1,138 @@
 @startuml
 'Getters, setters and some other methods are excluded for simplicity'
-package "control"
+
+package model
+{
+    class CandidateRoadFinder
+    {
+        +CandidateRoadFinder(board: GameMap)
+        ~getCandidateRoadFromEdge(edge: Edge): CandidateRoad
+        ~edgeRecurse(edge: Edge, visitedEdges: Edge[*], visitedIntersections: Intersection[*]): CandidateRoad
+        -intersectionRecurse(intersection: Intersection, visitedEdges: Edge[*], visitedIntersections: Intersection[*]): CandidateRoad
+        -edgeIsVisitable(edge: Edge, visitedEdges: Edge[*], originalColor: PlayerColor): boolean
+        -intersectionNotBlocked(intersection: Intersection, originalColor: PlayerColor): boolean
+    }
+    CandidateRoadFinder --> GameMap: board
+    CandidateRoadFinder --> Edge
+    CandidateRoadFinder --> Intersection
+
+    abstract class DevelopmentCard
+    {
+
+    }
+
+    class DevelopmentDeck
+    {
+
+    }
+
+    class EdgeMap
+    {
+
+    }
+
+    class GameMap
+    {
+
+    }
+
+    class GenericPort
+    {
+
+    }
+
+    class Hex
+    {
+
+    }
+
+    class HexMap
+    {
+
+    }
+
+    class Intersection
+    {
+
+    }
+
+    class IntersectionMap
+    {
+
+    }
+
+    class LargestArmy
+    {
+
+    }
+
+    class LongestRoad
+    {
+
+    }
+
+    class MapPosition
+    {
+
+    }
+
+    class PieceBuilder
+    {
+
+    }
+
+    class Player
+    {
+
+    }
+
+    class PlayerColor
+    {
+
+    }
+
+    interface Port
+    {
+
+    }
+
+    class PortMap
+    {
+
+    }
+
+    class PropertyPlacer
+    {
+
+    }
+
+    class ResourceProducer
+    {
+
+    }
+
+    class Robber
+    {
+
+    }
+
+    class SpecificPort
+    {
+
+    }
+
+    class TurnTracker
+    {
+
+    }
+
+    class VictoryPointCalculator
+    {
+
+    }
+}
+
+package control
 {
     class BuildingHandler
     {
@@ -88,6 +220,8 @@ package "control"
         ~orderedResourceNumbers: int[*]
         -possibleDevCardNames: String[*]
         -hexPlacementNumbers: int[*]
+        -orderedResources: Resource[*]
+        -hexPlacementResources: Resource[*]
         +InputHandler(resourceProducer: ResourceProducer, game: CatanGame, builder: PieceBuilder)
         +selectCustomHexPlacement(availableResources: Resources[*], availableNumbers: int[*]): void
         ~buildCustomSelectors(availableResources: Resource[*], availableNumbers: int[*]): void
@@ -121,7 +255,6 @@ package "control"
     InputHandler --> Select1Frame: devCardSelector, resourceNumberSelector, resourceSelector, resourceSelector2
     InputHandler --> Select2Frame: optionalIntersectionSelector, optionalEdgeSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
     InputHandler --> BuildingHandler: propertyBuilder
-    InputHandler --> Resource: hexPlacementResources[*], orderedResources[*]
     InputHandler --> ResourceProducer: resourceProducer
     InputHandler --> CatanGame: catanGame
     InputHandler --> PieceBuilder
@@ -131,6 +264,8 @@ package "control"
         +{static} DEFAULT_TRADE_COST: int
         +{static} GENERIC_TRADE_COST: int
         +{static} SPECIAL_TRADE_COST: int
+        -soldResource: Resource
+        -boughtResource: Resource
         +MaritimeTradeManager(inputHandler: InputHandler, catanGame: CatanGame)
         +trade(): void
         ~sellResource(resource: Resource): void
@@ -142,7 +277,6 @@ package "control"
     MaritimeTradeManager --> CatanGame: catanGame
     MaritimeTradeManager --> ResourceSelector: sellingResourceSelector, buyingResourceSelector
     MaritimeTradeManager --> PortSelector: portSelector
-    MaritimeTradeManager --> Resource: soldResource, boughtResource
 
     class PlayerPlacer
     {
@@ -163,11 +297,5 @@ package "control"
     }
     PlayerPlacer --> turnTracker: turnTracker
     PlayerPlacer --> Player
-    PlayerPlacer --> Resource
-}
-
-package model
-{
-
 }
 @enduml
