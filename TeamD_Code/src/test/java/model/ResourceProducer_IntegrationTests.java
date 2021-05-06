@@ -6,8 +6,6 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import exception.*;
-
 public class ResourceProducer_IntegrationTests {
 
     ResourceProducer producer;
@@ -15,24 +13,80 @@ public class ResourceProducer_IntegrationTests {
     TurnTracker tracker;
     Random random;
     
-    public void setupObjects() {
+    public void setupObjects(int numPlayers) {
         random = new Random(0);
         gmTest = new GameMap();
-        gmTest.setUpBeginnerMap(3);
+        gmTest.setUpBeginnerMap(numPlayers);
         tracker = new TurnTracker(random);
-        tracker.setupPlayers(3);
+        tracker.setupPlayers(numPlayers);
         tracker.setupBeginnerResourcesAndPieces();
         producer = new ResourceProducer(random);
     }
     
     @Test
-    public void testRollNoResourcesProduced() {
-        setupObjects();
+    public void testRollNoResourcesProducedWith3() {
+        setupObjects(3);
         producer.produceResources(gmTest, tracker, 2);
         verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(1,1,0,1,0));
         verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,1,0,0));
         verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,1,1,0));
-
+    }
+    
+    @Test
+    public void testRoll12BeginnerMapWith3() {
+        setupObjects(3);
+        producer.produceResources(gmTest, tracker, 12);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(2,1,0,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,1,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,1,1,0));
+    }
+    
+    @Test
+    public void testRoll12BeginnerMapWith4() {
+        setupObjects(4);
+        producer.produceResources(gmTest, tracker, 12);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(2,1,0,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,1,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,1,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.RED), Arrays.asList(1,0,0,2,0));
+    }
+    
+    @Test
+    public void testRoll8BeginnerMapWith3() {
+        setupObjects(3);
+        producer.produceResources(gmTest, tracker, 8);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(1,1,1,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,1,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,1,2,0));
+    }
+    
+    @Test
+    public void testRoll8BeginnerMapWith4() {
+        setupObjects(4);
+        producer.produceResources(gmTest, tracker, 8);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(1,1,1,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,1,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,1,2,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.RED), Arrays.asList(1,0,0,3,0));
+    }
+    
+    @Test
+    public void testRoll3BeginnerMapWith3() {
+        setupObjects(3);
+        producer.produceResources(gmTest, tracker, 3);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(1,1,0,2,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,2,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,2,1,0));
+    }
+    
+    @Test
+    public void testRoll3BeginnerMapWith4() {
+        setupObjects(4);
+        producer.produceResources(gmTest, tracker, 3);
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.WHITE), Arrays.asList(1,1,0,2,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.ORANGE), Arrays.asList(2,0,2,0,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.BLUE), Arrays.asList(0,1,2,1,0));
+        verifyPlayerHasResources(tracker.getPlayer(PlayerColor.RED), Arrays.asList(1,0,0,2,0));
     }
     
     private void verifyPlayerHasResources(Player player, List<Integer> resourceNums) {
