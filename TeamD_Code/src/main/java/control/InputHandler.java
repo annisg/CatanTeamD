@@ -126,6 +126,7 @@ public class InputHandler {
         @Override
         public Void apply(Point mouseCoordinates) {
             propertyBuilder.placeInitialRoadAtClosestEdge(mouseCoordinates);
+            catanGame.endTurn();
             return null;
         }
     };
