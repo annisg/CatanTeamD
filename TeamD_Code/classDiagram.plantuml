@@ -1,5 +1,5 @@
 @startuml
-'Getters, setters and some other methods are excluded for simplicity'
+'Greatly reduced for readability'
 
 package model
 {
@@ -13,7 +13,6 @@ package model
         -intersectionNotBlocked(intersection: Intersection, originalColor: PlayerColor): boolean
     }
     CandidateRoadFinder --> GameMap: board
-    CandidateRoadFinder --> Edge
     CandidateRoadFinder --> Intersection
 
     abstract class DevelopmentCard
@@ -31,7 +30,6 @@ package model
         +DevelopmentCard(largestArmy: LargestArmy)
         +DevelopmentCard(largestArmy: LargestArmy, random: Random)
         -populateDeck(): void
-        +populateDeckUniqueCards(): void
         +size(): int
         +drawCard(): DevelopmentCard
     }
@@ -41,60 +39,35 @@ package model
     class EdgeMap
     {
         -edges: Edge[11][*]
-        +EdgeMap()
         +getAllAdjacentIntersections(givenEdge: Edge): MapPosition[*]
-        +getAllAdjacentIntersections(edgePosition: MapPosition): MapPosition[*]
         +getAdjacentIntersection(givenEdge: Edge, givenDirection: Direction): MapPosition
         +getIntersectionDirection0(givenEdge: Edge): MapPosition
-        +getIntersectionDirection0(edgePosition: MapPosition): MapPosition
         +getIntersectionDirection1(givenEdge: Edge): MapPosition
-        +getIntersectionDirection1(edgePosition: MapPosition): MapPosition
         +getEdge(position: MapPosition): Edge
         +getClosestEdgeToPoint(point: Point): Edge
-        -getDistanceFromPoint(mapPosition: MapPosition, point: Point): double
         +findEdgePosition(givenEdge: Edge): MapPosition
         +getNumberOfEdgesInRow(rowNumber: int): int
-        -isNotValidPosition(positionToTest: MapPosition): boolean
-        -isNotValidRow(rowNumber: int): boolean
-        +getNumberOfRows(): int
-        -isInBottomHalf(pos: MapPosition): boolean
-        -isInTopHalf(pos: MapPosition): boolean
     }
     EdgeMap --> MapPosition
 
     class GameMap
     {
-        +GameMap()
         +setUpBeginnerMap(numPlayers: int): void
         +setUpAdvancedMap(): void
         +setUpCustomPorts(): void
-        +getHex(row: int, col: int): Hex
-        +getIntersection(row: int, col: int): Intersection
         +getClosestEdgeToPoint(point: Point): Edge
         +getClosestIntersectionToPoint(point: Point): Intersection
-        +getEdge(row: int, col: int): Edge
         +moveRobberToClosestHex(mousePosition: Point): void
-        +getClosestValidRobberPosition(mosePosition: Point): MapPosition
-        -placeBeginnerPieces(numPlayers: int): void
         +getHexesByResourceNumber(resourceNumber: int): Hex[*]
         +getPortFromIntersection(givenIntersection: Intersection): Port
-        +getPortFromIntersection(intersectionPos: MapPosition): Port
         +getSpecificHexFromIntersection(givenIntersection: Intersection, givenDirection: Direction)
-        +getAllHexesFromIntersection(givenIntersection: Intersection): Hex[*]
-        +getAllHexesFromIntersection(intersectionRow: int, intersectionCols: int): Hex[*]
         +getSpecificEdgeFromIntersection(givenIntersection: Intersection, givenDirection: Direction): edge
-        +getAllEdgesFromIntersection(givenIntersection: Intersection): Edge[*]
-        +getAllEdgesFromIntersection(intersectionRow: int, intersectionCol: int): Edge[*]
         +getSpecificIntersectionFromEdge(givenEdge: Edge, intersectionDirection: Direction): Intersection
-        +getAllIntersectionsFromEdge(givenEdge: Edge): Intersection[*]
-        +getAllIntersectionsFromEdge(edgeRow: int, edgeCol: int): Intersection[*]
         +getSpecificIntersectionFromHex(givenHex: Hex, intersectionDirection: Direction): Intersection
-        +getAllIntersectionsFromHex(givenHex: Hex): Intersection[*]
-        +getAllIntersectionsFromHex(hexRow: int, hexCol: int): Intersection[*]
         +canSeeIntersection(givenIntersection: Intersection, color: PlayerColor): boolean
         +canSeeEdge(givenEdge: Edge, color: PlayerColor): boolean
         +doesPlayerOwnsGenericHarbor(currentPlayer: Player): boolean
-        +doesPlayerOwnsSpecialHarbor(currentPlayer: Player, resource: Resource)
+        +doesPlayerOwnsSpecialHarbor(currentPlayer: Player, resource: Resource): boolean
     }
     GameMap --> HexMap: hexMap
     GameMap --> IntersectionMap: intersectionMap
@@ -102,7 +75,6 @@ package model
     GameMap --> PortMap: portMap
     GameMap --> Hex
     GameMap --> Intersection
-    GameMap --> Edge
     GameMap --> MapPosition
 
     class Hex
@@ -111,131 +83,172 @@ package model
         -rollResourceNumber: int
         ~hasRobber: boolean
         +Hex(providesResource: Resource, rollResourceNumber: int)
-        +Hex()
         +placeRobber(): void
         +removeRobber(): void
-        +getResource(): Resource
         +getRollResourceNumber(): int
-        +hasRobber(): boolean
     }
 
     class HexMap
     {
         -resourceHashMap: HashMap<Integer, Hex[*]>
-        +HexMap()
+        -robber: Robber
         +getHex(hexPosition: MapPosition): Hex
-        +getHexesByResourceNumber(resourceNumber: int): Hex[*]
         +moveRobberToPosition(newRobberPosition: MapPosition): void
-        +getAllAdjacentIntersections(givenHex: Hex): MapPosition[*]
-        +getAllAdjacentIntersections(hexPosition: MapPosition): MapPosition[*]
         +getAdjacentIntersection(givenHex: Hex, givenDirection: Direction): MapPosition
-        +getAdjacentIntersection(hexPosition: MapPosition, givenDirection: Direction): MapPosition
-        +getIntersectionDirection0(hexPosition: MapPosition): MapPosition
-        +getIntersectionDirection1(hexPosition: MapPosition): MapPosition
-        +getIntersectionDirection2(hexPosition: MapPosition): MapPosition
-        +getIntersectionDirection3(hexPosition: MapPosition): MapPosition
-        +getIntersectionDirection4(hexPosition: MapPosition): MapPosition
-        +getIntersectionDirection5(hexPosition: MapPosition): MapPosition
-        -isInvalidResourceNumber(resourceNumber: int): boolean
-        -isInvalidHexPosition(posToCheck): boolean
-        +findHexPosition(givenHex: Hex): MapPosition
         +setUpAdvancedMap(random: Random): void
         +setUpCustomMap(resources: Resource[*], resourceNumber: int): void
-        +getShuffledResourceNumbers(random: Random): int[*]
-        +getStandardResourceNumbers(): int[*]
-        +getShuffledResources(random: Resource): Resource[*]
-        +getStandardResources(): Resource[*]
         +setUpBeginnerMap(): void
         -populateResourceNumberHashMap(): void
-        -placeHexArrayOneMap(hexes: Hex[*])
-        -isInBottomHalf(pos: MapPosition): boolean
-        -isInTopHalf(pos: MapPosition): boolean
-        +getNumberOfHexesInRow(n: int): int
         +getClosestValidRobberPosition(mousePosition: Point): MapPosition
         -getHexPosition(mapPosition: MapPosition): Point
     }
     HexMap --> Hex: hexes[5][0]
-    HexMap --> Robber: robber
 
     class Intersection
     {
-
+        -hasSettlement: boolean
+        -hasCity: boolean
     }
+    Intersection --> Port: port
 
     class IntersectionMap
     {
-
+        +getAdjacentHex(givenIntersection: Intersection, givenDirection: Direction): MapPosition
+        +getAdjacentEdge(givenIntersection: Intersection, givenDirection: Direction): MapPosition
+        +getClosestIntersectionToPoint(point: Point): Intersection
+        +findIntersectionPosition(knownIntersection: Intersection): MapPosition
+        +doesPlayerOwnsGenericHarbor(player: Player): boolean
+        +doesPlayerOwnsSpecialHarbor(player: Player, resource: Resource): boolean
     }
+    IntersectionMap --> Intersection: intersectionMap[*][*]
+    IntersectionMap --> MapPosition
+    IntersectionMap --> Player
 
     class LargestArmy
     {
-
+        -size: int
+        +LargestArmy(players: TurnTracker)
+        +updateLargestArmy(): void
     }
+    LargestArmy --> TurnTracker: turnTracker
 
     class LongestRoad
     {
-
+        +currentLongestRoad: CandidateRoad
+        +LongestRoad(candidateRoadFinder: CandidateRoadFinder)
+        +updateLongestRoad(board: GameMap): void
     }
+    LongestRoad --> CandidateRoadFinder: candidateRoadFinder
+    LongestRoad --> GameMap
 
     class MapPosition
     {
-
+        -row: int
+        -col: int
+        +MapPosition(row: int, column: int)
+        +MapPosition()
+        +setPosition(row: int, column: int): void
     }
 
     class PieceBuilder
     {
-
+        -settlementCost: Resource[*]
+        -cityCost: Resource[*]
+        -roadCost: Resource[*]
+        -developmentDeck: Resource[*]
+        +PieceBuilder(board: GameMap, placer: PropertyPlacer, developmentDeck: DevelopmentDeck)
+        +buildSettlement(player: Player, intersection: Intersection): void
+        +buildCity(player: Player, intersection: Intersection): void
+        +buildRoad(player: Player, edge: Edge): void
+        +buildDevelopmentCard(player: Player): String
+        -hasSufficientResources(player: Player, cost: Resource[*]): boolean
+        -removeResource(player: Player, cost: Resource[*]): void
     }
+    PieceBuilder --> GameMap: board
+    PieceBuilder --> PropertyPlacer: placer
+    PieceBuilder --> DevelopmentDeck: developmentDeck
+    PieceBuilder --> Player
+    PieceBuilder --> Intersection
 
     class Player
     {
-
+        -resources: Map<Resource, int>
+        -settlementCount: int
+        -cityCount: int
+        -roadCount: int
+        -knightCount: int
+        -name: String
+        +Player(color: PlayerColor)
+        +removeResource(resource: Resource, amount: int): void
+        +giveResource(resource: Resource, amount: int): void
+        +discardHalfResourceHand(): void
+        +giveDevelopmentCard(card: DevelopmentCard): void
+        +removeDevelopmentCard(card: DevelopmentCard): void
     }
-
-    class PlayerColor
-    {
-
-    }
+    Player --> DevelopmentCard: developmentCards[*]
+    Player --> TurnTracker: turnTracker
 
     interface Port
     {
-
+        +tradeRatioXto1ForResource(resourceOffering): int
     }
 
     class PortMap
     {
-
+        ~positionsToPort: HashMap<MapPosition, Port>
+        -initializePortPositions(ports: Port[*]): void
+        +getPortFromPosition(posToFind: MapPosition): Port
+        +addPortsToIntersectionMap(map: IntersectionMap): void
     }
+    PortMap --> MapPosition
+    PortMap --> Port
 
     class PropertyPlacer
     {
-
+        +PropertyPlacer(longestRoad: LongestRoad)
+        +placeRegularSettlementOnMap(player: Player, gameMap: GameMap, intersection: Intersection): void
+        +placeCityOnMap(player: Player, intersection: Intersection): void
+        +placeRoadOnMap(player: Player, gameMap: GameMap, edge: Edge): void
     }
+    PropertyPlacer --> LongestRoad: longestRoad
+    PropertyPlacer --> Player
+    PropertyPlacer --> GameMap
+    PropertyPlacer --> Intersection
 
     class ResourceProducer
     {
-
+        +produceResources(map: GameMap, player: TurnTracker, roll: int): void
+        +rollDice(): int
+        ~produceHex(hex: Hex, map: GameMap, players: TurnTracker): void
+        ~produceIntersection(intersection: Intersection, resource: Resource, players: TurnTracker): void
     }
-
-    class Robber
-    {
-
-    }
-
-    class SpecificPort
-    {
-
-    }
+    ResourceProducer --> GameMap
+    ResourceProducer --> TurnTracker
+    ResourceProducer --> Hex
+    ResourceProducer --> Intersection
 
     class TurnTracker
     {
-
+        ~colors: PlayerColor[4]
+        ~currentPlayerIndex: int
+        ~isInitialFirstRound: boolean
+        +setupPlayers(numPlayers): void
+        +promptForPlayerNames(i: int): String
+        +setupBeginnerResourcesAndPieces(): void
+        +getCurrentPlayer(): Player
+        +passInitialTurn(): void
     }
+    TurnTracker --> Player: players[*]
 
     class VictoryPointCalculator
     {
-
+        +VictoryPointCalculator(longestRoad: LongestRoad, largestArmy: LargestArmy)
+        +calculateForPlayer(player: Player): int
+        +isWinning(player: Player): boolean
     }
+    VictoryPointCalculator --> LongestRoad: longestRoad
+    VictoryPointCalculator --> LargestArmy: largestArmy
+    VictoryPointCalculator --> Player
 }
 
 package control
@@ -243,8 +256,6 @@ package control
     class BuildingHandler
     {
         +BuildingHandler(game: CatanGame, builder: PieceBuilder, handler: InputHandler)
-        ~placeInitialSettlement(point: Point): void
-        ~placeInitialRoadAtClosestEdge(point: Point): void
         +placeSettlement(point: Point): void
         +placeCity(point: Point): void
         +placeRoad(point: Point, chargeResources: boolean): void
@@ -257,7 +268,6 @@ package control
     class CatanGame
     {
         -isFogOfWar: boolean
-        +CatanGame()
         ~startGame(): void
         +makeBoard(state: GameStartState, numPlaers: int, gamemode: GameMode, isDebug: boolean): void
         +advancedInitialPlacement(): void
