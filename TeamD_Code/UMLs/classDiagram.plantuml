@@ -1,129 +1,6 @@
 @startuml
 'Greatly reduced for readability'
 
-package gui
-{
-
-    abstract class Drawable
-    {
-        ~xCoord: int
-        ~yCoord: int
-        +drawComponent(g: Graphics)
-        +{abstract} getShape(): Shape
-    }
-
-    class DrawablePort extends Drawable
-    {
-        +DrawablePort(prot: Port, pos: MapPosition, x: int, y: int)
-    }
-    DrawablePort --> Port: port
-    DrawablePort --> MapPosition: position
-
-    class EdgeGUI extends Drawable
-    {
-        ~direction: EdgeDirection
-        EdgeGUI(playerColor: PlayerColor, x: int, y: int, direction: EdgeDirection)
-    }
-
-    class GameBoard
-    {
-        +fullResetMap(): void
-        +drawFullMap(): void
-        drawProperty(): void
-        +clearScreen(): void
-        +drawIntersections(): void
-        +drawEdges(): void
-        ~paintComponent(g: Graphics): void
-        -drawObjects(g: Graphics, objects: Drawable[*]): void
-        +showPopup(): void
-    }
-    GameBoard --> Drawable: hexesAndNumbersToDraw[*], propertyToDraw[*], playersToDraw[*], portsToDraw[*]
-
-    class GameOptionSelector
-    {
-        -selectedState: GameStartState
-        -selectedGameMode: GameMode
-        -numPlayers: int
-        +getOptionsFromUser(catanController: CatanGame): void
-    }
-
-    class HexGUI extends Drawable
-    {
-        resourceToColor: Resource
-        +HexGUI(resource: Resource, x: int, y: int)
-    }
-
-    class HexNumGUI extends Drawable
-    {
-        ~num: int
-        +HexNumGUI(num: int, x: int, y: int, hasRobber: boolean)
-    }
-
-    class InputComponent
-    {
-        -clickFunctionQueue: Queue<ClickFunctionAndDisplayString>
-        +InputComponent(handler: InputHandler, maritimeTradeManager: MaritimeTradeManager)
-        ~{static} rollDiceClicked(handler: InputHandler, rollDiceButton: JButton, buyDevCard: JButton, useDevCard: JButton, endTurn: JButton): void
-        ~endTurnClicked(handler: InputHandler, rollDiceButton: JButton, buyDevCard: JButton, useDevCard: JButton, endTurn: JButton): void
-        +addMouseListenerToParent(): void
-        +placeRoadWithCard(): void
-        -addToQueueAndUpdateNextClickActionText(clickFunctionAndDisplayString: ClickFunctionAndDisplayString): void
-        -updateNextActionLabel(): void
-        +addMoveRobberToQueue(): void
-    }
-    InputComponent --> InputHandler: handler
-    InputComponent --> MaritimeTradeManager: maritimeTradeManager
-
-    class PlayerGUI extends Drawable
-    {
-        -numOfEachResource: HashMap<Resource, int>
-        -numOfEachDevelopmentCard: HashMap<String, int>
-        ~playerPosition: int
-        -playerName: String
-        +PlayerGUI(colorOfPlayer: Color, numPerResourceMap: HashMap<Resource, int>, numOfEachDevelopmentCard: HashMap<String, int>, position: int, playerOrder: int, playerName: String)
-        -drawPlayerName(g2: Graphics2D): void
-        -drawDevelopmentCards(g2: Graphics2D): void
-        -drawResourceCards(g2: Graphics2D): void
-    }
-
-    class RemoveCardsGUI
-    {
-
-    }
-
-    class Select1Frame
-    {
-
-    }
-
-    class Select2Frame
-    {
-
-    }
-
-    abstract class SelectFrame
-    {
-
-    }
-
-    class SettlementGUI extends Drawable
-    {
-        +SettlementGUI(playerColor: PlayerColor, x: int, y: int, rotate: boolean)
-    }
-
-    class SpecialCardGUI extends Drawable
-    {
-        ~order: int
-        ~cardName: String
-        +SpecialCardGUI(cardName: String, holderColor: Color, order: int)
-    }
-
-    class TradeWithSpecificPlayerGUI
-    {
-
-    }
-}
-
 package model
 {
     class CandidateRoadFinder
@@ -136,7 +13,6 @@ package model
         -intersectionNotBlocked(intersection: Intersection, originalColor: PlayerColor): boolean
     }
     CandidateRoadFinder --> GameMap: board
-    CandidateRoadFinder --> Intersection
 
     abstract class DevelopmentCard
     {
@@ -150,14 +26,14 @@ package model
 
     class DevelopmentDeck
     {
+        -largestArmy: LargestArmy
         +DevelopmentCard(largestArmy: LargestArmy)
         +DevelopmentCard(largestArmy: LargestArmy, random: Random)
         -populateDeck(): void
         +size(): int
         +drawCard(): DevelopmentCard
     }
-    DevelopmentCard --> DevelopmentCard: cards[*]
-    DevelopmentCard --> LargestArmy: largestArmy
+    DevelopmentDeck --> DevelopmentCard: cards[*]
 
     class EdgeMap
     {
@@ -171,7 +47,6 @@ package model
         +findEdgePosition(givenEdge: Edge): MapPosition
         +getNumberOfEdgesInRow(rowNumber: int): int
     }
-    EdgeMap --> MapPosition
 
     class GameMap
     {
@@ -197,8 +72,6 @@ package model
     GameMap --> EdgeMap: edgeMap
     GameMap --> PortMap: portMap
     GameMap --> Hex
-    GameMap --> Intersection
-    GameMap --> MapPosition
 
     class Hex
     {
@@ -227,15 +100,9 @@ package model
     }
     HexMap --> Hex: hexes[5][0]
 
-    class Intersection
-    {
-        -hasSettlement: boolean
-        -hasCity: boolean
-    }
-    Intersection --> Port: port
-
     class IntersectionMap
     {
+        -Intersection: intersectionMap[*][*]
         +getAdjacentHex(givenIntersection: Intersection, givenDirection: Direction): MapPosition
         +getAdjacentEdge(givenIntersection: Intersection, givenDirection: Direction): MapPosition
         +getClosestIntersectionToPoint(point: Point): Intersection
@@ -243,35 +110,7 @@ package model
         +doesPlayerOwnsGenericHarbor(player: Player): boolean
         +doesPlayerOwnsSpecialHarbor(player: Player, resource: Resource): boolean
     }
-    IntersectionMap --> Intersection: intersectionMap[*][*]
-    IntersectionMap --> MapPosition
     IntersectionMap --> Player
-
-    class LargestArmy
-    {
-        -size: int
-        +LargestArmy(players: TurnTracker)
-        +updateLargestArmy(): void
-    }
-    LargestArmy --> TurnTracker: turnTracker
-
-    class LongestRoad
-    {
-        +currentLongestRoad: CandidateRoad
-        +LongestRoad(candidateRoadFinder: CandidateRoadFinder)
-        +updateLongestRoad(board: GameMap): void
-    }
-    LongestRoad --> CandidateRoadFinder: candidateRoadFinder
-    LongestRoad --> GameMap
-
-    class MapPosition
-    {
-        -row: int
-        -col: int
-        +MapPosition(row: int, column: int)
-        +MapPosition()
-        +setPosition(row: int, column: int): void
-    }
 
     class PieceBuilder
     {
@@ -291,7 +130,6 @@ package model
     PieceBuilder --> PropertyPlacer: placer
     PieceBuilder --> DevelopmentDeck: developmentDeck
     PieceBuilder --> Player
-    PieceBuilder --> Intersection
 
     class Player
     {
@@ -323,20 +161,18 @@ package model
         +getPortFromPosition(posToFind: MapPosition): Port
         +addPortsToIntersectionMap(map: IntersectionMap): void
     }
-    PortMap --> MapPosition
     PortMap --> Port
 
     class PropertyPlacer
     {
+        -longestRoad: LongestRoad
         +PropertyPlacer(longestRoad: LongestRoad)
         +placeRegularSettlementOnMap(player: Player, gameMap: GameMap, intersection: Intersection): void
         +placeCityOnMap(player: Player, intersection: Intersection): void
         +placeRoadOnMap(player: Player, gameMap: GameMap, edge: Edge): void
     }
-    PropertyPlacer --> LongestRoad: longestRoad
     PropertyPlacer --> Player
     PropertyPlacer --> GameMap
-    PropertyPlacer --> Intersection
 
     class ResourceProducer
     {
@@ -348,7 +184,6 @@ package model
     ResourceProducer --> GameMap
     ResourceProducer --> TurnTracker
     ResourceProducer --> Hex
-    ResourceProducer --> Intersection
 
     class TurnTracker
     {
@@ -365,13 +200,127 @@ package model
 
     class VictoryPointCalculator
     {
+        -largestArmy: LargestArmy
+        -longestRoad: LongestRoad
         +VictoryPointCalculator(longestRoad: LongestRoad, largestArmy: LargestArmy)
         +calculateForPlayer(player: Player): int
         +isWinning(player: Player): boolean
     }
-    VictoryPointCalculator --> LongestRoad: longestRoad
-    VictoryPointCalculator --> LargestArmy: largestArmy
     VictoryPointCalculator --> Player
+}
+
+package gui
+{
+    abstract class Drawable
+    {
+        ~xCoord: int
+        ~yCoord: int
+        +drawComponent(g: Graphics)
+        +{abstract} getShape(): Shape
+    }
+
+    class DrawablePort extends Drawable
+    {
+        -mapPosition: MapPosition
+        +DrawablePort(port: Port, pos: MapPosition, x: int, y: int)
+    }
+    DrawablePort --> Port: port
+
+    class EdgeGUI extends Drawable
+    {
+        ~direction: EdgeDirection
+        EdgeGUI(playerColor: PlayerColor, x: int, y: int, direction: EdgeDirection)
+    }
+
+    class GameBoard
+    {
+        +fullResetMap(): void
+        +drawFullMap(): void
+        +drawProperty(): void
+        +clearScreen(): void
+        +drawIntersections(): void
+        +drawEdges(): void
+        ~paintComponent(g: Graphics): void
+        -drawObjects(g: Graphics, objects: Drawable[*]): void
+        +showPopup(): void
+    }
+    GameBoard --> Drawable: hexesAndNumbersToDraw[*], propertyToDraw[*], playersToDraw[*], portsToDraw[*]
+
+    class GameOptionSelector
+    {
+        -selectedState: GameStartState
+        -selectedGameMode: GameMode
+        -numPlayers: int
+        +getOptionsFromUser(catanController: CatanGame): void
+    }
+
+    class HexGUI extends Drawable
+    {
+        resourceToColor: Resource
+        +HexGUI(resource: Resource, x: int, y: int)
+    }
+
+    class InputComponent
+    {
+        -clickFunctionQueue: Queue<ClickFunctionAndDisplayString>
+        +InputComponent(handler: InputHandler, maritimeTradeManager: MaritimeTradeManager)
+        +addMouseListenerToParent(): void
+        +placeRoadWithCard(): void
+        -addToQueueAndUpdateNextClickActionText(clickFunctionAndDisplayString: ClickFunctionAndDisplayString): void
+        -updateNextActionLabel(): void
+        +addMoveRobberToQueue(): void
+    }
+    InputComponent --> InputHandler: handler
+    InputComponent --> MaritimeTradeManager: maritimeTradeManager
+
+    class PlayerGUI extends Drawable
+    {
+        -numOfEachResource: HashMap<Resource, int>
+        -numOfEachDevelopmentCard: HashMap<String, int>
+        ~playerPosition: int
+        -playerName: String
+        +PlayerGUI(colorOfPlayer: Color, numPerResourceMap: HashMap<Resource, int>, numOfEachDevelopmentCard: HashMap<String, int>, position: int, playerOrder: int, playerName: String)
+        -drawPlayerName(g2: Graphics2D): void
+        -drawDevelopmentCards(g2: Graphics2D): void
+        -drawResourceCards(g2: Graphics2D): void
+    }
+
+    class RemoveCardsGUI
+    {
+        ~numberOfResourceCards: int
+        ~sizeOfDeck: int
+        ~numToLose: int
+        +RemoveCardsGUI(p: Player)
+        +beginning(): void
+    }
+    RemoveCardsGUI --> Player
+
+    abstract class SelectFrame
+    {
+        -isOptional: boolean
+        +SelectFrame(handler: InputHandler, isOptional: boolean)
+        ~resetComponents(): void
+        ~formatDialogBox(submitButton: JButton): void
+    }
+    SelectFrame --> InputHandler
+
+    class SettlementGUI extends Drawable
+    {
+        +SettlementGUI(playerColor: PlayerColor, x: int, y: int, rotate: boolean)
+    }
+
+    class SpecialCardGUI extends Drawable
+    {
+        ~order: int
+        ~cardName: String
+        +SpecialCardGUI(cardName: String, holderColor: Color, order: int)
+    }
+
+    class TradeWithSpecificPlayerGUI
+    {
+        +startGUI(): void
+    }
+    TradeWithSpecificPlayerGUI --> Player: currentPlayer, playerToTrade
 }
 
 package control
@@ -411,28 +360,20 @@ package control
     CatanGame --> MaritimeTradeManager: maritimeTradeManager
     CatanGame --> InputHandler: inputHandler
     CatanGame --> VictoryPointCalculator: pointCalculator
-    CatanGame --> LongestRoad
-    CatanGame --> LargestArmy
     CatanGame --> PieceBuilder
     CatanGame --> PropertyPlacer
     CatanGame --> DevelopmentDeck
 
     class HexPlacer
     {
-        -{static}height: int
-        -{static}heightOffset: int
-        -{static}widthOffset: int
-        -{static}leftMin: int
         +HexPlacer(hexes: HexMap)
         +getAllDrawables(): Drawable[*]
         ~getHexDrawable(hexObject: Hex, row: int, col: int): HexGUI
-        ~getHexNumDrawable(hexObject: Hex, row: int, col: int): HexNumGUI
         +{static}calculatePosition(row: int, col: int): int[*]
     }
     HexPlacer --> HexMap: hexes
     HexPlacer --> Hex
     HexPlacer --> HexGUI
-    HexPlacer --> HexNumGUI
 
     class InputHandler
     {
@@ -456,8 +397,7 @@ package control
         ~updateRobberPositionOnBoard(mousePosition: Point): void
         +endTurn(): void
     }
-    InputHandler --> Select1Frame: devCardSelector, resourceNumberSelector, resourceSelector, resourceSelector2
-    InputHandler --> Select2Frame: optionalIntersectionSelector, optionalEdgeSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
+    InputHandler --> SelectFrame: devCardSelector, resourceSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
     InputHandler --> BuildingHandler: propertyBuilder
     InputHandler --> ResourceProducer: resourceProducer
     InputHandler --> CatanGame: catanGame
@@ -474,20 +414,15 @@ package control
         +trade(): void
         ~sellResource(resource: Resource): void
         ~buyResource(resource: Resource): void
-        ~tradeViaPort(portType: PortSelector.PortTypes): void
+        ~tradeViaPort(portType: SelectFrame.PortTypes): void
         ~exchangeResourcesWithBand(tradeCost: int): void
     }
     MaritimeTradeManager --> InputHandler: inputHandler
     MaritimeTradeManager --> CatanGame: catanGame
-    MaritimeTradeManager --> ResourceSelector: sellingResourceSelector, buyingResourceSelector
-    MaritimeTradeManager --> PortSelector: portSelector
+    MaritimeTradeManager --> SelectFrame: sellingResourceSelector, buyingResourceSelector, portSelector
 
     class PlayerPlacer
     {
-        -xPlayerBackground: int
-        -yPlayerBackground: int
-        -playerBackgroundWidth: int
-        -playerBackgroundHeight: int
         ~numberOfPlayers: int
         +PlayerPlacer(turnTracker: TurnTracker)
         +refreshPlayerNumber(): void
@@ -495,7 +430,7 @@ package control
         +getDevelopmentCardMap(player: Player): HashMap<String, int>
         +getDevelopmentCardMapAmount(player: Player): HashMap<String, int>
     }
-    PlayerPlacer --> turnTracker: turnTracker
+    PlayerPlacer --> TurnTracker: turnTracker
     PlayerPlacer --> Player
 }
 @enduml
