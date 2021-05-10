@@ -139,15 +139,10 @@ package control
         +BuildingHandler(game: CatanGame, builder: PieceBuilder, handler: InputHandler)
         ~placeInitialSettlement(point: Point): void
         ~placeInitialRoadAtClosestEdge(point: Point): void
-        ~placeInitialSettlementRound2(point: Point): void
         +placeSettlement(point: Point): void
-        +canPlaceSettlement(hasNotRolled: boolean): boolean
         +placeCity(point: Point): void
-        +canPlaceCity((hasNotRolled: boolean): boolean
         +placeRoad(point: Point, chargeResources: boolean): void
-        +canPlaceRoad((hasNotRolled: boolean): boolean
         +buyDevelopmentCard((hasNotRolled: boolean): void
-        +canBuyDevCard((hasNotRolled: boolean): boolean
     }
     BuildingHandler --> CatanGame: catanGame
     BuildingHandler --> PieceBuilder: itemBuilder
@@ -155,20 +150,14 @@ package control
 
     class CatanGame
     {
-        ~initialRound: int
-        ~showAllPlayer: boolean
         -isFogOfWar: boolean
         +CatanGame()
         ~startGame(): void
         +makeBoard(state: GameStartState, numPlaers: int, gamemode: GameMode, isDebug: boolean): void
         +advancedInitialPlacement(): void
-        +advancedInitialPlacementOneTurn(): void
-        +advancedInitialPlacementRoundTwoOneTurn(): void
         -customHexPlacement(): void
-        +setupModelFrame(gameFrame: JFrame): void
         +drawScreen(): void
         +drawMap(): void
-        +justDrawProperty(): void
         +drawPlayers(): void
         +drawSpecialCards(): void
         +endTurn(): void
@@ -198,7 +187,7 @@ package control
         +HexPlacer(hexes: HexMap)
         +getAllDrawables(): Drawable[*]
         ~getHexDrawable(hexObject: Hex, row: int, col: int): HexGUI
-        ~getHexDrawable(hexObject: Hex, row: int, col: int): HexNumGUI
+        ~getHexNumDrawable(hexObject: Hex, row: int, col: int): HexNumGUI
         +{static}calculatePosition(row: int, col: int): int[*]
     }
     HexPlacer --> HexMap: hexes
@@ -206,51 +195,27 @@ package control
     HexPlacer --> HexGUI
     HexPlacer --> HexNumGUI
 
-    'what to do about function variables?'
     class InputHandler
     {
-        -possibleIntersectionRows: int[12]
-        -possibleIntersectionCols: int[6]
-        -possibleEdgeRows: int[11]
-        -possibleEdgeCols: int[10]
-        -possibleHexRows: int[5]
-        -possibleHexCols: int[5]
-        -possibleDevCards: Object[5]
         ~hasNotRolled: boolean
-        ~orderedResourceNumbers: int[*]
-        -possibleDevCardNames: String[*]
         -hexPlacementNumbers: int[*]
-        -orderedResources: Resource[*]
         -hexPlacementResources: Resource[*]
         +InputHandler(resourceProducer: ResourceProducer, game: CatanGame, builder: PieceBuilder)
-        +selectCustomHexPlacement(availableResources: Resources[*], availableNumbers: int[*]): void
-        ~buildCustomSelectors(availableResources: Resource[*], availableNumbers: int[*]): void
-        ~applyCustomResourceNumber(currentResourceNumber: int)
-        ~applyCustomHexResource(currentResource: Resource)
-        ~buildResourceNumberSelector(availableNumbers: int[*]): Select1Frame
-        ~buildResourceSelector(availableResources: Resource[*]): Select1Frame
-        ~buildNewSelect1Frame(displayStrings: String[*], underlyingObjs: Object[*]): Select1Frame
         +buyDevelopmentCard(): void
         +selectAndUseDevCard(): void
         ~playDevelopmentCard(selected: Class): void
-        -promptForStealingAllOfResource(): void
         -stealAllOfResource(resource: Resource): void
-        +tryToROllDice(): void
         +discardCardsForEveryPlayer(): void
         +tradeWithPlayer(): void
         +rollDice(): int
-        -rolledSeven(): void
         -moveRobber(): void
         ~selectPlayerToStealFromAtMapPosition(mapPosition: MapPosition): void
-        +isRobberTurn(numRolled: int): boolean
-        +produceResources((numRolled: int): void
+        +produceResources(numRolled: int): void
         -stealFromPlayer(selectedPlayerColor: PlayerColor): void
         -offerPlayerTwoFreeRoads(): void
-        -offerPlayerTwoFreeResources(): void
         -giveResourceToCurrentPlayer(resource: Resource): void
         ~updateRobberPositionOnBoard(mousePosition: Point): void
         +endTurn(): void
-        +cheatResources(): void
     }
     InputHandler --> Select1Frame: devCardSelector, resourceNumberSelector, resourceSelector, resourceSelector2
     InputHandler --> Select2Frame: optionalIntersectionSelector, optionalEdgeSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
@@ -285,13 +250,9 @@ package control
         -playerBackgroundWidth: int
         -playerBackgroundHeight: int
         ~numberOfPlayers: int
-        -colorConverter: ObjectToColorConverter
         +PlayerPlacer(turnTracker: TurnTracker)
         +refreshPlayerNumber(): void
-        +getCurrentPlayerGUI: Drawable[*]
-        +getAllPlayerGUIs: Drawable[*]
-        +getOtherPlayerGUIs(): Drawable[*]
-        -getAllNonDesertResourceMap(player: Player): HashMap<Resource, int>
+        +getAllPlayerGUIs(): Drawable[*]
         +getDevelopmentCardMap(player: Player): HashMap<String, int>
         +getDevelopmentCardMapAmount(player: Player): HashMap<String, int>
     }
