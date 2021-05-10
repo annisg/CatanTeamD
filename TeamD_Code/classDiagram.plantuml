@@ -1,6 +1,129 @@
 @startuml
 'Greatly reduced for readability'
 
+package gui
+{
+
+    abstract class Drawable
+    {
+        ~xCoord: int
+        ~yCoord: int
+        +drawComponent(g: Graphics)
+        +{abstract} getShape(): Shape
+    }
+
+    class DrawablePort extends Drawable
+    {
+        +DrawablePort(prot: Port, pos: MapPosition, x: int, y: int)
+    }
+    DrawablePort --> Port: port
+    DrawablePort --> MapPosition: position
+
+    class EdgeGUI extends Drawable
+    {
+        ~direction: EdgeDirection
+        EdgeGUI(playerColor: PlayerColor, x: int, y: int, direction: EdgeDirection)
+    }
+
+    class GameBoard
+    {
+        +fullResetMap(): void
+        +drawFullMap(): void
+        drawProperty(): void
+        +clearScreen(): void
+        +drawIntersections(): void
+        +drawEdges(): void
+        ~paintComponent(g: Graphics): void
+        -drawObjects(g: Graphics, objects: Drawable[*]): void
+        +showPopup(): void
+    }
+    GameBoard --> Drawable: hexesAndNumbersToDraw[*], propertyToDraw[*], playersToDraw[*], portsToDraw[*]
+
+    class GameOptionSelector
+    {
+        -selectedState: GameStartState
+        -selectedGameMode: GameMode
+        -numPlayers: int
+        +getOptionsFromUser(catanController: CatanGame): void
+    }
+
+    class HexGUI extends Drawable
+    {
+        resourceToColor: Resource
+        +HexGUI(resource: Resource, x: int, y: int)
+    }
+
+    class HexNumGUI extends Drawable
+    {
+        ~num: int
+        +HexNumGUI(num: int, x: int, y: int, hasRobber: boolean)
+    }
+
+    class InputComponent
+    {
+        -clickFunctionQueue: Queue<ClickFunctionAndDisplayString>
+        +InputComponent(handler: InputHandler, maritimeTradeManager: MaritimeTradeManager)
+        ~{static} rollDiceClicked(handler: InputHandler, rollDiceButton: JButton, buyDevCard: JButton, useDevCard: JButton, endTurn: JButton): void
+        ~endTurnClicked(handler: InputHandler, rollDiceButton: JButton, buyDevCard: JButton, useDevCard: JButton, endTurn: JButton): void
+        +addMouseListenerToParent(): void
+        +placeRoadWithCard(): void
+        -addToQueueAndUpdateNextClickActionText(clickFunctionAndDisplayString: ClickFunctionAndDisplayString): void
+        -updateNextActionLabel(): void
+        +addMoveRobberToQueue(): void
+    }
+    InputComponent --> InputHandler: handler
+    InputComponent --> MaritimeTradeManager: maritimeTradeManager
+
+    class PlayerGUI extends Drawable
+    {
+        -numOfEachResource: HashMap<Resource, int>
+        -numOfEachDevelopmentCard: HashMap<String, int>
+        ~playerPosition: int
+        -playerName: String
+        +PlayerGUI(colorOfPlayer: Color, numPerResourceMap: HashMap<Resource, int>, numOfEachDevelopmentCard: HashMap<String, int>, position: int, playerOrder: int, playerName: String)
+        -drawPlayerName(g2: Graphics2D): void
+        -drawDevelopmentCards(g2: Graphics2D): void
+        -drawResourceCards(g2: Graphics2D): void
+    }
+
+    class RemoveCardsGUI
+    {
+
+    }
+
+    class Select1Frame
+    {
+
+    }
+
+    class Select2Frame
+    {
+
+    }
+
+    abstract class SelectFrame
+    {
+
+    }
+
+    class SettlementGUI extends Drawable
+    {
+        +SettlementGUI(playerColor: PlayerColor, x: int, y: int, rotate: boolean)
+    }
+
+    class SpecialCardGUI extends Drawable
+    {
+        ~order: int
+        ~cardName: String
+        +SpecialCardGUI(cardName: String, holderColor: Color, order: int)
+    }
+
+    class TradeWithSpecificPlayerGUI
+    {
+
+    }
+}
+
 package model
 {
     class CandidateRoadFinder
@@ -279,7 +402,7 @@ package control
         +endTurn(): void
     }
     CatanGame --> GameBoard: gui
-    CatanGame --> InputComponenet: input
+    CatanGame --> InputComponent: input
     CatanGame --> GameMap: model
     CatanGame --> HexPlacer: hexesAndHexNumPlacer
     CatanGame --> PlayerPlacer: playerPlacer
