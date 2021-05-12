@@ -49,7 +49,7 @@ public class InputHandler {
     List<Resource> orderedResources;
     private String[] possibleDevCardNames;
     private ResourceProducer resourceProducer;
-    private CatanGame catanGame;
+    CatanGame catanGame;
 
     public Function<Object, Void> useSelectedDevCard = selected -> {
         playDevelopmentCard((Class) selected);
