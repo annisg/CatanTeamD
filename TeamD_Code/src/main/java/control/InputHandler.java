@@ -85,6 +85,8 @@ public class InputHandler {
         resourceSelector2 = new ResourceSelector(false, this);
     }
 
+    InputHandler() {}
+
     public ResourceBundle getMessages() {
         return this.catanGame.getMessages();
     }
