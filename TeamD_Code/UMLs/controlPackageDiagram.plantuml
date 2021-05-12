@@ -1,0 +1,106 @@
+@startuml
+package control
+{
+    class BuildingHandler
+    {
+        ~itemBuilder: PieceBuilder
+        +BuildingHandler(game: CatanGame, builder: PieceBuilder, handler: InputHandler)
+        +placeSettlement(point: Point): void
+        +placeCity(point: Point): void
+        +placeRoad(point: Point, chargeResources: boolean): void
+        +buyDevelopmentCard((hasNotRolled: boolean): void
+    }
+    BuildingHandler --> CatanGame: catanGame
+    BuildingHandler --> InputHandler: handler
+
+    class CatanGame
+    {
+        ~model: GameMap
+        ~input: InputComponent
+        ~gui: GameBoard
+        ~options: GameOptionSelector
+        ~pointCalculator: VictoryPointCalculator
+        ~turnTracker: TurnTracker
+        -isFogOfWar: boolean
+        ~startGame(): void
+        +makeBoard(state: GameStartState, numPlaers: int, gamemode: GameMode, isDebug: boolean): void
+        +advancedInitialPlacement(): void
+        -customHexPlacement(): void
+        +drawScreen(): void
+        +drawMap(): void
+        +drawPlayers(): void
+        +drawSpecialCards(): void
+        +endTurn(): void
+    }
+    CatanGame --> HexPlacer: hexesAndHexNumPlacer
+    CatanGame --> PlayerPlacer: playerPlacer
+    CatanGame --> MaritimeTradeManager: maritimeTradeManager
+    CatanGame --> InputHandler: inputHandler
+
+    class HexPlacer
+    {
+        ~hexes: HexMap
+        +HexPlacer(hexes: HexMap)
+        +getAllDrawables(): Drawable[*]
+        ~getHexDrawable(hexObject: Hex, row: int, col: int): HexGUI
+        +{static}calculatePosition(row: int, col: int): int[*]
+    }
+
+    class InputHandler
+    {
+        ~hasNotRolled: boolean
+        -hexPlacementNumbers: int[*]
+        -hexPlacementResources: Resource[*]
+        -resourceProducer: ResourceProducer
+        ~devCardSelector, resourceSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector: SelectFrame
+        +InputHandler(resourceProducer: ResourceProducer, game: CatanGame, builder: PieceBuilder)
+        +buyDevelopmentCard(): void
+        +selectAndUseDevCard(): void
+        ~playDevelopmentCard(selected: Class): void
+        -stealAllOfResource(resource: Resource): void
+        +discardCardsForEveryPlayer(): void
+        +tradeWithPlayer(): void
+        +rollDice(): int
+        -moveRobber(): void
+        ~selectPlayerToStealFromAtMapPosition(mapPosition: MapPosition): void
+        +produceResources(numRolled: int): void
+        -stealFromPlayer(selectedPlayerColor: PlayerColor): void
+        -offerPlayerTwoFreeRoads(): void
+        -giveResourceToCurrentPlayer(resource: Resource): void
+        ~updateRobberPositionOnBoard(mousePosition: Point): void
+        +endTurn(): void
+    }
+    InputHandler --> BuildingHandler: propertyBuilder
+    InputHandler --> CatanGame: catanGame
+
+    class MaritimeTradeManager
+    {
+        +{static} DEFAULT_TRADE_COST: int
+        +{static} GENERIC_TRADE_COST: int
+        +{static} SPECIAL_TRADE_COST: int
+        -soldResource: Resource
+        -boughtResource: Resource
+        ~sellingResourceSelector, buyingResourceSelector: ResourceSelector
+        ~portSelector: PortSelector
+        +MaritimeTradeManager(inputHandler: InputHandler, catanGame: CatanGame)
+        +trade(): void
+        ~sellResource(resource: Resource): void
+        ~buyResource(resource: Resource): void
+        ~tradeViaPort(portType: SelectFrame.PortTypes): void
+        ~exchangeResourcesWithBand(tradeCost: int): void
+    }
+    MaritimeTradeManager --> InputHandler: inputHandler
+    MaritimeTradeManager --> CatanGame: catanGame
+
+    class PlayerPlacer
+    {
+        ~turnTracker: TurnTracker
+        ~numberOfPlayers: int
+        +PlayerPlacer(turnTracker: TurnTracker)
+        +refreshPlayerNumber(): void
+        +getAllPlayerGUIs(): Drawable[*]
+        +getDevelopmentCardMap(player: Player): HashMap<String, int>
+        +getDevelopmentCardMapAmount(player: Player): HashMap<String, int>
+    }
+}
+@enduml
