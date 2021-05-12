@@ -139,7 +139,7 @@ public class CatanGame {
         input.selectInitialRoadPlacement();
     }
     
-    private void customHexPlacement() {
+    public void customHexPlacement() {
         List<Resource> remainingResources = model.getHexMap().getStandardResources();
         List<Integer> remainingNumbers = model.getHexMap().getStandardResourceNumbers();
         inputHandler.selectCustomHexPlacement(remainingResources, remainingNumbers);
