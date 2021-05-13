@@ -13,7 +13,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class PlayerPlayerTrackerIntegration_Test {
+public class PlayerPlayerTrackerIntegration_Tests {
     @Test
     public void testAddPlayerTracker(){
         Player player = new Player(PlayerColor.BLUE);

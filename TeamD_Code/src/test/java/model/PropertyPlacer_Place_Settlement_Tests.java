@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Place_Settlement_Test {
+public class PropertyPlacer_Place_Settlement_Tests {
 
     ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));
     

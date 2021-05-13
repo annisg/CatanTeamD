@@ -6,7 +6,7 @@ import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
-public class ResourceProducer_IntegrationTests {
+public class ResourceProducer_Integration_Tests {
 
     ResourceProducer producer;
     GameMap gmTest;

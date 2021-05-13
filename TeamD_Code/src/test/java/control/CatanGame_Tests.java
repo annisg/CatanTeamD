@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import gui.*;
 import model.*;
 
-public class CatanGame_tests {
+public class CatanGame_Tests {
 
     private CatanGame testCatan = null;
     private TurnTracker mockedTurnTracker = null;

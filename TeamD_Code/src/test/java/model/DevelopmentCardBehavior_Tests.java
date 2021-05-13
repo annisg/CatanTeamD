@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class DevelopmentCardBehaviorTest {
+public class DevelopmentCardBehavior_Tests {
     @Test
     public void testMakeCardPlayable() {
         DevelopmentCard card = new YearOfPlentyCard(null);

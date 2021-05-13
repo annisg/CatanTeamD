@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import exception.*;
 
-public class GameMap_Direction_Retrieval_IntegrationTests {
+public class GameMap_Direction_Retrieval_Integration_Tests {
 
     @Test
     public void getSpecificIntersectionFromHexTest() {

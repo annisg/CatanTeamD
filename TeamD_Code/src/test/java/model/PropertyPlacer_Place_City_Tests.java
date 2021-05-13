@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 import org.easymock.EasyMock;
 
-public class Place_City_Tests {
+public class PropertyPlacer_Place_City_Tests {
 
     ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));
     

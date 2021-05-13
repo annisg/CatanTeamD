@@ -1,4 +1,4 @@
-package control;
+package model;
 
 import model.*;
 import org.easymock.EasyMock;
@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class RemoveHalfCardsTest {
+public class Player_RemoveHalfCards_Tests {
     private PlayerColor colors[] = { PlayerColor.RED, PlayerColor.BLUE, PlayerColor.WHITE, PlayerColor.ORANGE };
     ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));
     @Test

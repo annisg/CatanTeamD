@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Place_Road_Tests {
+public class ProperyPlace_Place_Road_Tests {
 
     PlayerColor[] colors = { PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.RED, PlayerColor.WHITE };
     ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));

@@ -15,7 +15,7 @@ import gui.*;
 import model.*;
 
 
-public class HexPlacer_tests {
+public class HexPlacer_Tests {
 
     GUIcomparisons compGUI = new GUIcomparisons();
     ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale("en"));

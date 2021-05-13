@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class PlayerAndPropertyPlacerIntegration_Tests {
+class Player_PropertyPlacer_Integration_Tests {
     @Test
     void testVerifyIfEdgeIsConnectedValid() {
         PropertyPlacer propertyPlacer = new PropertyPlacer(null, ResourceBundle.getBundle("messages"));

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class PlayerTrading_Test {
+public class PlayerTrading_Tests {
     @Test
     public void testTradeWithOneCard(){
         Player p1 = new Player((PlayerColor.WHITE) );

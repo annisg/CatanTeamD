@@ -21,7 +21,7 @@ import model.ResourceProducer;
 import model.TurnTracker;
 import model.VictoryPointCalculator;
 
-public class Catan_Game_InputHandler_IntegrationTests {
+public class CatanGame_InputHandler_Integration_Tests {
     
     private CatanGame testCatan = null;
     private InputHandler testHandler = null;
