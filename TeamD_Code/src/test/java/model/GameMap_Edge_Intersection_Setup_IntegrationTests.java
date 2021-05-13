@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import exception.*;
 
-public class GameMap_Edge_Intersection_Setup_Tests {
+public class GameMap_Edge_Intersection_Setup_IntegrationTests {
 
     @Test
     public void testEdgeSetupExists() {

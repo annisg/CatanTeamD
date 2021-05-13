@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import exception.*;
 
-public class GameMap_Port_Retrieval_Tests {
+public class GameMap_Port_Retrieval_IntegrationTests {
 
     @Test
     public void testGameMapHasPortMap() {

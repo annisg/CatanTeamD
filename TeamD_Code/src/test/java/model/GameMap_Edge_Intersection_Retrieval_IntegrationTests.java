@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import exception.*;
 
-public class GameMap_Edge_Intersection_Retrieval_Tests {
+public class GameMap_Edge_Intersection_Retrieval_IntegrationTests {
 
     @Test
     public void testSizeOfGetIntersectionsFromHexIndexes() {
