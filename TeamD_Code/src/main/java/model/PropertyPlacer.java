@@ -112,7 +112,7 @@ public class PropertyPlacer {
         longestRoad.updateLongestRoad(gameMap);
     }
 
-    private void verifyIntersectionIsConnected(Player player, ArrayList<Edge> edges) {
+    void verifyIntersectionIsConnected(Player player, ArrayList<Edge> edges) {
         for (Edge edge : edges) {
             if (edge.getRoadColor() == player.getColor()) {
                 return;
