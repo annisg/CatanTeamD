@@ -1,0 +1,427 @@
+@startuml
+'Greatly reduced for readability'
+
+class CandidateRoadFinder
+{
+    +CandidateRoadFinder(board: GameMap)
+    ~getCandidateRoadFromEdge(edge: Edge): CandidateRoad
+    ~edgeRecurse(edge: Edge, visitedEdges: Edge[*], visitedIntersections: Intersection[*]): CandidateRoad
+    -intersectionRecurse(intersection: Intersection, visitedEdges: Edge[*], visitedIntersections: Intersection[*]): CandidateRoad
+    -edgeIsVisitable(edge: Edge, visitedEdges: Edge[*], originalColor: PlayerColor): boolean
+    -intersectionNotBlocked(intersection: Intersection, originalColor: PlayerColor): boolean
+}
+CandidateRoadFinder --> GameMap: board
+
+abstract class DevelopmentCard
+{
+    -canBePlayed: boolean
+    +{abstract}getName(): String
+    +{abstract}use(Player owner): void
+    +canBePlayed(): boolean
+    +makePlayable(): void
+}
+DevelopmentCard --> Player
+
+class DevelopmentDeck
+{
+    -largestArmy: LargestArmy
+    +DevelopmentCard(largestArmy: LargestArmy)
+    +DevelopmentCard(largestArmy: LargestArmy, random: Random)
+    -populateDeck(): void
+    +size(): int
+    +drawCard(): DevelopmentCard
+}
+DevelopmentDeck --> DevelopmentCard: cards[*]
+
+class EdgeMap
+{
+    -edges: Edge[11][*]
+    +getAllAdjacentIntersections(givenEdge: Edge): MapPosition[*]
+    +getAdjacentIntersection(givenEdge: Edge, givenDirection: Direction): MapPosition
+    +getIntersectionDirection0(givenEdge: Edge): MapPosition
+    +getIntersectionDirection1(givenEdge: Edge): MapPosition
+    +getEdge(position: MapPosition): Edge
+    +getClosestEdgeToPoint(point: Point): Edge
+    +findEdgePosition(givenEdge: Edge): MapPosition
+    +getNumberOfEdgesInRow(rowNumber: int): int
+}
+
+class GameMap
+{
+    +setUpBeginnerMap(numPlayers: int): void
+    +setUpAdvancedMap(): void
+    +setUpCustomPorts(): void
+    +getClosestEdgeToPoint(point: Point): Edge
+    +getClosestIntersectionToPoint(point: Point): Intersection
+    +moveRobberToClosestHex(mousePosition: Point): void
+    +getHexesByResourceNumber(resourceNumber: int): Hex[*]
+    +getPortFromIntersection(givenIntersection: Intersection): Port
+    +getSpecificHexFromIntersection(givenIntersection: Intersection, givenDirection: Direction)
+    +getSpecificEdgeFromIntersection(givenIntersection: Intersection, givenDirection: Direction): edge
+    +getSpecificIntersectionFromEdge(givenEdge: Edge, intersectionDirection: Direction): Intersection
+    +getSpecificIntersectionFromHex(givenHex: Hex, intersectionDirection: Direction): Intersection
+    +canSeeIntersection(givenIntersection: Intersection, color: PlayerColor): boolean
+    +canSeeEdge(givenEdge: Edge, color: PlayerColor): boolean
+    +doesPlayerOwnsGenericHarbor(currentPlayer: Player): boolean
+    +doesPlayerOwnsSpecialHarbor(currentPlayer: Player, resource: Resource): boolean
+}
+GameMap --> HexMap: hexMap
+GameMap --> IntersectionMap: intersectionMap
+GameMap --> EdgeMap: edgeMap
+GameMap --> PortMap: portMap
+GameMap --> Hex
+
+class Hex
+{
+    -providesResource: Resource
+    -rollResourceNumber: int
+    ~hasRobber: boolean
+    +Hex(providesResource: Resource, rollResourceNumber: int)
+    +placeRobber(): void
+    +removeRobber(): void
+    +getRollResourceNumber(): int
+}
+
+class HexMap
+{
+    -resourceHashMap: HashMap<Integer, Hex[*]>
+    -robber: Robber
+    +getHex(hexPosition: MapPosition): Hex
+    +moveRobberToPosition(newRobberPosition: MapPosition): void
+    +getAdjacentIntersection(givenHex: Hex, givenDirection: Direction): MapPosition
+    +setUpAdvancedMap(random: Random): void
+    +setUpCustomMap(resources: Resource[*], resourceNumber: int): void
+    +setUpBeginnerMap(): void
+    -populateResourceNumberHashMap(): void
+    +getClosestValidRobberPosition(mousePosition: Point): MapPosition
+    -getHexPosition(mapPosition: MapPosition): Point
+}
+HexMap --> Hex: hexes[5][0]
+
+class IntersectionMap
+{
+    -Intersection: intersectionMap[*][*]
+    +getAdjacentHex(givenIntersection: Intersection, givenDirection: Direction): MapPosition
+    +getAdjacentEdge(givenIntersection: Intersection, givenDirection: Direction): MapPosition
+    +getClosestIntersectionToPoint(point: Point): Intersection
+    +findIntersectionPosition(knownIntersection: Intersection): MapPosition
+    +doesPlayerOwnsGenericHarbor(player: Player): boolean
+    +doesPlayerOwnsSpecialHarbor(player: Player, resource: Resource): boolean
+}
+IntersectionMap --> Player
+
+class PieceBuilder
+{
+    -settlementCost: Resource[*]
+    -cityCost: Resource[*]
+    -roadCost: Resource[*]
+    -developmentDeck: Resource[*]
+    +PieceBuilder(board: GameMap, placer: PropertyPlacer, developmentDeck: DevelopmentDeck)
+    +buildSettlement(player: Player, intersection: Intersection): void
+    +buildCity(player: Player, intersection: Intersection): void
+    +buildRoad(player: Player, edge: Edge): void
+    +buildDevelopmentCard(player: Player): String
+    -hasSufficientResources(player: Player, cost: Resource[*]): boolean
+    -removeResource(player: Player, cost: Resource[*]): void
+}
+PieceBuilder --> GameMap: board
+PieceBuilder --> PropertyPlacer: placer
+PieceBuilder --> DevelopmentDeck: developmentDeck
+PieceBuilder --> Player
+
+class Player
+{
+    -resources: Map<Resource, int>
+    -settlementCount: int
+    -cityCount: int
+    -roadCount: int
+    -knightCount: int
+    -name: String
+    +Player(color: PlayerColor)
+    +removeResource(resource: Resource, amount: int): void
+    +giveResource(resource: Resource, amount: int): void
+    +discardHalfResourceHand(): void
+    +giveDevelopmentCard(card: DevelopmentCard): void
+    +removeDevelopmentCard(card: DevelopmentCard): void
+}
+Player --> DevelopmentCard: developmentCards[*]
+Player --> TurnTracker: turnTracker
+
+interface Port
+{
+    +tradeRatioXto1ForResource(resourceOffering): int
+}
+
+class PortMap
+{
+    ~positionsToPort: HashMap<MapPosition, Port>
+    -initializePortPositions(ports: Port[*]): void
+    +getPortFromPosition(posToFind: MapPosition): Port
+    +addPortsToIntersectionMap(map: IntersectionMap): void
+}
+PortMap --> Port
+
+class PropertyPlacer
+{
+    -longestRoad: LongestRoad
+    +PropertyPlacer(longestRoad: LongestRoad)
+    +placeRegularSettlementOnMap(player: Player, gameMap: GameMap, intersection: Intersection): void
+    +placeCityOnMap(player: Player, intersection: Intersection): void
+    +placeRoadOnMap(player: Player, gameMap: GameMap, edge: Edge): void
+}
+PropertyPlacer --> Player
+PropertyPlacer --> GameMap
+
+class ResourceProducer
+{
+    +produceResources(map: GameMap, player: TurnTracker, roll: int): void
+    +rollDice(): int
+    ~produceHex(hex: Hex, map: GameMap, players: TurnTracker): void
+    ~produceIntersection(intersection: Intersection, resource: Resource, players: TurnTracker): void
+}
+ResourceProducer --> GameMap
+ResourceProducer --> TurnTracker
+ResourceProducer --> Hex
+
+class TurnTracker
+{
+    ~colors: PlayerColor[4]
+    ~currentPlayerIndex: int
+    ~isInitialFirstRound: boolean
+    +setupPlayers(numPlayers): void
+    +promptForPlayerNames(i: int): String
+    +setupBeginnerResourcesAndPieces(): void
+    +getCurrentPlayer(): Player
+    +passInitialTurn(): void
+}
+TurnTracker --> Player: players[*]
+
+class VictoryPointCalculator
+{
+    -largestArmy: LargestArmy
+    -longestRoad: LongestRoad
+    +VictoryPointCalculator(longestRoad: LongestRoad, largestArmy: LargestArmy)
+    +calculateForPlayer(player: Player): int
+    +isWinning(player: Player): boolean
+}
+VictoryPointCalculator --> Player
+
+abstract class Drawable
+{
+    ~xCoord: int
+    ~yCoord: int
+    +drawComponent(g: Graphics)
+    +{abstract} getShape(): Shape
+}
+
+class DrawablePort extends Drawable
+{
+    -mapPosition: MapPosition
+    +DrawablePort(port: Port, pos: MapPosition, x: int, y: int)
+}
+DrawablePort --> Port: port
+
+class EdgeGUI extends Drawable
+{
+    ~direction: EdgeDirection
+    EdgeGUI(playerColor: PlayerColor, x: int, y: int, direction: EdgeDirection)
+}
+
+class GameBoard
+{
+    +fullResetMap(): void
+    +drawFullMap(): void
+    +drawProperty(): void
+    +clearScreen(): void
+    +drawIntersections(): void
+    +drawEdges(): void
+    ~paintComponent(g: Graphics): void
+    -drawObjects(g: Graphics, objects: Drawable[*]): void
+    +showPopup(): void
+}
+GameBoard --> Drawable: hexesAndNumbersToDraw[*], propertyToDraw[*], playersToDraw[*], portsToDraw[*]
+
+class GameOptionSelector
+{
+    -selectedState: GameStartState
+    -selectedGameMode: GameMode
+    -numPlayers: int
+    +getOptionsFromUser(catanController: CatanGame): void
+}
+
+class HexGUI extends Drawable
+{
+    resourceToColor: Resource
+    +HexGUI(resource: Resource, x: int, y: int)
+}
+
+class InputComponent
+{
+    -clickFunctionQueue: Queue<ClickFunctionAndDisplayString>
+    +InputComponent(handler: InputHandler, maritimeTradeManager: MaritimeTradeManager)
+    +addMouseListenerToParent(): void
+    +placeRoadWithCard(): void
+    -addToQueueAndUpdateNextClickActionText(clickFunctionAndDisplayString: ClickFunctionAndDisplayString): void
+    -updateNextActionLabel(): void
+    +addMoveRobberToQueue(): void
+}
+InputComponent --> InputHandler: handler
+InputComponent --> MaritimeTradeManager: maritimeTradeManager
+
+class PlayerGUI extends Drawable
+{
+    -numOfEachResource: HashMap<Resource, int>
+    -numOfEachDevelopmentCard: HashMap<String, int>
+    ~playerPosition: int
+    -playerName: String
+    +PlayerGUI(colorOfPlayer: Color, numPerResourceMap: HashMap<Resource, int>, numOfEachDevelopmentCard: HashMap<String, int>, position: int, playerOrder: int, playerName: String)
+    -drawPlayerName(g2: Graphics2D): void
+    -drawDevelopmentCards(g2: Graphics2D): void
+    -drawResourceCards(g2: Graphics2D): void
+}
+
+class RemoveCardsGUI
+{
+    ~numberOfResourceCards: int
+    ~sizeOfDeck: int
+    ~numToLose: int
+    +RemoveCardsGUI(p: Player)
+    +beginning(): void
+}
+RemoveCardsGUI --> Player
+
+abstract class SelectFrame
+{
+    -isOptional: boolean
+    +SelectFrame(handler: InputHandler, isOptional: boolean)
+    ~resetComponents(): void
+    ~formatDialogBox(submitButton: JButton): void
+}
+SelectFrame --> InputHandler
+
+class SettlementGUI extends Drawable
+{
+    +SettlementGUI(playerColor: PlayerColor, x: int, y: int, rotate: boolean)
+}
+
+class SpecialCardGUI extends Drawable
+{
+    ~order: int
+    ~cardName: String
+    +SpecialCardGUI(cardName: String, holderColor: Color, order: int)
+}
+
+class TradeWithSpecificPlayerGUI
+{
+    +startGUI(): void
+}
+TradeWithSpecificPlayerGUI --> Player: currentPlayer, playerToTrade
+
+class BuildingHandler
+{
+    +BuildingHandler(game: CatanGame, builder: PieceBuilder, handler: InputHandler)
+    +placeSettlement(point: Point): void
+    +placeCity(point: Point): void
+    +placeRoad(point: Point, chargeResources: boolean): void
+    +buyDevelopmentCard((hasNotRolled: boolean): void
+}
+BuildingHandler --> CatanGame: catanGame
+BuildingHandler --> PieceBuilder: itemBuilder
+BuildingHandler --> InputHandler: handler
+
+class CatanGame
+{
+    -isFogOfWar: boolean
+    ~startGame(): void
+    +makeBoard(state: GameStartState, numPlaers: int, gamemode: GameMode, isDebug: boolean): void
+    +advancedInitialPlacement(): void
+    -customHexPlacement(): void
+    +drawScreen(): void
+    +drawMap(): void
+    +drawPlayers(): void
+    +drawSpecialCards(): void
+    +endTurn(): void
+}
+CatanGame --> GameBoard: gui
+CatanGame --> InputComponent: input
+CatanGame --> GameMap: model
+CatanGame --> HexPlacer: hexesAndHexNumPlacer
+CatanGame --> PlayerPlacer: playerPlacer
+CatanGame --> TurnTracker: turnTracker
+CatanGame --> GameOptionSelector: options
+CatanGame --> MaritimeTradeManager: maritimeTradeManager
+CatanGame --> InputHandler: inputHandler
+CatanGame --> VictoryPointCalculator: pointCalculator
+CatanGame --> PieceBuilder
+CatanGame --> PropertyPlacer
+CatanGame --> DevelopmentDeck
+
+class HexPlacer
+{
+    +HexPlacer(hexes: HexMap)
+    +getAllDrawables(): Drawable[*]
+    ~getHexDrawable(hexObject: Hex, row: int, col: int): HexGUI
+    +{static}calculatePosition(row: int, col: int): int[*]
+}
+HexPlacer --> HexMap: hexes
+HexPlacer --> Hex
+HexPlacer --> HexGUI
+
+class InputHandler
+{
+    ~hasNotRolled: boolean
+    -hexPlacementNumbers: int[*]
+    -hexPlacementResources: Resource[*]
+    +InputHandler(resourceProducer: ResourceProducer, game: CatanGame, builder: PieceBuilder)
+    +buyDevelopmentCard(): void
+    +selectAndUseDevCard(): void
+    ~playDevelopmentCard(selected: Class): void
+    -stealAllOfResource(resource: Resource): void
+    +discardCardsForEveryPlayer(): void
+    +tradeWithPlayer(): void
+    +rollDice(): int
+    -moveRobber(): void
+    ~selectPlayerToStealFromAtMapPosition(mapPosition: MapPosition): void
+    +produceResources(numRolled: int): void
+    -stealFromPlayer(selectedPlayerColor: PlayerColor): void
+    -offerPlayerTwoFreeRoads(): void
+    -giveResourceToCurrentPlayer(resource: Resource): void
+    ~updateRobberPositionOnBoard(mousePosition: Point): void
+    +endTurn(): void
+}
+InputHandler --> SelectFrame: devCardSelector, resourceSelector, mandatoryIntersectionSelector, mandatoryEdgeSelector, hexSelector
+InputHandler --> BuildingHandler: propertyBuilder
+InputHandler --> ResourceProducer: resourceProducer
+InputHandler --> CatanGame: catanGame
+InputHandler --> PieceBuilder
+
+class MaritimeTradeManager
+{
+    +{static} DEFAULT_TRADE_COST: int
+    +{static} GENERIC_TRADE_COST: int
+    +{static} SPECIAL_TRADE_COST: int
+    -soldResource: Resource
+    -boughtResource: Resource
+    +MaritimeTradeManager(inputHandler: InputHandler, catanGame: CatanGame)
+    +trade(): void
+    ~sellResource(resource: Resource): void
+    ~buyResource(resource: Resource): void
+    ~tradeViaPort(portType: SelectFrame.PortTypes): void
+    ~exchangeResourcesWithBand(tradeCost: int): void
+}
+MaritimeTradeManager --> InputHandler: inputHandler
+MaritimeTradeManager --> CatanGame: catanGame
+MaritimeTradeManager --> SelectFrame: sellingResourceSelector, buyingResourceSelector, portSelector
+
+class PlayerPlacer
+{
+    ~numberOfPlayers: int
+    +PlayerPlacer(turnTracker: TurnTracker)
+    +refreshPlayerNumber(): void
+    +getAllPlayerGUIs(): Drawable[*]
+    +getDevelopmentCardMap(player: Player): HashMap<String, int>
+    +getDevelopmentCardMapAmount(player: Player): HashMap<String, int>
+}
+PlayerPlacer --> TurnTracker: turnTracker
+PlayerPlacer --> Player
+@enduml

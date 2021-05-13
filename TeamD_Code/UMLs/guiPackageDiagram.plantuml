@@ -1,0 +1,114 @@
+@startuml
+package gui
+{
+    abstract class Drawable
+    {
+        ~xCoord: int
+        ~yCoord: int
+        +drawComponent(g: Graphics)
+        +{abstract} getShape(): Shape
+    }
+
+    class DrawablePort extends Drawable
+    {
+        -port: Port
+        -mapPosition: MapPosition
+        +DrawablePort(port: Port, pos: MapPosition, x: int, y: int)
+    }
+
+    class EdgeGUI extends Drawable
+    {
+        ~direction: EdgeDirection
+        EdgeGUI(playerColor: PlayerColor, x: int, y: int, direction: EdgeDirection)
+    }
+
+    class GameBoard
+    {
+        +fullResetMap(): void
+        +drawFullMap(): void
+        +drawProperty(): void
+        +clearScreen(): void
+        +drawIntersections(): void
+        +drawEdges(): void
+        ~paintComponent(g: Graphics): void
+        -drawObjects(g: Graphics, objects: Drawable[*]): void
+        +showPopup(): void
+    }
+    GameBoard --> Drawable: hexesAndNumbersToDraw[*], propertyToDraw[*], playersToDraw[*], portsToDraw[*]
+
+    class GameOptionSelector
+    {
+        -selectedState: GameStartState
+        -selectedGameMode: GameMode
+        -numPlayers: int
+        +getOptionsFromUser(catanController: CatanGame): void
+    }
+
+    class HexGUI extends Drawable
+    {
+        resourceToColor: Resource
+        +HexGUI(resource: Resource, x: int, y: int)
+    }
+
+    class InputComponent
+    {
+        -maritimeTradeManager: MaritimeTradeManager
+        -handler: InputHandler
+        -clickFunctionQueue: Queue<ClickFunctionAndDisplayString>
+        +InputComponent(handler: InputHandler, maritimeTradeManager: MaritimeTradeManager)
+        +addMouseListenerToParent(): void
+        +placeRoadWithCard(): void
+        -addToQueueAndUpdateNextClickActionText(clickFunctionAndDisplayString: ClickFunctionAndDisplayString): void
+        -updateNextActionLabel(): void
+        +addMoveRobberToQueue(): void
+    }
+
+    class PlayerGUI extends Drawable
+    {
+        -numOfEachResource: HashMap<Resource, int>
+        -numOfEachDevelopmentCard: HashMap<String, int>
+        ~playerPosition: int
+        -playerName: String
+        +PlayerGUI(colorOfPlayer: Color, numPerResourceMap: HashMap<Resource, int>, numOfEachDevelopmentCard: HashMap<String, int>, position: int, playerOrder: int, playerName: String)
+        -drawPlayerName(g2: Graphics2D): void
+        -drawDevelopmentCards(g2: Graphics2D): void
+        -drawResourceCards(g2: Graphics2D): void
+    }
+
+    class RemoveCardsGUI
+    {
+        ~numberOfResourceCards: int
+        ~sizeOfDeck: int
+        ~numToLose: int
+        +RemoveCardsGUI(p: Player)
+        +beginning(): void
+    }
+
+    abstract class SelectFrame
+    {
+        -isOptional: boolean
+        +SelectFrame(handler: InputHandler, isOptional: boolean)
+        ~resetComponents(): void
+        ~formatDialogBox(submitButton: JButton): void
+    }
+
+    class SettlementGUI extends Drawable
+    {
+        +SettlementGUI(playerColor: PlayerColor, x: int, y: int, rotate: boolean)
+    }
+
+    class SpecialCardGUI extends Drawable
+    {
+        ~order: int
+        ~cardName: String
+        +SpecialCardGUI(cardName: String, holderColor: Color, order: int)
+    }
+
+    class TradeWithSpecificPlayerGUI
+    {
+        ~currentPlayer: Player
+        ~playerToTrade: Player
+        +startGUI(): void
+    }
+}
+@enduml
